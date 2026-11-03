@@ -317,10 +317,75 @@ export const StudentFeesPage = ({
                     </div>
                   )}
 
-                  {/* Sub-tab 2: Others */}
+                  {/* Sub-tab 2: Others Table (Exact match to Screenshot media_1793730832009_917bea16.png) */}
                   {activeSubTab === 'others' && (
-                    <div className="p-8 text-center text-xs text-slate-400">
-                      No additional institutional miscellaneous fees recorded for session {yearData.academicYear}.
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-[12px]">
+                        
+                        {/* Dark Charcoal Table Header */}
+                        <thead>
+                          <tr className="bg-[#34373d] text-white text-[11px] font-semibold tracking-wider">
+                            <th className="py-2.5 px-3 border-r border-[#42464e] w-12 text-center">S. No.</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Fee Heads</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">PYOB</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Current Receivables</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Receivables</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Collected Amount</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Outstanding</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-center">Status</th>
+                            <th className="py-2.5 px-2 text-center w-10"></th>
+                          </tr>
+                        </thead>
+
+                        {/* Rows matching user screenshot */}
+                        <tbody className="divide-y divide-slate-100 text-slate-700">
+                          {(yearData.otherFeeHeads || []).map((head) => (
+                            <tr key={head.id} className="hover:bg-slate-50 transition-colors">
+                              <td className="py-2 px-3 text-center border-r border-slate-100">{head.id}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 font-medium text-slate-800">{head.name}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.pyob.toFixed(2)}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right font-medium">₹ {head.outstanding.toFixed(2)}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-center">
+                                {head.statusType === 'green' ? (
+                                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
+                                    {head.status}
+                                  </span>
+                                ) : (
+                                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#1d52f6] text-white">
+                                    {head.status}
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-2 px-2 text-center">
+                                <button 
+                                  onClick={() => onViewReceipt({
+                                    id: `other_${yearData.id}_${head.id}`,
+                                    receiptNumber: `REC-JITN-${yearData.academicYear.slice(0,4)}-${7000 + head.id}`,
+                                    transactionId: `TXN_EXAM_${yearData.id}_0${head.id}`,
+                                    date: `${yearData.academicYear.slice(0,4)}-09-15`,
+                                    time: "10:30 AM",
+                                    amount: head.totalCollectedAmount,
+                                    description: `${head.name} (${yearData.label})`,
+                                    paymentMethod: "Online PG (Razorpay / UPI)",
+                                    status: "Success",
+                                    bankReference: `AXIS-${982100 + head.id}`,
+                                    invoiceNumber: `INV-${yearData.academicYear.slice(0,4)}-EX0${head.id}`,
+                                    payerName: student.name,
+                                  })}
+                                  className="text-slate-600 hover:text-blue-600"
+                                  title="View official receipt"
+                                >
+                                  <Eye className="w-3.5 h-3.5 mx-auto" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+
+                      </table>
                     </div>
                   )}
 

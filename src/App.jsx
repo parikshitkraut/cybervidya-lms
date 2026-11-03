@@ -45,7 +45,13 @@ export function App() {
   // Core Data States
   const [student, setStudent] = useState(() => localStore.get('student', INITIAL_STUDENT));
   const [feesData, setFeesData] = useState(() => localStore.get('feesData', INITIAL_FEES_DATA));
-  const [paymentHistory, setPaymentHistory] = useState(() => localStore.get('paymentHistory', INITIAL_TRANSACTION_HISTORY));
+  const [paymentHistory, setPaymentHistory] = useState(() => {
+    const saved = localStore.get('paymentHistory', null);
+    if (saved && saved.length >= INITIAL_TRANSACTION_HISTORY.length) {
+      return saved;
+    }
+    return INITIAL_TRANSACTION_HISTORY;
+  });
 
   // Modals
   const [isPayNowOpen, setIsPayNowOpen] = useState(false);
