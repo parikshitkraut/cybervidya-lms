@@ -19,9 +19,11 @@ pnpm-debug.log*
 # Editor & OS files
 .DS_Store
 Thumbs.db
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
-
 vite.config.js.timestamp-*.mjs
