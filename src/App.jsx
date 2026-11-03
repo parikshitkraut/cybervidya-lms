@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
 import { NotificationToast } from './components/common/NotificationToast';
+import { LoginPage } from './components/auth/LoginPage';
 
 // Student Components
 import { StudentDashboard } from './components/student/StudentDashboard';
@@ -52,6 +53,9 @@ import {
 import { localStore } from './lib/supabase';
 
 export function App() {
+  // Auth state: start at LoginPage so user sees the exact campus sign-in screen
+  const [isAuthenticated, setIsAuthenticated] = useState(() => localStore.get('isAuthenticated', false));
+
   // Roles: 'student' | 'admin'
   const [currentRole, setCurrentRole] = useState(() => localStore.get('role', 'student'));
   const [activeTab, setActiveTab] = useState(() => currentRole === 'admin' ? 'admin-overview' : 'dashboard');
@@ -94,6 +98,7 @@ export function App() {
 
   // Sync state to local persistence
   useEffect(() => {
+    localStore.set('isAuthenticated', isAuthenticated);
     localStore.set('feeSummary', feeSummary);
     localStore.set('installments', installments);
     localStore.set('paymentHistory', paymentHistory);
@@ -101,9 +106,36 @@ export function App() {
     localStore.set('courses', courses);
     localStore.set('assignments', assignments);
     localStore.set('role', currentRole);
-  }, [feeSummary, installments, paymentHistory, allStudents, courses, assignments, currentRole]);
+  }, [isAuthenticated, feeSummary, installments, paymentHistory, allStudents, courses, assignments, currentRole]);
 
-  // Handle switching roles
+  // Handle Login from campus screenshot LoginPage
+  const handleLogin = ({ role, username }) => {
+    setCurrentRole(role);
+    setActiveTab(role === 'admin' ? 'admin-overview' : 'dashboard');
+    setIsAuthenticated(true);
+    
+    if (role === 'student' && username) {
+      setStudent(prev => ({
+        ...prev,
+        prn: username.toUpperCase() === 'UGF24EE041' ? 'UGF24EE041' : prev.prn,
+        branch: username.toUpperCase().includes('EE') ? 'Electrical Engineering' : prev.branch,
+      }));
+    }
+
+    showNotification(
+      'success',
+      'Sign In Successful',
+      `Welcome to Jhulelal Institute of Technology CyberVidya Portal (${role === 'admin' ? 'Admin ERP' : 'Student Dashboard'})`
+    );
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    showNotification('info', 'Logged Out', 'You have been safely signed out to the CyberVidya login portal.');
+  };
+
+  // Handle switching roles inside dashboard
   const handleRoleChange = (newRole) => {
     setCurrentRole(newRole);
     setActiveTab(newRole === 'admin' ? 'admin-overview' : 'dashboard');
@@ -289,10 +321,24 @@ export function App() {
 
   const pendingAssignmentsCount = assignments.filter(a => a.status === 'Pending').length;
 
+  // If user is not signed in, render the exact Screenshot LoginPage!
+  if (!isAuthenticated) {
+    return (
+      <>
+        <LoginPage onLogin={handleLogin} />
+        <NotificationToast
+          notification={notification}
+          onClose={() => setNotification(null)}
+        />
+      </>
+    );
+  }
+
+  // Once signed in, render the Full Academic LMS & ERP Dashboard!
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       
-      {/* Top Navbar */}
+      {/* Top Navbar with JIT + CyberVidya Logos & Sign Out */}
       <Navbar
         currentRole={currentRole}
         onRoleChange={handleRoleChange}
@@ -301,6 +347,7 @@ export function App() {
         setActiveTab={setActiveTab}
         onOpenPayNow={() => handleOpenPayNow(feeSummary.outstandingBalance)}
         feeSummary={feeSummary}
+        onLogout={handleLogout}
       />
 
       {/* Main Body Layout */}
@@ -371,7 +418,7 @@ export function App() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyber-50 text-cyber-700 border border-cyber-200">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
                           Accounts & Finance Directorate
                         </span>
                         <span className="text-xs text-slate-400">Autonomous ERP</span>
@@ -388,7 +435,7 @@ export function App() {
                       {feeSummary.outstandingBalance > 0 && (
                         <button
                           onClick={() => handleOpenPayNow(feeSummary.outstandingBalance)}
-                          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-xs font-bold shadow-lg shadow-emerald-500/20 flex items-center gap-2 transition-all"
+                          className="px-5 py-2.5 rounded-xl bg-[#18b82a] hover:bg-[#15a225] text-white text-xs font-bold shadow-md shadow-emerald-500/20 flex items-center gap-2 transition-all"
                         >
                           <span>Pay Total Outstanding (₹{feeSummary.outstandingBalance.toLocaleString('en-IN')})</span>
                         </button>
