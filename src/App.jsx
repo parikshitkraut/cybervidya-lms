@@ -27,11 +27,20 @@ import {
 import { localStore } from './lib/supabase';
 
 export function App() {
-  // Auth state: start at LoginPage so user sees the exact campus sign-in screen
-  const [isAuthenticated, setIsAuthenticated] = useState(() => localStore.get('isAuthenticated', false));
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const initialTabFromUrl = urlParams ? urlParams.get('tab') : null;
+
+  // Auth state: start at LoginPage so user sees the exact campus sign-in screen, or auto-auth if tab query is provided
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (initialTabFromUrl) return true;
+    return localStore.get('isAuthenticated', false);
+  });
 
   // Active student tab matching screenshots: 'home' | 'admission' | 'attendance' | 'course' | 'exam' | 'finance' | 'feedback' | 'library' | 'courses'
-  const [activeTab, setActiveTab] = useState(() => localStore.get('activeTab', 'home'));
+  const [activeTab, setActiveTab] = useState(() => {
+    if (initialTabFromUrl) return initialTabFromUrl;
+    return localStore.get('activeTab', 'home');
+  });
 
   // Core Data States
   const [student, setStudent] = useState(() => localStore.get('student', INITIAL_STUDENT));

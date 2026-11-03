@@ -25,11 +25,17 @@ export const PayNowModal = ({
   defaultAmount = 14348.00,
   onPaymentComplete 
 }) => {
-  const [amount, setAmount] = useState(defaultAmount || 14348.00);
+  const [paymentChoice, setPaymentChoice] = useState('development'); // 'development' | 'full_year' | 'custom'
+  const [customAmount, setCustomAmount] = useState(14348.00);
   const [selectedMethod, setSelectedMethod] = useState('razorpay');
   const [isProcessing, setIsProcessing] = useState(false);
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [razorpayKeyInput, setRazorpayKeyInput] = useState(getRazorpayKey());
+
+  const amountToPay = 
+    paymentChoice === 'development' ? 14348.00 :
+    paymentChoice === 'full_year' ? 43000.00 :
+    Number(customAmount) || 0;
 
   const handleCopyUpi = () => {
     navigator.clipboard.writeText('jitn.cybervidya@axisbank');
@@ -38,7 +44,7 @@ export const PayNowModal = ({
   };
 
   const executePayment = async () => {
-    if (Number(amount) <= 0) {
+    if (amountToPay <= 0) {
       alert('Please enter a valid payment amount.');
       return;
     }
@@ -51,7 +57,7 @@ export const PayNowModal = ({
       if (scriptLoaded && window.Razorpay && razorpayKeyInput && !razorpayKeyInput.includes('DemoKey')) {
         const options = {
           key: razorpayKeyInput,
-          amount: Math.round(Number(amount) * 100),
+          amount: Math.round(amountToPay * 100),
           currency: 'INR',
           name: INSTITUTION.name,
           description: `Fees Payment - ${student.name} (${student.registrationNo})`,
@@ -107,8 +113,9 @@ export const PayNowModal = ({
       transactionId: gatewayDetails.transactionId,
       date: new Date().toISOString().split('T')[0],
       time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-      amount: Number(amount),
-      description: `Session ${INSTITUTION.academicYear} - Development & Institutional Fees`,
+      academicYear: "2026-2027 III",
+      amount: amountToPay,
+      description: `Third Year Session 2026-2027 - ${paymentChoice === 'development' ? 'Development Fees (₹14,348)' : 'Yearly Student Share (₹43,000 / Rest Freeship)'}`,
       paymentMethod: gatewayDetails.paymentMethod,
       status: 'Success',
       bankReference: gatewayDetails.gatewayRef,
@@ -141,25 +148,70 @@ export const PayNowModal = ({
             <span className="font-mono text-slate-800">{student.registrationNo}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Branch & Semester:</span>
-            <span className="text-slate-800">{student.branch} • Sem {student.semester} ({student.academicYear})</span>
+            <span className="text-slate-500">Total Annual College Fee:</span>
+            <span className="font-bold text-slate-900">₹ 125,848.00 (Freeship Covered)</span>
           </div>
         </div>
 
-        {/* Amount */}
+        {/* Payment Scope Selector */}
         <div>
-          <label className="text-xs font-bold text-slate-700 block mb-1">
-            Payment Amount (₹)
+          <label className="text-xs font-bold text-slate-700 block mb-1.5">
+            Select Payment Option
           </label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            className="w-full bg-white border border-slate-300 rounded px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:border-green-600 font-mono"
-          />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            
+            <div
+              onClick={() => setPaymentChoice('development')}
+              className={`p-2.5 rounded border-2 cursor-pointer transition-all ${
+                paymentChoice === 'development' ? 'border-green-600 bg-green-50/40 font-bold' : 'border-slate-200'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span>Development Fee</span>
+                {paymentChoice === 'development' && <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />}
+              </div>
+              <div className="text-sm font-black text-slate-900 mt-1">₹ 14,348</div>
+            </div>
+
+            <div
+              onClick={() => setPaymentChoice('full_year')}
+              className={`p-2.5 rounded border-2 cursor-pointer transition-all ${
+                paymentChoice === 'full_year' ? 'border-green-600 bg-green-50/40 font-bold' : 'border-slate-200'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span>3rd Year Total Share</span>
+                {paymentChoice === 'full_year' && <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />}
+              </div>
+              <div className="text-sm font-black text-slate-900 mt-1">₹ 43,000</div>
+            </div>
+
+            <div
+              onClick={() => setPaymentChoice('custom')}
+              className={`p-2.5 rounded border-2 cursor-pointer transition-all ${
+                paymentChoice === 'custom' ? 'border-green-600 bg-green-50/40 font-bold' : 'border-slate-200'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span>Custom Amount</span>
+                {paymentChoice === 'custom' && <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />}
+              </div>
+              <input
+                type="number"
+                value={customAmount}
+                onChange={(e) => {
+                  setCustomAmount(Number(e.target.value));
+                  setPaymentChoice('custom');
+                }}
+                className="w-full text-xs font-bold text-slate-900 bg-white border border-slate-300 rounded px-1.5 py-0.5 mt-1"
+                placeholder="₹ Amount"
+              />
+            </div>
+
+          </div>
         </div>
 
-        {/* Mode selector */}
+        {/* Payment Methods */}
         <div className="space-y-2">
           <label className="text-xs font-bold text-slate-700 block mb-1">
             Choose Payment Method
@@ -176,7 +228,7 @@ export const PayNowModal = ({
               className="mt-0.5 text-green-600"
             />
             <div className="text-xs">
-              <span className="font-bold text-slate-900 block">Razorpay Standard (UPI / Cards / NetBanking)</span>
+              <span className="font-bold text-slate-900 block">Razorpay Gateway (UPI / Cards / NetBanking)</span>
               <p className="text-slate-500 text-[11px]">Instant receipt generation via Google Pay, PhonePe, Paytm, or Net Banking.</p>
             </div>
           </label>
@@ -223,7 +275,7 @@ export const PayNowModal = ({
         <div className="pt-2">
           <button
             type="button"
-            disabled={isProcessing || Number(amount) <= 0}
+            disabled={isProcessing || amountToPay <= 0}
             onClick={executePayment}
             className="w-full py-2.5 px-4 bg-[#18b82a] hover:bg-[#15a225] disabled:bg-slate-400 text-white font-bold text-xs uppercase tracking-wider rounded shadow-xs flex items-center justify-center gap-2 transition-all"
           >
@@ -235,7 +287,7 @@ export const PayNowModal = ({
             ) : (
               <>
                 <Lock className="w-4 h-4" />
-                <span>Pay ₹ {Number(amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                <span>Pay ₹ {amountToPay.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
               </>
             )}
           </button>

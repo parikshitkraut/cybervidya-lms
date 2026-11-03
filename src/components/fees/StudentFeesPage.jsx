@@ -1,26 +1,67 @@
 import React, { useState } from 'react';
 import { User, ChevronUp, ChevronDown, Eye, FileText, Download, CreditCard, CheckCircle2 } from 'lucide-react';
+import { ACADEMIC_YEARS_FEES } from '../../data/mockData';
 
 export const StudentFeesPage = ({ 
   student, 
-  feesData, 
   paymentHistory, 
   onPayNow, 
   onViewReceipt, 
   onViewInvoice 
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState('academic'); // 'academic' | 'others' | 'transactions' | 'online_history'
-  const [isAccordionOpen, setIsAccordionOpen] = useState(true);
+  // Store expanded state for each academic year (default year 1 open matching user screenshot)
+  const [expandedYears, setExpandedYears] = useState({
+    'year_1': true,
+    'year_2': false,
+    'year_3': false,
+  });
+
+  const expandAll = () => {
+    setExpandedYears({
+      'year_1': true,
+      'year_2': true,
+      'year_3': true,
+    });
+  };
+
+  const collapseAll = () => {
+    setExpandedYears({
+      'year_1': false,
+      'year_2': false,
+      'year_3': false,
+    });
+  };
+
+  // Active sub-tab per year: { [yearId]: 'academic' | 'others' | 'transactions' | 'online_history' }
+  const [subTabs, setSubTabs] = useState({
+    'year_1': 'academic',
+    'year_2': 'academic',
+    'year_3': 'academic',
+  });
+
+  const toggleYear = (yearId) => {
+    setExpandedYears(prev => ({
+      ...prev,
+      [yearId]: !prev[yearId]
+    }));
+  };
+
+  const setYearSubTab = (yearId, tab) => {
+    setSubTabs(prev => ({
+      ...prev,
+      [yearId]: tab
+    }));
+  };
 
   return (
     <div className="space-y-4">
       
-      {/* Page Title from Screenshot 3 */}
+      {/* Page Title from Screenshot 1 & 3 */}
       <h2 className="text-[17px] font-bold text-slate-900 tracking-tight">
         Student Fees Details
       </h2>
 
-      {/* Top Student Particulars Card (Exact layout from Screenshot 3) */}
+      {/* Top Student Particulars Card (Exact layout from Screenshot 1 & 3) */}
       <div className="bg-white rounded border border-slate-200 shadow-xs relative overflow-hidden">
         {/* Teal top accent line */}
         <div className="h-[3px] bg-[#00a896] w-full" />
@@ -32,7 +73,7 @@ export const StudentFeesPage = ({
             <User className="w-10 h-10" />
           </div>
 
-          {/* 3-Column Particulars Grid from Screenshot 3 */}
+          {/* 3-Column Particulars Grid from Screenshot 1 & 3 */}
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 gap-x-6 text-[12px] text-slate-600">
             
             {/* Column 1 */}
@@ -114,251 +155,323 @@ export const StudentFeesPage = ({
         </div>
       </div>
 
-      {/* Main Fee Particulars Card (Exact layout from Screenshot 3) */}
-      <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden">
-        
-        {/* Accordion Bar: "2026-2027 III" */}
-        <div 
-          onClick={() => setIsAccordionOpen(!isAccordionOpen)}
-          className="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer select-none hover:bg-slate-100 transition-colors"
-        >
-          <span className="text-[13px] font-bold text-slate-800">
-            {feesData.academicYearLabel}
-          </span>
-          <button className="text-slate-500">
-            {isAccordionOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+      {/* Accordion Controls Bar */}
+      <div className="flex items-center justify-between text-xs pt-1">
+        <span className="text-slate-500 font-medium">
+          Fee History by Academic Year (Total Annual College Fee: <strong>₹ 125,848.00</strong>)
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={expandAll}
+            className="px-2 py-0.5 text-[11px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors"
+          >
+            Expand All Years
+          </button>
+          <button
+            onClick={collapseAll}
+            className="px-2 py-0.5 text-[11px] font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded border border-slate-300 transition-colors"
+          >
+            Collapse All
           </button>
         </div>
+      </div>
 
-        {isAccordionOpen && (
-          <div>
-            
-            {/* Sub-tabs Row with "Pay Now" Button on Right */}
-            <div className="px-4 pt-2 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-white">
-              <div className="flex items-center gap-6">
-                <button
-                  onClick={() => setActiveSubTab('academic')}
-                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
-                    activeSubTab === 'academic'
-                      ? 'text-orange-500 border-b-2 border-orange-500'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Academic
-                </button>
-                <button
-                  onClick={() => setActiveSubTab('others')}
-                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
-                    activeSubTab === 'others'
-                      ? 'text-orange-500 border-b-2 border-orange-500'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Others
-                </button>
-                <button
-                  onClick={() => setActiveSubTab('transactions')}
-                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
-                    activeSubTab === 'transactions'
-                      ? 'text-orange-500 border-b-2 border-orange-500'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Transaction History
-                </button>
-                <button
-                  onClick={() => setActiveSubTab('online_history')}
-                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
-                    activeSubTab === 'online_history'
-                      ? 'text-orange-500 border-b-2 border-orange-500'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Online Payment History
-                </button>
-              </div>
+      {/* 3 Academic Years Accordion List (From Screenshot 1, 2, 3) */}
+      <div className="space-y-3">
+        {ACADEMIC_YEARS_FEES.map((yearData) => {
+          const isExpanded = expandedYears[yearData.id];
+          const activeSubTab = subTabs[yearData.id] || 'academic';
 
-              {/* Pay Now Button (Exact Vibrant Green from Screenshot 3) */}
-              <button
-                onClick={() => onPayNow(feesData.outstanding > 0 ? feesData.outstanding : 14348.00)}
-                className="mb-2 px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-[13px] font-bold rounded shadow-xs transition-colors flex items-center gap-1.5"
+          // Filter transactions for this academic year
+          const yearTransactions = paymentHistory.filter(t => 
+            t.academicYear?.includes(yearData.academicYear) || 
+            t.description?.includes(yearData.academicYear) ||
+            (yearData.id === 'year_3' && !t.academicYear)
+          );
+
+          return (
+            <div 
+              key={yearData.id}
+              className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden"
+            >
+              
+              {/* Accordion Bar from Screenshot 1 */}
+              <div 
+                onClick={() => toggleYear(yearData.id)}
+                className="p-3 bg-slate-50 hover:bg-slate-100/80 border-b border-slate-200 flex items-center justify-between cursor-pointer select-none transition-colors"
               >
-                <span>Pay Now</span>
-              </button>
-            </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-[13px] font-bold text-slate-800">
+                    {yearData.label}
+                  </span>
+                  <span className="text-[11px] text-slate-500 hidden sm:inline">
+                    ({yearData.yearTitle}) • Student Paid: <strong>₹{yearData.studentPaidTotal.toLocaleString('en-IN')}</strong> | Freeship: <strong>₹{yearData.freeshipTotal.toLocaleString('en-IN')}</strong>
+                  </span>
+                </div>
 
-            {/* Sub-tab 1: Academic Fees Table (Exact columns and styling from Screenshot 3) */}
-            {activeSubTab === 'academic' && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-[12px]">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 hidden md:inline">
+                    Total: ₹{yearData.grandTotal.toLocaleString('en-IN')}
+                  </span>
+                  <button className="text-slate-500 p-0.5">
+                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Accordion Body */}
+              {isExpanded && (
+                <div>
                   
-                  {/* Dark Charcoal Table Header */}
-                  <thead>
-                    <tr className="bg-[#34373d] text-white text-[11px] font-semibold tracking-wider">
-                      <th className="py-2.5 px-3 border-r border-[#42464e] w-12 text-center">S. No.</th>
-                      <th className="py-2.5 px-3 border-r border-[#42464e]">Fee Heads</th>
-                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">PYOB</th>
-                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Current Receivables</th>
-                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Receivables</th>
-                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Collected Amount</th>
-                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Outstanding</th>
-                      <th className="py-2.5 px-3 border-r border-[#42464e] text-center">Status</th>
-                      <th className="py-2.5 px-2 text-center w-10"></th>
-                    </tr>
-                  </thead>
+                  {/* Sub-tabs Row with Pay Now on Right */}
+                  <div className="px-4 pt-2 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-white">
+                    <div className="flex items-center gap-6">
+                      <button
+                        onClick={() => setYearSubTab(yearData.id, 'academic')}
+                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                          activeSubTab === 'academic'
+                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Academic
+                      </button>
+                      <button
+                        onClick={() => setYearSubTab(yearData.id, 'others')}
+                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                          activeSubTab === 'others'
+                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Others
+                      </button>
+                      <button
+                        onClick={() => setYearSubTab(yearData.id, 'transactions')}
+                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                          activeSubTab === 'transactions'
+                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Transaction History
+                      </button>
+                      <button
+                        onClick={() => setYearSubTab(yearData.id, 'online_history')}
+                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                          activeSubTab === 'online_history'
+                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Online Payment History
+                      </button>
+                    </div>
 
-                  {/* Rows */}
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {feesData.feeHeads.map((head, idx) => (
-                      <tr key={head.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="py-2 px-3 text-center border-r border-slate-100">{head.id}</td>
-                        <td className="py-2 px-3 border-r border-slate-100 font-medium text-slate-800">{head.name}</td>
-                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.pyob.toFixed(2)}</td>
-                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                        <td className="py-2 px-3 border-r border-slate-100 text-right font-medium">₹ {head.outstanding.toFixed(2)}</td>
-                        <td className="py-2 px-3 border-r border-slate-100 text-center">
-                          {head.statusType === 'green' ? (
-                            <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
-                              {head.status}
-                            </span>
-                          ) : (
-                            <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#1d52f6] text-white">
-                              {head.status}
-                            </span>
-                          )}
-                        </td>
-                        <td className="py-2 px-2 text-center">
-                          <button 
-                            onClick={() => onViewReceipt(paymentHistory[0])}
-                            className="text-slate-600 hover:text-blue-600"
-                            title="View receipt"
-                          >
-                            <Eye className="w-3.5 h-3.5 mx-auto" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    {/* Pay Now Button (Active for Year 3 / Current) */}
+                    <button
+                      onClick={() => onPayNow(yearData.totals.totalA.outstanding > 0 ? yearData.totals.totalA.outstanding : 14348.00)}
+                      className="mb-2 px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-[13px] font-bold rounded shadow-xs transition-colors flex items-center gap-1.5"
+                    >
+                      <span>Pay Now</span>
+                    </button>
+                  </div>
 
-                    {/* (A) Total Row */}
-                    <tr className="bg-slate-50/80 font-bold text-slate-900 border-t border-slate-200">
-                      <td className="py-2.5 px-3 text-center border-r border-slate-200">(A)</td>
-                      <td className="py-2.5 px-3 border-r border-slate-200">Total</td>
-                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.pyob.toFixed(2)}</td>
-                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.outstanding.toFixed(2)}</td>
-                      <td colSpan="2" className="border-r-0"></td>
-                    </tr>
+                  {/* Sub-tab 1: Academic Fees Table (Exact columns and styling from Screenshot 2 & 3) */}
+                  {activeSubTab === 'academic' && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-[12px]">
+                        
+                        {/* Dark Charcoal Table Header */}
+                        <thead>
+                          <tr className="bg-[#34373d] text-white text-[11px] font-semibold tracking-wider">
+                            <th className="py-2.5 px-3 border-r border-[#42464e] w-12 text-center">S. No.</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Fee Heads</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">PYOB</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Current Receivables</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Receivables</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Collected Amount</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Outstanding</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] text-center">Status</th>
+                            <th className="py-2.5 px-2 text-center w-10"></th>
+                          </tr>
+                        </thead>
 
-                    {/* (B) Scholarship Amount Row */}
-                    <tr className="bg-white font-bold text-slate-900">
-                      <td className="py-2.5 px-3 text-center border-r border-slate-100">(B)</td>
-                      <td className="py-2.5 px-3 border-r border-slate-100">Scholarship Amount</td>
-                      <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
-                      <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {feesData.totals.scholarshipB.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                      <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
-                      <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {feesData.totals.scholarshipB.collected.toFixed(2)}</td>
-                      <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {feesData.totals.scholarshipB.outstanding.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                      <td colSpan="2"></td>
-                    </tr>
-                  </tbody>
+                        {/* Rows */}
+                        <tbody className="divide-y divide-slate-100 text-slate-700">
+                          {yearData.feeHeads.map((head) => (
+                            <tr key={head.id} className="hover:bg-slate-50 transition-colors">
+                              <td className="py-2 px-3 text-center border-r border-slate-100">{head.id}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 font-medium text-slate-800">{head.name}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.pyob.toFixed(2)}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-right font-medium">₹ {head.outstanding.toFixed(2)}</td>
+                              <td className="py-2 px-3 border-r border-slate-100 text-center">
+                                {head.statusType === 'green' ? (
+                                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
+                                    {head.status}
+                                  </span>
+                                ) : (
+                                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#1d52f6] text-white">
+                                    {head.status}
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-2 px-2 text-center">
+                                <button 
+                                  onClick={() => onViewReceipt(yearTransactions[0] || paymentHistory[0])}
+                                  className="text-slate-600 hover:text-blue-600"
+                                  title="View official receipt"
+                                >
+                                  <Eye className="w-3.5 h-3.5 mx-auto" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
 
-                </table>
-              </div>
-            )}
+                          {/* (A) Total Row from Screenshot 2 & 3 */}
+                          <tr className="bg-slate-50/80 font-bold text-slate-900 border-t border-slate-200">
+                            <td className="py-2.5 px-3 text-center border-r border-slate-200">(A)</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200">Total</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {yearData.totals.totalA.pyob.toFixed(2)}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {yearData.totals.totalA.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {yearData.totals.totalA.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {yearData.totals.totalA.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {yearData.totals.totalA.outstanding.toFixed(2)}</td>
+                            <td colSpan="2" className="border-r-0"></td>
+                          </tr>
 
-            {/* Sub-tab 2: Others */}
-            {activeSubTab === 'others' && (
-              <div className="p-8 text-center text-xs text-slate-400">
-                No additional institutional miscellaneous fees recorded for this session.
-              </div>
-            )}
+                          {/* (B) Freeship Amount Row from Screenshot 2 & 3 */}
+                          <tr className="bg-white font-bold text-slate-900 border-t border-slate-100">
+                            <td className="py-2.5 px-3 text-center border-r border-slate-100">(B)</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 font-semibold text-slate-800">Freeship Amount</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {yearData.totals.scholarshipB.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {yearData.totals.scholarshipB.collected.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {yearData.totals.scholarshipB.outstanding.toFixed(2)}</td>
+                            <td colSpan="2"></td>
+                          </tr>
 
-            {/* Sub-tab 3: Transaction History */}
-            {activeSubTab === 'transactions' && (
-              <div className="p-4 space-y-3">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-[12px]">
-                    <thead className="bg-[#34373d] text-white text-[11px]">
-                      <tr>
-                        <th className="py-2 px-3">Receipt No</th>
-                        <th className="py-2 px-3">Date</th>
-                        <th className="py-2 px-3">Transaction ID</th>
-                        <th className="py-2 px-3">Description</th>
-                        <th className="py-2 px-3">Method</th>
-                        <th className="py-2 px-3 text-right">Amount</th>
-                        <th className="py-2 px-3 text-center">Receipt</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {paymentHistory.map((txn) => (
-                        <tr key={txn.id} className="hover:bg-slate-50">
-                          <td className="py-2.5 px-3 font-mono font-bold text-blue-700">{txn.receiptNumber}</td>
-                          <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
-                          <td className="py-2.5 px-3 font-mono text-slate-500">{txn.transactionId}</td>
-                          <td className="py-2.5 px-3 text-slate-800">{txn.description}</td>
-                          <td className="py-2.5 px-3 text-slate-600">{txn.paymentMethod}</td>
-                          <td className="py-2.5 px-3 text-right font-bold text-slate-900">
-                            ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                          </td>
-                          <td className="py-2.5 px-3 text-center">
-                            <button
-                              onClick={() => onViewReceipt(txn)}
-                              className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100"
-                            >
-                              Download
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                          {/* (A + B) Grand Total Row from Screenshot 3 (Total fee: ₹125,848.00 / 125k) */}
+                          <tr className="bg-[#f0f5ff] font-extrabold text-slate-950 border-t-2 border-slate-300">
+                            <td className="py-2.5 px-3 text-center border-r border-slate-200">(A + B)</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 uppercase tracking-wider text-[11px]">Grand Total</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right"></td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right"></td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right text-blue-800">₹ {yearData.grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right text-emerald-700">₹ {yearData.grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-200 text-right font-black">₹ 0.00</td>
+                            <td colSpan="2"></td>
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+                  )}
+
+                  {/* Sub-tab 2: Others */}
+                  {activeSubTab === 'others' && (
+                    <div className="p-8 text-center text-xs text-slate-400">
+                      No additional institutional miscellaneous fees recorded for session {yearData.academicYear}.
+                    </div>
+                  )}
+
+                  {/* Sub-tab 3: Transaction History */}
+                  {activeSubTab === 'transactions' && (
+                    <div className="p-4 space-y-3">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-[12px]">
+                          <thead className="bg-[#34373d] text-white text-[11px]">
+                            <tr>
+                              <th className="py-2 px-3">Receipt No</th>
+                              <th className="py-2 px-3">Date</th>
+                              <th className="py-2 px-3">Transaction ID</th>
+                              <th className="py-2 px-3">Description</th>
+                              <th className="py-2 px-3">Method</th>
+                              <th className="py-2 px-3 text-right">Student Paid Amount</th>
+                              <th className="py-2 px-3 text-center">Receipt</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {yearTransactions.length > 0 ? (
+                              yearTransactions.map((txn) => (
+                                <tr key={txn.id} className="hover:bg-slate-50">
+                                  <td className="py-2.5 px-3 font-mono font-bold text-blue-700">{txn.receiptNumber}</td>
+                                  <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
+                                  <td className="py-2.5 px-3 font-mono text-slate-500">{txn.transactionId}</td>
+                                  <td className="py-2.5 px-3 text-slate-800">{txn.description}</td>
+                                  <td className="py-2.5 px-3 text-slate-600">{txn.paymentMethod}</td>
+                                  <td className="py-2.5 px-3 text-right font-bold text-slate-900">
+                                    ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                  </td>
+                                  <td className="py-2.5 px-3 text-center">
+                                    <button
+                                      onClick={() => onViewReceipt(txn)}
+                                      className="px-2.5 py-1 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200"
+                                    >
+                                      Download
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan="7" className="py-4 text-center text-slate-400">
+                                  No transactions logged for this session.
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Sub-tab 4: Online Payment History */}
+                  {activeSubTab === 'online_history' && (
+                    <div className="p-4 space-y-3">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-[12px]">
+                          <thead className="bg-[#34373d] text-white text-[11px]">
+                            <tr>
+                              <th className="py-2 px-3">Gateway Ref</th>
+                              <th className="py-2 px-3">Payment Mode</th>
+                              <th className="py-2 px-3">Date</th>
+                              <th className="py-2 px-3 text-right">Amount</th>
+                              <th className="py-2 px-3 text-center">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {yearTransactions.map((txn) => (
+                              <tr key={txn.id} className="hover:bg-slate-50">
+                                <td className="py-2.5 px-3 font-mono text-slate-700">{txn.bankReference || 'RZP_ORDER_981'}</td>
+                                <td className="py-2.5 px-3 text-slate-700">{txn.paymentMethod}</td>
+                                <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
+                                <td className="py-2.5 px-3 text-right font-bold text-emerald-600">
+                                  ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                </td>
+                                <td className="py-2.5 px-3 text-center">
+                                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
+                                    {txn.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Sub-tab 4: Online Payment History */}
-            {activeSubTab === 'online_history' && (
-              <div className="p-4 space-y-3">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-[12px]">
-                    <thead className="bg-[#34373d] text-white text-[11px]">
-                      <tr>
-                        <th className="py-2 px-3">Gateway Ref</th>
-                        <th className="py-2 px-3">Payment Mode</th>
-                        <th className="py-2 px-3">Date</th>
-                        <th className="py-2 px-3 text-right">Amount</th>
-                        <th className="py-2 px-3 text-center">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {paymentHistory.map((txn) => (
-                        <tr key={txn.id} className="hover:bg-slate-50">
-                          <td className="py-2.5 px-3 font-mono text-slate-700">{txn.bankReference || 'RZP_ORDER_981'}</td>
-                          <td className="py-2.5 px-3 text-slate-700">{txn.paymentMethod}</td>
-                          <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
-                          <td className="py-2.5 px-3 text-right font-bold text-emerald-600">
-                            ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                          </td>
-                          <td className="py-2.5 px-3 text-center">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
-                              {txn.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-
-          </div>
-        )}
-
+            </div>
+          );
+        })}
       </div>
 
     </div>
