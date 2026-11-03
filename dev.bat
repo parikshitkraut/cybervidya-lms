@@ -1,0 +1,3 @@
+@echo off
+echo Starting CyberVidya Next LMS Development Server...
+npm.cmd run dev
