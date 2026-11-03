@@ -1,0 +1,366 @@
+import React, { useState } from 'react';
+import { User, ChevronUp, ChevronDown, Eye, FileText, Download, CreditCard, CheckCircle2 } from 'lucide-react';
+
+export const StudentFeesPage = ({ 
+  student, 
+  feesData, 
+  paymentHistory, 
+  onPayNow, 
+  onViewReceipt, 
+  onViewInvoice 
+}) => {
+  const [activeSubTab, setActiveSubTab] = useState('academic'); // 'academic' | 'others' | 'transactions' | 'online_history'
+  const [isAccordionOpen, setIsAccordionOpen] = useState(true);
+
+  return (
+    <div className="space-y-4">
+      
+      {/* Page Title from Screenshot 3 */}
+      <h2 className="text-[17px] font-bold text-slate-900 tracking-tight">
+        Student Fees Details
+      </h2>
+
+      {/* Top Student Particulars Card (Exact layout from Screenshot 3) */}
+      <div className="bg-white rounded border border-slate-200 shadow-xs relative overflow-hidden">
+        {/* Teal top accent line */}
+        <div className="h-[3px] bg-[#00a896] w-full" />
+
+        <div className="p-4 sm:p-5 flex flex-col md:flex-row items-start gap-6">
+          
+          {/* Avatar Silhouette */}
+          <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 shrink-0">
+            <User className="w-10 h-10" />
+          </div>
+
+          {/* 3-Column Particulars Grid from Screenshot 3 */}
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 gap-x-6 text-[12px] text-slate-600">
+            
+            {/* Column 1 */}
+            <div className="space-y-1.5">
+              <div className="flex items-baseline">
+                <span className="w-32 text-slate-500 shrink-0">Name :</span>
+                <span className="font-semibold text-slate-800 uppercase truncate" title={student.name}>
+                  {student.name}
+                </span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-32 text-slate-500 shrink-0">Branch :</span>
+                <span className="text-slate-800 font-medium">{student.branch}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-32 text-slate-500 shrink-0">Academic Batch :</span>
+                <span className="text-slate-800 font-medium">{student.academicBatch}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-32 text-slate-500 shrink-0">Academic Year :</span>
+                <span className="text-slate-800 font-medium">{student.academicYear}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-32 text-slate-500 shrink-0">Category :</span>
+                <span className="text-slate-800 font-medium">{student.category}</span>
+              </div>
+            </div>
+
+            {/* Column 2 */}
+            <div className="space-y-1.5">
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Registration Number :</span>
+                <span className="font-mono text-slate-800 font-medium">{student.registrationNo}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Year :</span>
+                <span className="text-slate-800 font-medium">{student.year}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Class Section :</span>
+                <span className="text-slate-800 font-medium">{student.section}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Academic Session :</span>
+                <span className="text-slate-800 font-medium">{student.academicSession}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Fee Category Name :</span>
+                <span className="text-slate-800 font-medium">{student.feeCategoryName}</span>
+              </div>
+            </div>
+
+            {/* Column 3 */}
+            <div className="space-y-1.5">
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Degree :</span>
+                <span className="text-slate-800 font-medium">{student.degree}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Semester :</span>
+                <span className="text-slate-800 font-medium">{student.semester}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Roll Number :</span>
+                <span className="font-mono text-slate-800 font-medium">{student.rollNo}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Admission Category :</span>
+                <span className="text-slate-800 font-medium">{student.admissionCategory}</span>
+              </div>
+              <div className="flex items-baseline">
+                <span className="w-36 text-slate-500 shrink-0">Enrollment Type :</span>
+                <span className="text-slate-800 font-medium">{student.enrollmentType}</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* Main Fee Particulars Card (Exact layout from Screenshot 3) */}
+      <div className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden">
+        
+        {/* Accordion Bar: "2026-2027 III" */}
+        <div 
+          onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+          className="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between cursor-pointer select-none hover:bg-slate-100 transition-colors"
+        >
+          <span className="text-[13px] font-bold text-slate-800">
+            {feesData.academicYearLabel}
+          </span>
+          <button className="text-slate-500">
+            {isAccordionOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {isAccordionOpen && (
+          <div>
+            
+            {/* Sub-tabs Row with "Pay Now" Button on Right */}
+            <div className="px-4 pt-2 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-white">
+              <div className="flex items-center gap-6">
+                <button
+                  onClick={() => setActiveSubTab('academic')}
+                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                    activeSubTab === 'academic'
+                      ? 'text-orange-500 border-b-2 border-orange-500'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Academic
+                </button>
+                <button
+                  onClick={() => setActiveSubTab('others')}
+                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                    activeSubTab === 'others'
+                      ? 'text-orange-500 border-b-2 border-orange-500'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Others
+                </button>
+                <button
+                  onClick={() => setActiveSubTab('transactions')}
+                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                    activeSubTab === 'transactions'
+                      ? 'text-orange-500 border-b-2 border-orange-500'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Transaction History
+                </button>
+                <button
+                  onClick={() => setActiveSubTab('online_history')}
+                  className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                    activeSubTab === 'online_history'
+                      ? 'text-orange-500 border-b-2 border-orange-500'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Online Payment History
+                </button>
+              </div>
+
+              {/* Pay Now Button (Exact Vibrant Green from Screenshot 3) */}
+              <button
+                onClick={() => onPayNow(feesData.outstanding > 0 ? feesData.outstanding : 14348.00)}
+                className="mb-2 px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-[13px] font-bold rounded shadow-xs transition-colors flex items-center gap-1.5"
+              >
+                <span>Pay Now</span>
+              </button>
+            </div>
+
+            {/* Sub-tab 1: Academic Fees Table (Exact columns and styling from Screenshot 3) */}
+            {activeSubTab === 'academic' && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-[12px]">
+                  
+                  {/* Dark Charcoal Table Header */}
+                  <thead>
+                    <tr className="bg-[#34373d] text-white text-[11px] font-semibold tracking-wider">
+                      <th className="py-2.5 px-3 border-r border-[#42464e] w-12 text-center">S. No.</th>
+                      <th className="py-2.5 px-3 border-r border-[#42464e]">Fee Heads</th>
+                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">PYOB</th>
+                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Current Receivables</th>
+                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Receivables</th>
+                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Collected Amount</th>
+                      <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Outstanding</th>
+                      <th className="py-2.5 px-3 border-r border-[#42464e] text-center">Status</th>
+                      <th className="py-2.5 px-2 text-center w-10"></th>
+                    </tr>
+                  </thead>
+
+                  {/* Rows */}
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                    {feesData.feeHeads.map((head, idx) => (
+                      <tr key={head.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="py-2 px-3 text-center border-r border-slate-100">{head.id}</td>
+                        <td className="py-2 px-3 border-r border-slate-100 font-medium text-slate-800">{head.name}</td>
+                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.pyob.toFixed(2)}</td>
+                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                        <td className="py-2 px-3 border-r border-slate-100 text-right font-medium">₹ {head.outstanding.toFixed(2)}</td>
+                        <td className="py-2 px-3 border-r border-slate-100 text-center">
+                          {head.statusType === 'green' ? (
+                            <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
+                              {head.status}
+                            </span>
+                          ) : (
+                            <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#1d52f6] text-white">
+                              {head.status}
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-2 px-2 text-center">
+                          <button 
+                            onClick={() => onViewReceipt(paymentHistory[0])}
+                            className="text-slate-600 hover:text-blue-600"
+                            title="View receipt"
+                          >
+                            <Eye className="w-3.5 h-3.5 mx-auto" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {/* (A) Total Row */}
+                    <tr className="bg-slate-50/80 font-bold text-slate-900 border-t border-slate-200">
+                      <td className="py-2.5 px-3 text-center border-r border-slate-200">(A)</td>
+                      <td className="py-2.5 px-3 border-r border-slate-200">Total</td>
+                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.pyob.toFixed(2)}</td>
+                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td className="py-2.5 px-3 border-r border-slate-200 text-right">₹ {feesData.totals.totalA.outstanding.toFixed(2)}</td>
+                      <td colSpan="2" className="border-r-0"></td>
+                    </tr>
+
+                    {/* (B) Scholarship Amount Row */}
+                    <tr className="bg-white font-bold text-slate-900">
+                      <td className="py-2.5 px-3 text-center border-r border-slate-100">(B)</td>
+                      <td className="py-2.5 px-3 border-r border-slate-100">Scholarship Amount</td>
+                      <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
+                      <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {feesData.totals.scholarshipB.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
+                      <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {feesData.totals.scholarshipB.collected.toFixed(2)}</td>
+                      <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {feesData.totals.scholarshipB.outstanding.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                      <td colSpan="2"></td>
+                    </tr>
+                  </tbody>
+
+                </table>
+              </div>
+            )}
+
+            {/* Sub-tab 2: Others */}
+            {activeSubTab === 'others' && (
+              <div className="p-8 text-center text-xs text-slate-400">
+                No additional institutional miscellaneous fees recorded for this session.
+              </div>
+            )}
+
+            {/* Sub-tab 3: Transaction History */}
+            {activeSubTab === 'transactions' && (
+              <div className="p-4 space-y-3">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[12px]">
+                    <thead className="bg-[#34373d] text-white text-[11px]">
+                      <tr>
+                        <th className="py-2 px-3">Receipt No</th>
+                        <th className="py-2 px-3">Date</th>
+                        <th className="py-2 px-3">Transaction ID</th>
+                        <th className="py-2 px-3">Description</th>
+                        <th className="py-2 px-3">Method</th>
+                        <th className="py-2 px-3 text-right">Amount</th>
+                        <th className="py-2 px-3 text-center">Receipt</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {paymentHistory.map((txn) => (
+                        <tr key={txn.id} className="hover:bg-slate-50">
+                          <td className="py-2.5 px-3 font-mono font-bold text-blue-700">{txn.receiptNumber}</td>
+                          <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
+                          <td className="py-2.5 px-3 font-mono text-slate-500">{txn.transactionId}</td>
+                          <td className="py-2.5 px-3 text-slate-800">{txn.description}</td>
+                          <td className="py-2.5 px-3 text-slate-600">{txn.paymentMethod}</td>
+                          <td className="py-2.5 px-3 text-right font-bold text-slate-900">
+                            ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                          </td>
+                          <td className="py-2.5 px-3 text-center">
+                            <button
+                              onClick={() => onViewReceipt(txn)}
+                              className="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100"
+                            >
+                              Download
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* Sub-tab 4: Online Payment History */}
+            {activeSubTab === 'online_history' && (
+              <div className="p-4 space-y-3">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[12px]">
+                    <thead className="bg-[#34373d] text-white text-[11px]">
+                      <tr>
+                        <th className="py-2 px-3">Gateway Ref</th>
+                        <th className="py-2 px-3">Payment Mode</th>
+                        <th className="py-2 px-3">Date</th>
+                        <th className="py-2 px-3 text-right">Amount</th>
+                        <th className="py-2 px-3 text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {paymentHistory.map((txn) => (
+                        <tr key={txn.id} className="hover:bg-slate-50">
+                          <td className="py-2.5 px-3 font-mono text-slate-700">{txn.bankReference || 'RZP_ORDER_981'}</td>
+                          <td className="py-2.5 px-3 text-slate-700">{txn.paymentMethod}</td>
+                          <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
+                          <td className="py-2.5 px-3 text-right font-bold text-emerald-600">
+                            ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                          </td>
+                          <td className="py-2.5 px-3 text-center">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
+                              {txn.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+          </div>
+        )}
+
+      </div>
+
+    </div>
+  );
+};

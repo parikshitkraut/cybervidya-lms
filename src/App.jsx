@@ -1,54 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
-import { NotificationToast } from './components/common/NotificationToast';
+import { Footer } from './components/common/Footer';
 import { LoginPage } from './components/auth/LoginPage';
+import { NotificationToast } from './components/common/NotificationToast';
 
-// Student Components
-import { StudentDashboard } from './components/student/StudentDashboard';
-import { StudentProfile } from './components/student/StudentProfile';
-import { AssignmentsList } from './components/student/AssignmentsList';
-import { CertificatesView } from './components/student/CertificatesView';
-import { TimetableSchedule } from './components/student/TimetableSchedule';
-import { AnnouncementsView } from './components/student/AnnouncementsView';
+// Student Pages matching screenshots
+import { HomePage } from './components/home/HomePage';
+import { StudentFeesPage } from './components/fees/StudentFeesPage';
+import { RegisteredCoursesPage } from './components/student/RegisteredCoursesPage';
+import { AttendancePage } from './components/student/AttendancePage';
+import { ExamPage } from './components/student/ExamPage';
 
-// Course Components
-import { CourseCatalog } from './components/courses/CourseCatalog';
-import { CoursePlayer } from './components/courses/CoursePlayer';
-import { QuizModal } from './components/courses/QuizModal';
-
-// Fees Components
-import { FeeOverviewCards } from './components/fees/FeeOverviewCards';
-import { InstallmentSchedule } from './components/fees/InstallmentSchedule';
-import { PaymentHistoryTable } from './components/fees/PaymentHistoryTable';
+// Modals
 import { PayNowModal } from './components/fees/PayNowModal';
 import { ReceiptModal } from './components/fees/ReceiptModal';
-import { InvoiceModal } from './components/fees/InvoiceModal';
 import { PaymentSuccessModal } from './components/fees/PaymentSuccessModal';
 
-// Admin Components
-import { AdminDashboard } from './components/admin/AdminDashboard';
-import { AdminFeesManagement } from './components/admin/AdminFeesManagement';
-import { AdminStudents } from './components/admin/AdminStudents';
-import { AdminCourses } from './components/admin/AdminCourses';
-import { AdminReports } from './components/admin/AdminReports';
-import { RecordPaymentModal } from './components/admin/RecordPaymentModal';
-import { FeeStructureModal } from './components/admin/FeeStructureModal';
-import { ScholarshipModal } from './components/admin/ScholarshipModal';
-
-// Initial Mock Data
+// Initial Data
 import { 
   INSTITUTION, 
   INITIAL_STUDENT, 
-  INITIAL_FEE_SUMMARY, 
-  INITIAL_INSTALLMENTS, 
-  INITIAL_PAYMENT_HISTORY, 
-  INITIAL_COURSES, 
-  UPCOMING_CLASSES, 
-  ASSIGNMENTS, 
-  ANNOUNCEMENTS, 
-  CERTIFICATES, 
-  ALL_STUDENTS 
+  INITIAL_FEES_DATA, 
+  INITIAL_TRANSACTION_HISTORY 
 } from './data/mockData';
 import { localStore } from './lib/supabase';
 
@@ -56,39 +30,23 @@ export function App() {
   // Auth state: start at LoginPage so user sees the exact campus sign-in screen
   const [isAuthenticated, setIsAuthenticated] = useState(() => localStore.get('isAuthenticated', false));
 
-  // Roles: 'student' | 'admin'
-  const [currentRole, setCurrentRole] = useState(() => localStore.get('role', 'student'));
-  const [activeTab, setActiveTab] = useState(() => currentRole === 'admin' ? 'admin-overview' : 'dashboard');
+  // Active student tab matching screenshots: 'home' | 'admission' | 'attendance' | 'course' | 'exam' | 'finance' | 'feedback' | 'library' | 'courses'
+  const [activeTab, setActiveTab] = useState(() => localStore.get('activeTab', 'home'));
 
-  // Core Data States with persistence
+  // Core Data States
   const [student, setStudent] = useState(() => localStore.get('student', INITIAL_STUDENT));
-  const [feeSummary, setFeeSummary] = useState(() => localStore.get('feeSummary', INITIAL_FEE_SUMMARY));
-  const [installments, setInstallments] = useState(() => localStore.get('installments', INITIAL_INSTALLMENTS));
-  const [paymentHistory, setPaymentHistory] = useState(() => localStore.get('paymentHistory', INITIAL_PAYMENT_HISTORY));
-  const [courses, setCourses] = useState(() => localStore.get('courses', INITIAL_COURSES));
-  const [assignments, setAssignments] = useState(() => localStore.get('assignments', ASSIGNMENTS));
-  const [allStudents, setAllStudents] = useState(() => localStore.get('allStudents', ALL_STUDENTS));
-  
-  // Active playing course
-  const [activeCourse, setActiveCourse] = useState(null);
+  const [feesData, setFeesData] = useState(() => localStore.get('feesData', INITIAL_FEES_DATA));
+  const [paymentHistory, setPaymentHistory] = useState(() => localStore.get('paymentHistory', INITIAL_TRANSACTION_HISTORY));
 
-  // Modal States
+  // Modals
   const [isPayNowOpen, setIsPayNowOpen] = useState(false);
-  const [payNowDefaultAmount, setPayNowDefaultAmount] = useState(null);
+  const [payNowDefaultAmount, setPayNowDefaultAmount] = useState(14348.00);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [activeReceipt, setActiveReceipt] = useState(null);
-  const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
-  const [activeInvoice, setActiveInvoice] = useState(null);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [latestPayment, setLatestPayment] = useState(null);
-  const [isQuizOpen, setIsQuizOpen] = useState(false);
 
-  // Admin Modals
-  const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
-  const [isFeeStructureOpen, setIsFeeStructureOpen] = useState(false);
-  const [isScholarshipOpen, setIsScholarshipOpen] = useState(false);
-
-  // Notifications
+  // Notification Toast
   const [notification, setNotification] = useState(null);
 
   const showNotification = (type, title, message) => {
@@ -99,90 +57,65 @@ export function App() {
   // Sync state to local persistence
   useEffect(() => {
     localStore.set('isAuthenticated', isAuthenticated);
-    localStore.set('feeSummary', feeSummary);
-    localStore.set('installments', installments);
+    localStore.set('activeTab', activeTab);
+    localStore.set('student', student);
+    localStore.set('feesData', feesData);
     localStore.set('paymentHistory', paymentHistory);
-    localStore.set('allStudents', allStudents);
-    localStore.set('courses', courses);
-    localStore.set('assignments', assignments);
-    localStore.set('role', currentRole);
-  }, [isAuthenticated, feeSummary, installments, paymentHistory, allStudents, courses, assignments, currentRole]);
+  }, [isAuthenticated, activeTab, student, feesData, paymentHistory]);
 
-  // Handle Login from campus screenshot LoginPage
-  const handleLogin = ({ role, username }) => {
-    setCurrentRole(role);
-    setActiveTab(role === 'admin' ? 'admin-overview' : 'dashboard');
+  // Login handler from exact login screenshot
+  const handleLogin = ({ username }) => {
     setIsAuthenticated(true);
-    
-    if (role === 'student' && username) {
-      setStudent(prev => ({
-        ...prev,
-        prn: username.toUpperCase() === 'UGF24EE041' ? 'UGF24EE041' : prev.prn,
-        branch: username.toUpperCase().includes('EE') ? 'Electrical Engineering' : prev.branch,
-      }));
-    }
+    setActiveTab('home');
 
     showNotification(
       'success',
       'Sign In Successful',
-      `Welcome to Jhulelal Institute of Technology CyberVidya Portal (${role === 'admin' ? 'Admin ERP' : 'Student Dashboard'})`
+      `Welcome to CyberVidya Portal, ${student.shortName}!`
     );
   };
 
-  // Handle Logout
+  // Logout handler
   const handleLogout = () => {
     setIsAuthenticated(false);
-    showNotification('info', 'Logged Out', 'You have been safely signed out to the CyberVidya login portal.');
+    showNotification('info', 'Signed Out', 'You have been safely signed out to the CyberVidya login portal.');
   };
 
-  // Handle switching roles inside dashboard
-  const handleRoleChange = (newRole) => {
-    setCurrentRole(newRole);
-    setActiveTab(newRole === 'admin' ? 'admin-overview' : 'dashboard');
-    setActiveCourse(null);
+  // Open Pay Now
+  const handleOpenPayNow = (amt) => {
+    setPayNowDefaultAmount(amt || 14348.00);
+    setIsPayNowOpen(true);
   };
 
-  // Payment completed (Razorpay or Demo checkout)
-  const handlePaymentComplete = (newPaymentRecord, amountPaid, paymentChoice) => {
+  // Complete Payment handler
+  const handlePaymentComplete = (newPaymentRecord) => {
     // 1. Prepend to payment history
     setPaymentHistory(prev => [newPaymentRecord, ...prev]);
 
-    // 2. Update fee summary
-    const newPaidAmount = feeSummary.amountPaid + amountPaid;
-    const newOutstanding = Math.max(0, feeSummary.outstandingBalance - amountPaid);
-    setFeeSummary(prev => ({
+    // 2. Mark Development fees as paid
+    setFeesData(prev => ({
       ...prev,
-      amountPaid: newPaidAmount,
-      outstandingBalance: newOutstanding,
-    }));
-
-    // 3. If paid installment, mark term 3 as paid
-    setInstallments(prev => prev.map(inst => {
-      if (inst.status === 'Pending' && (paymentChoice === 'installment' || paymentChoice === 'full')) {
-        return {
-          ...inst,
-          status: 'Paid',
-          paidDate: newPaymentRecord.date,
-          transactionId: newPaymentRecord.transactionId,
-          receiptNumber: newPaymentRecord.receiptNumber,
-          paymentMethod: newPaymentRecord.paymentMethod,
-        };
+      outstanding: 0.00,
+      feeHeads: prev.feeHeads.map(h => {
+        if (h.name === "Development Fees") {
+          return {
+            ...h,
+            status: "Paid",
+            statusType: "green",
+            totalCollectedAmount: h.totalReceivables,
+            outstanding: 0.00,
+          };
+        }
+        return h;
+      }),
+      totals: {
+        ...prev.totals,
+        totalA: {
+          ...prev.totals.totalA,
+          outstanding: 0.00,
+          totalCollectedAmount: prev.totals.totalA.totalReceivables,
+        }
       }
-      return inst;
-    }));
-
-    // 4. Update student in admin roster
-    setAllStudents(prev => prev.map(s => {
-      if (s.id === student.id) {
-        return {
-          ...s,
-          paidAmount: s.paidAmount + amountPaid,
-          outstanding: Math.max(0, s.outstanding - amountPaid),
-          feeStatus: newOutstanding === 0 ? 'Paid' : 'Partial',
-          lastPaymentDate: newPaymentRecord.date,
-        };
-      }
-      return s;
     }));
 
     setIsPayNowOpen(false);
@@ -191,137 +124,13 @@ export function App() {
     showNotification('success', 'Fee Payment Verified!', `Official receipt ${newPaymentRecord.receiptNumber} generated.`);
   };
 
-  // Admin records offline payment
-  const handleRecordOfflinePayment = (studentId, newPayment, amount) => {
-    setPaymentHistory(prev => [newPayment, ...prev]);
-
-    setAllStudents(prev => prev.map(s => {
-      if (s.id === studentId) {
-        const newOutstanding = Math.max(0, s.outstanding - amount);
-        return {
-          ...s,
-          paidAmount: s.paidAmount + amount,
-          outstanding: newOutstanding,
-          feeStatus: newOutstanding === 0 ? 'Paid' : 'Partial',
-          lastPaymentDate: newPayment.date,
-        };
-      }
-      return s;
-    }));
-
-    // If recording for currently viewed student
-    if (studentId === student.id) {
-      setFeeSummary(prev => ({
-        ...prev,
-        amountPaid: prev.amountPaid + amount,
-        outstandingBalance: Math.max(0, prev.outstandingBalance - amount),
-      }));
-      setInstallments(prev => prev.map(inst => {
-        if (inst.status === 'Pending') {
-          return {
-            ...inst,
-            status: 'Paid',
-            paidDate: newPayment.date,
-            transactionId: newPayment.transactionId,
-            receiptNumber: newPayment.receiptNumber,
-            paymentMethod: newPayment.paymentMethod,
-          };
-        }
-        return inst;
-      }));
-    }
-
-    showNotification('success', 'Offline Payment Recorded', `Receipt ${newPayment.receiptNumber} issued for ₹${amount.toLocaleString('en-IN')}`);
-  };
-
   // View Receipt handler
-  const handleOpenReceipt = (receiptNumberOrObject) => {
-    let target = null;
-    if (typeof receiptNumberOrObject === 'string') {
-      target = paymentHistory.find(p => p.receiptNumber === receiptNumberOrObject) || paymentHistory[0];
-    } else {
-      target = receiptNumberOrObject;
-    }
-    setActiveReceipt(target);
+  const handleOpenReceipt = (receiptObj) => {
+    setActiveReceipt(receiptObj || paymentHistory[0]);
     setIsReceiptOpen(true);
   };
 
-  // View Invoice handler
-  const handleOpenInvoice = (transaction) => {
-    setActiveInvoice(transaction);
-    setIsInvoiceOpen(true);
-  };
-
-  // Open Pay Now
-  const handleOpenPayNow = (amount = null) => {
-    setPayNowDefaultAmount(amount);
-    setIsPayNowOpen(true);
-  };
-
-  // Toggle Lesson Completion
-  const handleToggleLesson = (courseId, lessonId) => {
-    setCourses(prev => prev.map(c => {
-      if (c.id === courseId) {
-        let total = 0;
-        let completed = 0;
-        const newModules = (c.modules || []).map(m => {
-          const newLessons = (m.lessons || []).map(l => {
-            total++;
-            const isTarget = l.id === lessonId;
-            const isCompleted = isTarget ? !l.completed : l.completed;
-            if (isCompleted) completed++;
-            return { ...l, completed: isCompleted };
-          });
-          return { ...m, lessons: newLessons };
-        });
-
-        const progress = total > 0 ? Math.round((completed / total) * 100) : c.progress;
-        return {
-          ...c,
-          modules: newModules,
-          progress,
-          completedLectures: completed,
-          totalLectures: total || c.totalLectures,
-        };
-      }
-      return c;
-    }));
-  };
-
-  // Assignment submission
-  const handleSubmitAssignment = (asgId, submissionData) => {
-    setAssignments(prev => prev.map(a => {
-      if (a.id === asgId) {
-        return {
-          ...a,
-          status: 'Submitted',
-          submittedFile: submissionData.file,
-          submittedAt: submissionData.submittedAt,
-        };
-      }
-      return a;
-    }));
-    showNotification('success', 'Assignment Submitted', 'Work uploaded and queued for faculty evaluation.');
-  };
-
-  // Send fee reminder SMS
-  const handleSendReminder = (targetStudent) => {
-    showNotification(
-      'info', 
-      'Fee Reminder Dispatched', 
-      `Automated SMS & Email sent to ${targetStudent.name} and parent registered contact: ${targetStudent.phone}`
-    );
-  };
-
-  // Add course
-  const handleAddCourse = (newCourse) => {
-    setCourses(prev => [newCourse, ...prev]);
-    showNotification('success', 'Course Added', `${newCourse.title} (${newCourse.code}) enrolled into curriculum.`);
-  };
-
-  const pendingAssignmentsCount = assignments.filter(a => a.status === 'Pending').length;
-
-  // If user is not signed in, render the exact Screenshot LoginPage!
+  // 1. If not logged in, render the exact screenshot LoginPage
   if (!isAuthenticated) {
     return (
       <>
@@ -334,232 +143,101 @@ export function App() {
     );
   }
 
-  // Once signed in, render the Full Academic LMS & ERP Dashboard!
+  // 2. When logged in, render the exact JITN CyberVidya Student Portal
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col bg-[#f5f6f8] text-slate-900 font-sans antialiased">
       
-      {/* Top Navbar with JIT + CyberVidya Logos & Sign Out */}
+      {/* Top Header: JIT Logo + JHULELAL INSTITUTE OF TECHNOLOGY, NAGPUR + Welcome RIDDHI */}
       <Navbar
-        currentRole={currentRole}
-        onRoleChange={handleRoleChange}
         student={student}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenPayNow={() => handleOpenPayNow(feeSummary.outstandingBalance)}
-        feeSummary={feeSummary}
         onLogout={handleLogout}
       />
 
-      {/* Main Body Layout */}
+      {/* Main Container: Sidebar + Content */}
       <div className="flex flex-1">
         
-        {/* Left Sidebar */}
+        {/* Dark Charcoal Sidebar matching Screenshot 1 & 2 */}
         <Sidebar
-          currentRole={currentRole}
           activeTab={activeTab}
-          setActiveTab={(tab) => {
-            setActiveTab(tab);
-            setActiveCourse(null);
-          }}
-          feeSummary={feeSummary}
-          pendingAssignmentsCount={pendingAssignmentsCount}
+          setActiveTab={setActiveTab}
         />
 
-        {/* Content Area */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full overflow-y-auto">
+        {/* Inner Content Area matching Screenshots */}
+        <main className="flex-1 p-4 sm:p-6 overflow-y-auto max-w-7xl w-full">
           
-          {/* ================= STUDENT PORTAL VIEWS ================= */}
-          {currentRole === 'student' && (
-            <>
-              {/* 1. Student Dashboard */}
-              {activeTab === 'dashboard' && (
-                <StudentDashboard
-                  student={student}
-                  courses={courses}
-                  feeSummary={feeSummary}
-                  upcomingClasses={UPCOMING_CLASSES}
-                  assignments={assignments}
-                  announcements={ANNOUNCEMENTS}
-                  onOpenCourse={(c) => {
-                    setActiveCourse(c);
-                    setActiveTab('courses');
-                  }}
-                  onOpenPayNow={() => handleOpenPayNow(feeSummary.outstandingBalance)}
-                  setActiveTab={setActiveTab}
-                />
-              )}
-
-              {/* 2. Courses & Lectures */}
-              {activeTab === 'courses' && (
-                activeCourse ? (
-                  <CoursePlayer
-                    course={activeCourse}
-                    onBack={() => setActiveCourse(null)}
-                    onToggleLesson={handleToggleLesson}
-                    onOpenQuiz={() => setIsQuizOpen(true)}
-                  />
-                ) : (
-                  <CourseCatalog
-                    courses={courses}
-                    onSelectCourse={(c) => setActiveCourse(c)}
-                  />
-                )
-              )}
-
-              {/* 3. Timetable & Schedule */}
-              {activeTab === 'timetable' && (
-                <TimetableSchedule />
-              )}
-
-              {/* 4. DEDICATED FEES & PAYMENTS SECTION */}
-              {activeTab === 'fees' && (
-                <div className="space-y-6">
-                  {/* Top Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                          Accounts & Finance Directorate
-                        </span>
-                        <span className="text-xs text-slate-400">Autonomous ERP</span>
-                      </div>
-                      <h2 className="text-xl font-black text-slate-900 mt-1">
-                        Academic Fees & Online Payments Portal
-                      </h2>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        {INSTITUTION.name} • PRN: <strong className="font-mono text-slate-800">{student.prn}</strong> • Session {INSTITUTION.academicYear}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      {feeSummary.outstandingBalance > 0 && (
-                        <button
-                          onClick={() => handleOpenPayNow(feeSummary.outstandingBalance)}
-                          className="px-5 py-2.5 rounded-xl bg-[#18b82a] hover:bg-[#15a225] text-white text-xs font-bold shadow-md shadow-emerald-500/20 flex items-center gap-2 transition-all"
-                        >
-                          <span>Pay Total Outstanding (₹{feeSummary.outstandingBalance.toLocaleString('en-IN')})</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 4 Overview Cards */}
-                  <FeeOverviewCards
-                    feeSummary={feeSummary}
-                    onPayNow={handleOpenPayNow}
-                    onViewBreakdown={() => handleOpenInvoice(paymentHistory[0])}
-                  />
-
-                  {/* Installment Schedule */}
-                  <InstallmentSchedule
-                    installments={installments}
-                    onPayInstallment={(inst) => handleOpenPayNow(inst.amount)}
-                    onViewReceipt={handleOpenReceipt}
-                  />
-
-                  {/* Transaction History Table */}
-                  <PaymentHistoryTable
-                    paymentHistory={paymentHistory}
-                    onViewReceipt={handleOpenReceipt}
-                    onViewInvoice={handleOpenInvoice}
-                  />
-                </div>
-              )}
-
-              {/* 5. Assignments & Labs */}
-              {activeTab === 'assignments' && (
-                <AssignmentsList
-                  assignments={assignments}
-                  onSubmitAssignment={handleSubmitAssignment}
-                />
-              )}
-
-              {/* 6. Announcements & Circulars */}
-              {activeTab === 'announcements' && (
-                <AnnouncementsView announcements={ANNOUNCEMENTS} />
-              )}
-
-              {/* 7. Certificates & Honors */}
-              {activeTab === 'certificates' && (
-                <CertificatesView certificates={CERTIFICATES} student={student} />
-              )}
-
-              {/* 8. Student Profile */}
-              {activeTab === 'profile' && (
-                <StudentProfile student={student} feeSummary={feeSummary} />
-              )}
-            </>
+          {/* Tab 1: Dashboard / Home Notice Board (Screenshot 1) */}
+          {activeTab === 'home' && (
+            <HomePage onNavigateToFees={() => setActiveTab('finance')} />
           )}
 
-          {/* ================= ADMIN ERP VIEWS ================= */}
-          {currentRole === 'admin' && (
-            <>
-              {/* 1. Admin Executive Dashboard */}
-              {activeTab === 'admin-overview' && (
-                <AdminDashboard
-                  students={allStudents}
-                  courses={courses}
-                  paymentHistory={paymentHistory}
-                  onRecordPayment={() => setIsRecordPaymentOpen(true)}
-                  setActiveTab={setActiveTab}
-                />
-              )}
+          {/* Tab 2: Finance / Student Fees Details (Screenshot 3) */}
+          {activeTab === 'finance' && (
+            <StudentFeesPage
+              student={student}
+              feesData={feesData}
+              paymentHistory={paymentHistory}
+              onPayNow={handleOpenPayNow}
+              onViewReceipt={handleOpenReceipt}
+              onViewInvoice={handleOpenReceipt}
+            />
+          )}
 
-              {/* 2. DEDICATED ADMIN FEES MANAGEMENT */}
-              {activeTab === 'admin-fees' && (
-                <AdminFeesManagement
-                  students={allStudents}
-                  onRecordOfflinePayment={() => setIsRecordPaymentOpen(true)}
-                  onViewReceipt={handleOpenReceipt}
-                  onOpenFeeStructure={() => setIsFeeStructureOpen(true)}
-                  onOpenScholarships={() => setIsScholarshipOpen(true)}
-                  onSendReminder={handleSendReminder}
-                />
-              )}
+          {/* Tab 3: My Registered Courses */}
+          {(activeTab === 'courses' || activeTab === 'course') && (
+            <RegisteredCoursesPage />
+          )}
 
-              {/* 3. Students Roster */}
-              {activeTab === 'admin-students' && (
-                <AdminStudents students={allStudents} />
-              )}
+          {/* Tab 4: Attendance */}
+          {activeTab === 'attendance' && (
+            <AttendancePage student={student} />
+          )}
 
-              {/* 4. Academic Courses */}
-              {activeTab === 'admin-courses' && (
-                <AdminCourses courses={courses} onAddCourse={handleAddCourse} />
-              )}
+          {/* Tab 5: Exam */}
+          {activeTab === 'exam' && (
+            <ExamPage student={student} />
+          )}
 
-              {/* 5. Collection Reports */}
-              {activeTab === 'admin-reports' && (
-                <AdminReports students={allStudents} paymentHistory={paymentHistory} />
-              )}
-
-              {/* 6. Scholarships & Waivers */}
-              {activeTab === 'admin-scholarships' && (
-                <div className="space-y-6">
-                  <ScholarshipModal isOpen={true} onClose={() => setActiveTab('admin-fees')} />
-                </div>
-              )}
-            </>
+          {/* Tab 6: Admission, Feedback, Library Placeholders */}
+          {(activeTab === 'admission' || activeTab === 'feedback' || activeTab === 'library') && (
+            <div className="space-y-4">
+              <h2 className="text-[17px] font-bold text-slate-900 capitalize">
+                {activeTab} Portal
+              </h2>
+              <div className="bg-white rounded border border-slate-200 p-8 text-center text-xs text-slate-500 space-y-2">
+                <p className="font-semibold text-slate-700">Autonomous Student Service Active</p>
+                <p>All records up-to-date for session 2026-2027 under Registration No: <strong className="font-mono text-slate-900">{student.registrationNo}</strong>.</p>
+                <button
+                  onClick={() => setActiveTab('finance')}
+                  className="mt-3 px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-xs font-bold rounded shadow-xs"
+                >
+                  Go to Student Fees Details
+                </button>
+              </div>
+            </div>
           )}
 
         </main>
       </div>
 
-      {/* ================= MODAL DIALOGS ================= */}
+      {/* Footer matching Screenshot 1, 2, 3 */}
+      <Footer />
 
-      {/* Pay Now Modal */}
+      {/* ================= MODALS ================= */}
+
+      {/* Pay Now Modal with Razorpay + Dynamic UPI QR */}
       {isPayNowOpen && (
         <PayNowModal
           isOpen={isPayNowOpen}
           onClose={() => setIsPayNowOpen(false)}
           student={student}
-          feeSummary={feeSummary}
-          installments={installments}
           defaultAmount={payNowDefaultAmount}
           onPaymentComplete={handlePaymentComplete}
         />
       )}
 
-      {/* Official Receipt Modal */}
+      {/* Official Computerized Receipt Modal */}
       {isReceiptOpen && activeReceipt && (
         <ReceiptModal
           isOpen={isReceiptOpen}
@@ -569,18 +247,7 @@ export function App() {
         />
       )}
 
-      {/* Tax Invoice Modal */}
-      {isInvoiceOpen && (
-        <InvoiceModal
-          isOpen={isInvoiceOpen}
-          onClose={() => setIsInvoiceOpen(false)}
-          transaction={activeInvoice || paymentHistory[0]}
-          student={student}
-          feeSummary={feeSummary}
-        />
-      )}
-
-      {/* Payment Success Confirmation Modal */}
+      {/* Payment Success Confirmation */}
       {isSuccessOpen && latestPayment && (
         <PaymentSuccessModal
           isOpen={isSuccessOpen}
@@ -591,43 +258,7 @@ export function App() {
         />
       )}
 
-      {/* Quiz Modal */}
-      {isQuizOpen && (
-        <QuizModal
-          isOpen={isQuizOpen}
-          onClose={() => setIsQuizOpen(false)}
-          courseTitle={activeCourse?.title || "Computer Science Core"}
-        />
-      )}
-
-      {/* Admin: Record Payment Modal */}
-      {isRecordPaymentOpen && (
-        <RecordPaymentModal
-          isOpen={isRecordPaymentOpen}
-          onClose={() => setIsRecordPaymentOpen(false)}
-          students={allStudents}
-          onPaymentRecorded={handleRecordOfflinePayment}
-        />
-      )}
-
-      {/* Admin: Fee Structure Modal */}
-      {isFeeStructureOpen && (
-        <FeeStructureModal
-          isOpen={isFeeStructureOpen}
-          onClose={() => setIsFeeStructureOpen(false)}
-          onSave={() => showNotification('success', 'Fee Structure Updated', 'New fee rules updated for B.Tech & M.Tech programs.')}
-        />
-      )}
-
-      {/* Admin: Scholarships Modal */}
-      {isScholarshipOpen && (
-        <ScholarshipModal
-          isOpen={isScholarshipOpen}
-          onClose={() => setIsScholarshipOpen(false)}
-        />
-      )}
-
-      {/* Floating Notification Toast */}
+      {/* Floating Alert Toast */}
       <NotificationToast
         notification={notification}
         onClose={() => setNotification(null)}

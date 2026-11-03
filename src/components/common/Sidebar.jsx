@@ -1,154 +1,90 @@
-import React from 'react';
-import {
-  LayoutDashboard,
-  BookOpen,
-  Calendar,
-  CreditCard,
-  FileText,
+import React, { useState } from 'react';
+import { 
+  LayoutDashboard, 
+  FolderPlus, 
+  CalendarCheck, 
+  Cog, 
+  FileText, 
+  CreditCard, 
+  ClipboardList, 
+  BookOpen, 
   Award,
-  BellRing,
-  User,
-  Users,
-  Settings,
-  DollarSign,
-  TrendingUp,
-  FileCheck2,
-  FolderLock,
-  Layers,
-  HelpCircle,
-  Shield,
-  Sparkles
+  ChevronRight,
+  ChevronLeft
 } from 'lucide-react';
-import { INSTITUTION } from '../../data/mockData';
 
-export const Sidebar = ({ 
-  currentRole, 
-  activeTab, 
-  setActiveTab, 
-  feeSummary, 
-  pendingAssignmentsCount 
-}) => {
+export const Sidebar = ({ activeTab, setActiveTab }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const studentNavItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'courses', label: 'My Courses & Lectures', icon: BookOpen },
-    { id: 'timetable', label: 'Classes & Timetable', icon: Calendar, badge: 'Live' },
-    { 
-      id: 'fees', 
-      label: 'Fees & Payments', 
-      icon: CreditCard, 
-      highlight: feeSummary.outstandingBalance > 0,
-      badge: feeSummary.outstandingBalance > 0 ? `₹${(feeSummary.outstandingBalance/1000).toFixed(0)}k Due` : null
-    },
-    { 
-      id: 'assignments', 
-      label: 'Assignments & Labs', 
-      icon: FileText, 
-      badge: pendingAssignmentsCount > 0 ? `${pendingAssignmentsCount} Due` : null 
-    },
-    { id: 'announcements', label: 'Announcements', icon: BellRing },
-    { id: 'certificates', label: 'Certificates & Honors', icon: Award },
-    { id: 'profile', label: 'Student Profile', icon: User },
+  const navItems = [
+    { id: 'home', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'admission', label: 'Admission', icon: FolderPlus, hasSubmenu: true },
+    { id: 'attendance', label: 'Attendance', icon: CalendarCheck, hasSubmenu: true },
+    { id: 'course', label: 'Course', icon: Cog, hasSubmenu: true },
+    { id: 'exam', label: 'Exam', icon: FileText, hasSubmenu: true },
+    { id: 'finance', label: 'Finance', icon: CreditCard, hasSubmenu: true, highlight: true },
+    { id: 'feedback', label: 'Feedback Form', icon: ClipboardList, hasSubmenu: true },
+    { id: 'library', label: 'Library', icon: BookOpen, hasSubmenu: true },
+    { id: 'courses', label: 'My Registered Courses', icon: Cog, hasSubmenu: false },
   ];
-
-  const adminNavItems = [
-    { id: 'admin-overview', label: 'Executive Overview', icon: TrendingUp },
-    { 
-      id: 'admin-fees', 
-      label: 'Fees Administration', 
-      icon: DollarSign,
-      highlight: true,
-      badge: 'Core'
-    },
-    { id: 'admin-students', label: 'Students Roster', icon: Users },
-    { id: 'admin-courses', label: 'Academic Courses', icon: Layers },
-    { id: 'admin-reports', label: 'Collection Reports', icon: FileCheck2 },
-    { id: 'admin-scholarships', label: 'Scholarships & Waivers', icon: Award },
-  ];
-
-  const items = currentRole === 'admin' ? adminNavItems : studentNavItems;
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 min-h-[calc(100vh-4rem)]">
+    <aside 
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+      className={`bg-[#2b2d32] text-slate-300 transition-all duration-200 shrink-0 flex flex-col z-20 shadow-md ${
+        isExpanded ? 'w-52' : 'w-14'
+      }`}
+      style={{ minHeight: 'calc(100vh - 3.5rem)' }}
+    >
       
-      {/* Role Banner / Context */}
-      <div className="p-4 border-b border-slate-100">
-        <div className={`p-3 rounded-xl border flex items-center gap-3 ${
-          currentRole === 'admin'
-            ? 'bg-gradient-to-r from-vidya-50 to-indigo-50 border-vidya-200/80 text-vidya-900'
-            : 'bg-gradient-to-r from-cyber-50 to-indigo-50 border-cyber-200/80 text-cyber-900'
-        }`}>
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-            currentRole === 'admin' ? 'bg-vidya-600 text-white' : 'bg-cyber-600 text-white'
-          }`}>
-            {currentRole === 'admin' ? <Shield className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
-          </div>
-          <div className="overflow-hidden">
-            <p className="text-[10px] font-bold tracking-wider uppercase opacity-75">
-              {currentRole === 'admin' ? 'Administrative Suite' : 'Autonomous Student ERP'}
-            </p>
-            <p className="text-xs font-bold truncate">
-              {currentRole === 'admin' ? 'Finance & Academic Office' : 'B.Tech CSE - Sem VI'}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Nav List */}
-      <nav className="p-3 space-y-1 flex-1 overflow-y-auto">
-        {items.map((item) => {
+      {/* Navigation List */}
+      <nav className="py-2 space-y-0.5 flex-1">
+        {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
+
           return (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
+              className={`w-full flex items-center h-11 px-4 transition-colors group relative ${
                 isActive
-                  ? currentRole === 'admin'
-                    ? 'bg-gradient-to-r from-vidya-600 to-indigo-600 text-white shadow-md shadow-vidya-600/20'
-                    : 'bg-gradient-to-r from-cyber-600 to-indigo-600 text-white shadow-md shadow-cyber-600/20'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                  ? 'bg-[#1e2023] text-white font-medium border-l-3 border-orange-500'
+                  : 'hover:bg-[#34373d] text-slate-300 hover:text-white'
               }`}
+              title={!isExpanded ? item.label : undefined}
             >
-              <div className="flex items-center gap-3">
-                <Icon className={`w-4 h-4 transition-transform group-hover:scale-110 ${
-                  isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-700'
-                }`} />
-                <span>{item.label}</span>
+              {/* Icon */}
+              <div className="w-6 flex items-center justify-center shrink-0">
+                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-300 group-hover:text-white'}`} />
               </div>
 
-              {item.badge && (
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                  isActive
-                    ? 'bg-white/20 text-white'
-                    : item.highlight
-                      ? 'bg-amber-100 text-amber-700 border border-amber-300'
-                      : 'bg-cyber-100 text-cyber-700'
-                }`}>
-                  {item.badge}
-                </span>
+              {/* Label (shown when expanded) */}
+              {isExpanded && (
+                <div className="ml-3 flex-1 flex items-center justify-between overflow-hidden">
+                  <span className="text-[13px] truncate text-left">
+                    {item.label}
+                  </span>
+                  {item.hasSubmenu && (
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white shrink-0 ml-1" />
+                  )}
+                </div>
               )}
             </button>
           );
         })}
       </nav>
 
-      {/* Institutional Footer Seal */}
-      <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-        <div className="text-[11px] text-slate-500 space-y-1">
-          <div className="flex items-center gap-1.5 font-bold text-slate-700">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span>Razorpay Secured Gateway</span>
-          </div>
-          <p className="text-[10px] text-slate-400 leading-relaxed">
-            {INSTITUTION.accreditation}
-          </p>
-          <div className="pt-2 text-[9px] text-slate-400 flex items-center justify-between border-t border-slate-200">
-            <span>CyberVidya v2.6</span>
-            <span className="font-mono text-emerald-600">PCI-DSS 256-bit</span>
-          </div>
-        </div>
+      {/* Collapse / Expand Toggle Button at bottom */}
+      <div className="p-2 border-t border-[#3a3d44] flex justify-center">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="p-1.5 rounded hover:bg-[#34373d] text-slate-400 hover:text-white transition-colors"
+          title={isExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
+        >
+          {isExpanded ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+        </button>
       </div>
 
     </aside>

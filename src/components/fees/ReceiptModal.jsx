@@ -1,15 +1,7 @@
-import React, { useRef } from 'react';
-import { 
-  Printer, 
-  Download, 
-  CheckCircle2, 
-  QrCode, 
-  Building2, 
-  FileCheck,
-  ShieldCheck,
-  X
-} from 'lucide-react';
+import React from 'react';
+import { Printer, Download, QrCode, ShieldCheck, X } from 'lucide-react';
 import { INSTITUTION } from '../../data/mockData';
+import jitLogo from '../../assets/jit-logo.png';
 
 export const ReceiptModal = ({ isOpen, onClose, receipt, student }) => {
   if (!isOpen || !receipt) return null;
@@ -18,212 +10,123 @@ export const ReceiptModal = ({ isOpen, onClose, receipt, student }) => {
     window.print();
   };
 
-  const handleDownload = () => {
-    // Generate a printable window or trigger print
-    window.print();
-  };
-
-  // Convert amount to Indian words roughly
-  const amountInWords = (amount) => {
-    if (amount === 40000) return "Rupees Forty Thousand Only";
-    if (amount === 80000) return "Rupees Eighty Thousand Only";
-    if (amount === 120000) return "Rupees One Lakh Twenty Thousand Only";
-    return `Rupees ${amount.toLocaleString('en-IN')} Only`;
-  };
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity no-print"
         onClick={onClose}
       />
 
-      <div className="min-h-full flex items-center justify-center p-4 sm:p-6">
+      <div className="min-h-full flex items-center justify-center p-4">
         <div 
-          className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all w-full max-w-3xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150 print:m-0 print:border-none print:shadow-none"
+          className="relative transform overflow-hidden rounded bg-white text-left shadow-2xl transition-all w-full max-w-2xl border border-slate-200 animate-in fade-in zoom-in-95 print:m-0 print:border-none print:shadow-none"
           onClick={(e) => e.stopPropagation()}
         >
-          
-          {/* Action Toolbar (Hidden in Print) */}
-          <div className="no-print px-6 py-3 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-700 flex items-center gap-2">
-              <FileCheck className="w-4 h-4 text-emerald-600" />
-              <span>Official Institutional Fee Receipt (Verified)</span>
-            </span>
+          {/* Action Toolbar (no-print) */}
+          <div className="no-print px-5 py-2.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-700">Official Computerized Fee Receipt</span>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrint}
-                className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs font-semibold shadow-sm flex items-center gap-1.5 transition-all"
+                className="px-3 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded text-xs font-semibold text-slate-700 flex items-center gap-1 shadow-xs"
               >
-                <Printer className="w-3.5 h-3.5 text-cyber-600" />
-                <span>Print Receipt</span>
+                <Printer className="w-3.5 h-3.5 text-blue-600" />
+                <span>Print</span>
               </button>
               <button
-                onClick={handleDownload}
-                className="px-3 py-1.5 rounded-lg bg-cyber-600 hover:bg-cyber-700 text-white text-xs font-semibold shadow-sm flex items-center gap-1.5 transition-all"
+                onClick={handlePrint}
+                className="px-3 py-1 bg-[#18b82a] hover:bg-[#15a225] text-white rounded text-xs font-bold flex items-center gap-1 shadow-xs"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download PDF</span>
               </button>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition-colors ml-1"
+                className="p-1 text-slate-400 hover:text-slate-600 ml-1"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          {/* Printable Receipt Content */}
-          <div className="p-8 print:p-0 print-area text-slate-900 bg-white">
+          {/* Printable Receipt Area */}
+          <div className="p-8 print:p-0 print-area text-slate-900 bg-white space-y-4">
             
-            {/* Header */}
-            <div className="text-center border-b-2 border-slate-800 pb-4">
-              <div className="flex items-center justify-center gap-3 mb-1">
-                <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-black text-xl tracking-tighter">
-                  {INSTITUTION.shortName}
-                </div>
+            {/* College Header with Logo */}
+            <div className="text-center border-b-2 border-slate-900 pb-3">
+              <div className="flex items-center justify-center gap-3">
+                <img src={jitLogo} alt="JIT Logo" className="h-12 w-12 object-contain" />
                 <div>
-                  <h1 className="text-xl font-extrabold text-slate-950 uppercase tracking-tight">
+                  <h1 className="text-base font-extrabold uppercase tracking-tight text-slate-950">
                     {INSTITUTION.name}
                   </h1>
-                  <p className="text-[11px] font-semibold text-slate-600">
-                    {INSTITUTION.accreditation}
-                  </p>
+                  <p className="text-[10px] text-slate-600 font-semibold">{INSTITUTION.accreditation}</p>
                 </div>
               </div>
-              <p className="text-[10px] text-slate-500 max-w-xl mx-auto leading-relaxed">
-                {INSTITUTION.affiliation} • {INSTITUTION.address}
-              </p>
-              <div className="mt-3 inline-block px-4 py-1 rounded-full bg-slate-100 text-slate-900 text-xs font-black uppercase tracking-wider border border-slate-300">
-                OFFICIAL STUDENT FEE RECEIPT ({INSTITUTION.academicYear})
+              <p className="text-[9px] text-slate-400 mt-1">{INSTITUTION.address}</p>
+              <div className="mt-2 inline-block px-3 py-0.5 rounded bg-slate-100 text-slate-800 text-[11px] font-bold uppercase tracking-wider border border-slate-300">
+                STUDENT FEES RECEIPT ({student.academicYear})
               </div>
             </div>
 
-            {/* Receipt Meta & Student Details Grid */}
-            <div className="grid grid-cols-2 gap-4 py-4 border-b border-slate-200 text-xs">
+            {/* Student Details Grid */}
+            <div className="grid grid-cols-2 gap-4 text-[11px] border-b border-slate-200 pb-3">
               <div className="space-y-1">
-                <div>
-                  <span className="text-slate-500">Student Name: </span>
-                  <strong className="text-slate-900 font-bold uppercase">{student?.name || receipt.payerName}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-500">PRN / Enrollment: </span>
-                  <strong className="text-slate-900 font-mono font-bold">{student?.prn || '2023BCSE042'}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-500">Program / Branch: </span>
-                  <span className="text-slate-800 font-medium">{student?.branch || 'B.Tech Computer Science & Engineering'}</span>
-                </div>
-                <div>
-                  <span className="text-slate-500">Semester & Roll No: </span>
-                  <span className="text-slate-800 font-medium">Semester {student?.semester || 6} ({student?.section || 'CSE-A'}) • Roll: {student?.rollNo || 'CSE-42'}</span>
-                </div>
+                <p><span className="text-slate-500">Student Name:</span> <strong className="uppercase">{student.name}</strong></p>
+                <p><span className="text-slate-500">Registration No:</span> <strong className="font-mono">{student.registrationNo}</strong></p>
+                <p><span className="text-slate-500">Program / Degree:</span> {student.degree} ({student.branchFullName || 'Electrical Engineering'})</p>
+                <p><span className="text-slate-500">Year / Semester:</span> Year {student.year} • Semester {student.semester}</p>
               </div>
-
               <div className="space-y-1 text-right">
-                <div>
-                  <span className="text-slate-500">Receipt No: </span>
-                  <strong className="text-cyber-700 font-mono font-bold">{receipt.receiptNumber}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-500">Transaction ID: </span>
-                  <strong className="text-slate-800 font-mono">{receipt.transactionId}</strong>
-                </div>
-                <div>
-                  <span className="text-slate-500">Payment Date: </span>
-                  <span className="text-slate-800 font-medium">
-                    {new Date(receipt.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} at {receipt.time}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-slate-500">Payment Mode: </span>
-                  <span className="font-semibold text-slate-900">{receipt.paymentMethod}</span>
-                </div>
+                <p><span className="text-slate-500">Receipt No:</span> <strong className="font-mono text-blue-700">{receipt.receiptNumber}</strong></p>
+                <p><span className="text-slate-500">Transaction ID:</span> <span className="font-mono">{receipt.transactionId}</span></p>
+                <p><span className="text-slate-500">Payment Date:</span> {receipt.date} at {receipt.time}</p>
+                <p><span className="text-slate-500">Payment Mode:</span> {receipt.paymentMethod}</p>
               </div>
             </div>
 
-            {/* Fee Particulars Table */}
-            <div className="mt-4">
-              <table className="w-full text-left text-xs border border-slate-300">
-                <thead className="bg-slate-100 border-b border-slate-300 font-bold uppercase text-[10px] text-slate-700">
-                  <tr>
-                    <th className="py-2.5 px-3 border-r border-slate-300 w-12 text-center">Sr.</th>
-                    <th className="py-2.5 px-3 border-r border-slate-300">Particulars / Fee Head</th>
-                    <th className="py-2.5 px-3 border-r border-slate-300">Remarks / Term</th>
-                    <th className="py-2.5 px-3 text-right">Amount Paid (₹)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-200">
-                  <tr>
-                    <td className="py-2.5 px-3 border-r border-slate-200 text-center font-mono">1</td>
-                    <td className="py-2.5 px-3 border-r border-slate-200 font-medium">
-                      College Academic Tuition & Development Fee
-                    </td>
-                    <td className="py-2.5 px-3 border-r border-slate-200 text-slate-600">
-                      {receipt.description || 'Session 2026-27 Installment'}
-                    </td>
-                    <td className="py-2.5 px-3 text-right font-bold text-slate-900">
-                      ₹{receipt.amount.toLocaleString('en-IN')}
-                    </td>
-                  </tr>
-                  <tr className="bg-slate-50/50 font-bold text-slate-900 border-t-2 border-slate-300">
-                    <td colSpan="3" className="py-3 px-3 text-right uppercase tracking-wider text-[11px]">
-                      Net Amount Received
-                    </td>
-                    <td className="py-3 px-3 text-right text-sm font-black text-slate-950">
-                      ₹{receipt.amount.toLocaleString('en-IN')}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            {/* Particulars Table */}
+            <table className="w-full text-left text-[11px] border border-slate-300">
+              <thead className="bg-slate-100 border-b border-slate-300 font-bold uppercase text-[10px]">
+                <tr>
+                  <th className="py-2 px-3 border-r border-slate-300 w-10 text-center">Sr.</th>
+                  <th className="py-2 px-3 border-r border-slate-300">Particulars / Fee Head</th>
+                  <th className="py-2 px-3 border-r border-slate-300 text-center">Session</th>
+                  <th className="py-2 px-3 text-right">Amount Paid</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr>
+                  <td className="py-2 px-3 text-center border-r border-slate-200">1</td>
+                  <td className="py-2 px-3 border-r border-slate-200 font-medium">Development & Academic Institutional Fees</td>
+                  <td className="py-2 px-3 text-center border-r border-slate-200">{student.academicSession}</td>
+                  <td className="py-2 px-3 text-right font-bold">₹ {receipt.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                </tr>
+                <tr className="bg-slate-50 font-bold">
+                  <td colSpan="3" className="py-2 px-3 text-right uppercase text-[10px]">Total Received Amount</td>
+                  <td className="py-2 px-3 text-right font-black text-xs">₹ {receipt.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                </tr>
+              </tbody>
+            </table>
 
-            {/* Amount in words */}
-            <div className="mt-3 p-2.5 rounded bg-slate-50 border border-slate-200 text-xs">
-              <span className="text-slate-500 font-medium">Amount Received in Words: </span>
-              <strong className="text-slate-900 font-bold uppercase">{amountInWords(receipt.amount)}</strong>
-            </div>
-
-            {/* Footer with Seal & QR Verification */}
-            <div className="mt-8 pt-4 border-t-2 border-slate-200 flex items-end justify-between text-xs">
-              
-              {/* QR Verification */}
-              <div className="flex items-center gap-3">
-                <div className="w-16 h-16 p-1 bg-white border border-slate-300 rounded flex items-center justify-center">
-                  <QrCode className="w-14 h-14 text-slate-900" />
-                </div>
-                <div className="text-[10px] text-slate-500 space-y-0.5">
-                  <span className="font-bold text-emerald-700 flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Digitally Signed & Validated</span>
-                  </span>
-                  <p className="font-mono">Ref: {receipt.bankReference || 'RZP-DIRECT'}</p>
-                  <p>Verify at: jitn.cybervidya.net/verify</p>
+            {/* Signatures & Seal */}
+            <div className="pt-6 border-t border-slate-200 flex items-end justify-between text-[10px]">
+              <div className="flex items-center gap-2">
+                <QrCode className="w-12 h-12 text-slate-800" />
+                <div className="text-slate-400">
+                  <p className="font-bold text-emerald-700">CyberVidya Validated</p>
+                  <p className="font-mono">{receipt.bankReference}</p>
                 </div>
               </div>
-
-              {/* Signature Stamp */}
               <div className="text-center">
-                <div className="w-40 border-b border-slate-400 pb-1 mb-1">
-                  <span className="font-serif italic font-bold text-indigo-900 text-sm">
-                    P. K. Deshmukh
-                  </span>
+                <div className="w-32 border-b border-slate-400 pb-1 mb-1 font-serif italic text-xs">
+                  Accounts Officer
                 </div>
-                <p className="font-bold text-[11px] text-slate-800">Finance & Accounts Officer</p>
-                <p className="text-[9px] text-slate-500">{INSTITUTION.name}</p>
+                <p className="font-bold text-slate-800">{INSTITUTION.name}</p>
               </div>
-
-            </div>
-
-            {/* Note */}
-            <div className="mt-6 text-[9px] text-slate-400 text-center border-t border-slate-100 pt-2">
-              Note: This is a system-generated computer receipt issued by the CyberVidya ERP System of {INSTITUTION.name}. Retain this receipt for university examination form submission and semester registration.
             </div>
 
           </div>
-
         </div>
       </div>
     </div>
