@@ -30,10 +30,10 @@ export function App() {
   const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
   const initialTabFromUrl = urlParams ? urlParams.get('tab') : null;
 
-  // Auth state: start at LoginPage so user sees the exact campus sign-in screen, or auto-auth if tab query is provided
+  // Auth state: start at LoginPage on root '/' so user can test login credentials, or auto-auth if tab query is provided
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     if (initialTabFromUrl) return true;
-    return localStore.get('isAuthenticated', false);
+    return false;
   });
 
   // Active student tab matching screenshots: 'home' | 'admission' | 'attendance' | 'course' | 'exam' | 'finance' | 'feedback' | 'library' | 'courses'
@@ -82,6 +82,14 @@ export function App() {
   const handleLogin = ({ username }) => {
     setIsAuthenticated(true);
     setActiveTab('home');
+
+    // Sync student PRN and roll number with the login ID (e.g. UGF24EE036)
+    setStudent(prev => ({
+      ...prev,
+      prn: username.toUpperCase(),
+      registrationNo: username.toUpperCase(),
+      rollNo: username.toUpperCase(),
+    }));
 
     showNotification(
       'success',

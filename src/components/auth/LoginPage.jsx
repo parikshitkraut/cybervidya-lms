@@ -1,45 +1,40 @@
 import React, { useState } from 'react';
-import { User, Eye, EyeOff, RefreshCw, KeyRound, CheckCircle2, ShieldCheck, HelpCircle } from 'lucide-react';
+import { User, Eye, EyeOff, RefreshCw, KeyRound, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
 import jitLogo from '../../assets/jit-logo.png';
 import cyberLogo from '../../assets/cybervidya-logo.png';
 import campusBg from '../../assets/jitn-campus-bg.png';
 import { INSTITUTION } from '../../data/mockData';
 
 export const LoginPage = ({ onLogin }) => {
-  const [username, setUsername] = useState('UGF24EE041');
-  const [password, setPassword] = useState('jitn@2026');
+  const [username, setUsername] = useState('ugf24ee036');
+  const [password, setPassword] = useState('parikshit');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [forgotInput, setForgotInput] = useState('');
   const [forgotSubmitted, setForgotSubmitted] = useState(false);
-  const [roleSelection, setRoleSelection] = useState('student'); // 'student' | 'admin'
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErrorMessage('');
     setIsLoading(true);
 
     setTimeout(() => {
       setIsLoading(false);
-      // If username has 'admin' or roleSelection is admin
-      const isAdm = username.toLowerCase().includes('admin') || roleSelection === 'admin';
-      onLogin({
-        role: isAdm ? 'admin' : 'student',
-        username: username,
-      });
-    }, 600);
-  };
+      const cleanUser = username.trim().toLowerCase();
 
-  const handleQuickStudent = () => {
-    setUsername('UGF24EE041');
-    setPassword('jitn@2026');
-    setRoleSelection('student');
-  };
-
-  const handleQuickAdmin = () => {
-    setUsername('ADMIN_FINANCE');
-    setPassword('admin@jitn');
-    setRoleSelection('admin');
+      // Strict validation: ID must be ugf24ee036 and password must be parikshit
+      if (cleanUser === 'ugf24ee036' && password === 'parikshit') {
+        onLogin({
+          role: 'student',
+          username: username.trim().toUpperCase(),
+        });
+      } else {
+        // If incorrect, DO NOT open the dashboard!
+        setErrorMessage('Invalid User Name or Password. Access denied.');
+      }
+    }, 400);
   };
 
   return (
@@ -84,6 +79,14 @@ export const LoginPage = ({ onLogin }) => {
           Sign In
         </h2>
 
+        {/* Error Alert if credentials incorrect */}
+        {errorMessage && (
+          <div className="mb-4 p-2.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded flex items-center gap-2 animate-in fade-in">
+            <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+            <span className="font-medium">{errorMessage}</span>
+          </div>
+        )}
+
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
@@ -97,9 +100,12 @@ export const LoginPage = ({ onLogin }) => {
                 <input
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    if (errorMessage) setErrorMessage('');
+                  }}
                   required
-                  placeholder="e.g. UGF24EE041"
+                  placeholder="ugf24ee036"
                   className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-1.5 text-[13px] font-mono text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
                 />
                 <User className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -117,9 +123,12 @@ export const LoginPage = ({ onLogin }) => {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (errorMessage) setErrorMessage('');
+                  }}
                   required
-                  placeholder="••••••••"
+                  placeholder="parikshit"
                   className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-1.5 text-[13px] text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
                 />
                 <button
@@ -168,45 +177,13 @@ export const LoginPage = ({ onLogin }) => {
 
         </form>
 
-        {/* Quick Demo Helper Tabs */}
-        <div className="mt-6 pt-4 border-t border-slate-100 text-center">
-          <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-2">
-            One-Click Demo Portals
-          </p>
-          <div className="flex items-center justify-center gap-2">
-            <button
-              type="button"
-              onClick={handleQuickStudent}
-              className={`px-2.5 py-1 text-[11px] font-semibold rounded border transition-all ${
-                roleSelection === 'student'
-                  ? 'bg-blue-50 text-blue-700 border-blue-200'
-                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              Student Portal
-            </button>
-            <button
-              type="button"
-              onClick={handleQuickAdmin}
-              className={`px-2.5 py-1 text-[11px] font-semibold rounded border transition-all ${
-                roleSelection === 'admin'
-                  ? 'bg-purple-50 text-purple-700 border-purple-200'
-                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              Admin ERP
-            </button>
-          </div>
-        </div>
-
       </div>
 
       {/* Floating Bottom Right Refresh / Security Badge (from screenshot) */}
       <div className="absolute bottom-4 right-4 z-20">
         <div 
           onClick={() => {
-            handleQuickStudent();
-            alert("CyberVidya Session Refreshed: JITN Autonomous Gateway Active.");
+            alert("CyberVidya Gateway Active: JITN Autonomous Authentication Server.");
           }}
           className="w-10 h-10 rounded-full bg-white text-blue-600 shadow-lg border border-slate-200 flex items-center justify-center cursor-pointer hover:bg-slate-50 hover:scale-105 transition-all"
           title="CyberVidya Autonomous Security Token"
