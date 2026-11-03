@@ -9,28 +9,12 @@ export const StudentFeesPage = ({
   onViewReceipt, 
   onViewInvoice 
 }) => {
-  // Store expanded state for each academic year (default year 1 open matching user screenshot)
+  // Store expanded state for each academic year (all collapsed by default, exactly matching the screenshot)
   const [expandedYears, setExpandedYears] = useState({
-    'year_1': true,
+    'year_1': false,
     'year_2': false,
     'year_3': false,
   });
-
-  const expandAll = () => {
-    setExpandedYears({
-      'year_1': true,
-      'year_2': true,
-      'year_3': true,
-    });
-  };
-
-  const collapseAll = () => {
-    setExpandedYears({
-      'year_1': false,
-      'year_2': false,
-      'year_3': false,
-    });
-  };
 
   // Active sub-tab per year: { [yearId]: 'academic' | 'others' | 'transactions' | 'online_history' }
   const [subTabs, setSubTabs] = useState({
@@ -155,28 +139,7 @@ export const StudentFeesPage = ({
         </div>
       </div>
 
-      {/* Accordion Controls Bar */}
-      <div className="flex items-center justify-between text-xs pt-1">
-        <span className="text-slate-500 font-medium">
-          Fee History by Academic Year (Total Annual College Fee: <strong>₹ 125,848.00</strong>)
-        </span>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={expandAll}
-            className="px-2 py-0.5 text-[11px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors"
-          >
-            Expand All Years
-          </button>
-          <button
-            onClick={collapseAll}
-            className="px-2 py-0.5 text-[11px] font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded border border-slate-300 transition-colors"
-          >
-            Collapse All
-          </button>
-        </div>
-      </div>
-
-      {/* 3 Academic Years Accordion List (From Screenshot 1, 2, 3) */}
+      {/* 3 Academic Years Accordion List (Exact match to CyberVidya screenshot) */}
       <div className="space-y-3">
         {ACADEMIC_YEARS_FEES.map((yearData) => {
           const isExpanded = expandedYears[yearData.id];
@@ -195,35 +158,25 @@ export const StudentFeesPage = ({
               className="bg-white rounded border border-slate-200 shadow-xs overflow-hidden"
             >
               
-              {/* Accordion Bar from Screenshot 1 */}
+              {/* Accordion Bar (Exact clean styling from Screenshot) */}
               <div 
                 onClick={() => toggleYear(yearData.id)}
                 className="p-3 bg-slate-50 hover:bg-slate-100/80 border-b border-slate-200 flex items-center justify-between cursor-pointer select-none transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-[13px] font-bold text-slate-800">
-                    {yearData.label}
-                  </span>
-                  <span className="text-[11px] text-slate-500 hidden sm:inline">
-                    ({yearData.yearTitle}) • Student Paid: <strong>₹{yearData.studentPaidTotal.toLocaleString('en-IN')}</strong> | Freeship: <strong>₹{yearData.freeshipTotal.toLocaleString('en-IN')}</strong>
-                  </span>
-                </div>
+                <span className="text-[13px] font-bold text-slate-800">
+                  {yearData.label}
+                </span>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 hidden md:inline">
-                    Total: ₹{yearData.grandTotal.toLocaleString('en-IN')}
-                  </span>
-                  <button className="text-slate-500 p-0.5">
-                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </button>
-                </div>
+                <button className="text-slate-500 p-0.5">
+                  {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
               </div>
 
               {/* Accordion Body */}
               {isExpanded && (
                 <div>
                   
-                  {/* Sub-tabs Row with Pay Now on Right */}
+                  {/* Sub-tabs Row (Clean tabs matching screenshot, NO green Pay button because fees are already paid) */}
                   <div className="px-4 pt-2 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-white">
                     <div className="flex items-center gap-6">
                       <button
@@ -267,14 +220,6 @@ export const StudentFeesPage = ({
                         Online Payment History
                       </button>
                     </div>
-
-                    {/* Pay Now Button (Active for Year 3 / Current) */}
-                    <button
-                      onClick={() => onPayNow(yearData.totals.totalA.outstanding > 0 ? yearData.totals.totalA.outstanding : 14348.00)}
-                      className="mb-2 px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-[13px] font-bold rounded shadow-xs transition-colors flex items-center gap-1.5"
-                    >
-                      <span>Pay Now</span>
-                    </button>
                   </div>
 
                   {/* Sub-tab 1: Academic Fees Table (Exact columns and styling from Screenshot 2 & 3) */}
