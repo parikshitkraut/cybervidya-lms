@@ -171,8 +171,11 @@ export const StudentFeesPage = ({
 
           // Filter transactions for this academic year (includes official OFR exam receipts for Year 1 & 2 matching screenshots)
           const yearTransactions = paymentHistory.filter(t => {
-            if (yearData.id === 'year_1' || yearData.id === 'year_2') {
-              return t.voucherNo?.startsWith('OFR');
+            if (yearData.id === 'year_1') {
+              return t.academicYear === '2024-2025 I' || t.academicYear === '2024-2025';
+            }
+            if (yearData.id === 'year_2') {
+              return t.academicYear === '2025-2026 II' || t.academicYear === '2025-2026';
             }
             return t.academicYear?.includes(yearData.academicYear) || (yearData.id === 'year_3' && !t.academicYear);
           });
@@ -423,13 +426,20 @@ export const StudentFeesPage = ({
                               <td className="py-2 px-2 text-center">
                                 <button 
                                   onClick={() => {
-                                    const voucherMap = {
+                                    const y1VoucherMap = {
+                                      1: 'OFR2425120400002',
+                                      2: 'OFR2425022000050',
+                                      3: 'OFR2425122300014',
+                                      4: 'OFR2425122600003',
+                                    };
+                                    const y2VoucherMap = {
                                       1: 'OFR2627042900342',
                                       2: 'OFR2526051200023',
                                       4: 'OFR2526070700068',
                                       5: 'OFR2526072400064',
                                       6: 'OFR2526110600051',
                                     };
+                                    const voucherMap = yearData.id === 'year_1' ? y1VoucherMap : y2VoucherMap;
                                     const voucherNo = voucherMap[head.id] || 'OFR2627042900342';
                                     const matchingTxn = yearTransactions.find(t => t.voucherNo === voucherNo) || {
                                       id: `other_${head.id}`,
@@ -460,10 +470,10 @@ export const StudentFeesPage = ({
                             <td className="py-2.5 px-3 border-r border-slate-100"></td>
                             <td className="py-2.5 px-3 border-r border-slate-100 font-bold">Total</td>
                             <td className="py-2.5 px-3 border-r border-slate-100">₹ 0.00</td>
-                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 16,814.00</td>
-                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 16,814.00</td>
-                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 16,814.00</td>
-                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 0.00</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ {(yearData.otherFeeHeads || OTHER_FEES_HEADS).reduce((acc, h) => acc + (h.totalReceivables || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ {(yearData.otherFeeHeads || OTHER_FEES_HEADS).reduce((acc, h) => acc + (h.totalReceivables || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ {(yearData.otherFeeHeads || OTHER_FEES_HEADS).reduce((acc, h) => acc + (h.totalCollectedAmount || 0), 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ {(yearData.otherFeeHeads || OTHER_FEES_HEADS).reduce((acc, h) => acc + (h.outstanding || 0), 0).toFixed(2)}</td>
                             <td className="py-2.5 px-3 border-r border-slate-100"></td>
                             <td className="py-2.5 px-2"></td>
                           </tr>
@@ -535,6 +545,7 @@ export const StudentFeesPage = ({
                                     <td className="py-2 px-3 border-r border-slate-100 text-slate-700 uppercase whitespace-nowrap">{txn.paymentMode || txn.paymentMethod || 'ONLINE PAYMENT'}</td>
                                     <td className="py-2 px-3 text-center">
                                       <div className="flex items-center justify-center gap-2.5">
+                                        {txn.hasDownload !== false && txn.pdfUrl ? (
                                         <button 
                                           onClick={() => handleDownloadPdf(txn)}
                                           className="text-[#1d52f6] hover:text-blue-800 p-0.5 cursor-pointer" 
@@ -542,6 +553,9 @@ export const StudentFeesPage = ({
                                         >
                                           <Download className="w-3.5 h-3.5 text-[#1d52f6]" />
                                         </button>
+                                      ) : (
+                                        <div className="w-4 h-4" />
+                                      )}
                                         <button 
                                           onClick={() => handleDownloadPdf(txn)}
                                           className="text-slate-800 hover:text-black p-0.5 cursor-pointer" 

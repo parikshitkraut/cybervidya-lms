@@ -126,7 +126,56 @@ export const INITIAL_STUDENT = {
 };
 
 // Shared Other Fees Heads matching user screenshot from CyberVidya (Total: ₹ 16,814.00)
-export const OTHER_FEES_HEADS = [
+export const FIRST_YEAR_OTHER_FEES = [
+  // Exact match to First Year Others Tab (Screenshot media_1793821536557_50e88246.png)
+  {
+    id: 1,
+    name: "EXAM FEE -REGULAR",
+    pyob: 0.00,
+    currentReceivables: 3600.00,
+    totalReceivables: 3600.00,
+    totalCollectedAmount: 3600.00,
+    outstanding: 0.00,
+    status: "Paid",
+    statusType: "green",
+  },
+  {
+    id: 2,
+    name: "Exam registration and Fees",
+    pyob: 0.00,
+    currentReceivables: 600.00,
+    totalReceivables: 600.00,
+    totalCollectedAmount: 600.00,
+    outstanding: 0.00,
+    status: "Paid",
+    statusType: "green",
+  },
+  {
+    id: 3,
+    name: "Late Fees Fine",
+    pyob: 0.00,
+    currentReceivables: 1100.00,
+    totalReceivables: 1100.00,
+    totalCollectedAmount: 1100.00,
+    outstanding: 0.00,
+    status: "Paid",
+    statusType: "green",
+  },
+  {
+    id: 4,
+    name: "University Annual Fee",
+    pyob: 0.00,
+    currentReceivables: 710.00,
+    totalReceivables: 710.00,
+    totalCollectedAmount: 710.00,
+    outstanding: 0.00,
+    status: "Paid",
+    statusType: "green",
+  },
+];
+
+export const SECOND_YEAR_OTHER_FEES = [
+  // Exact match to Second Year Others Tab (Screenshot media_1793818562824_4057a9da.png)
   {
     id: 1,
     name: "EXAM FEE -REGULAR",
@@ -195,7 +244,8 @@ export const OTHER_FEES_HEADS = [
   },
 ];
 
-// 3 Academic Years Data matching the user's fee structure (Total Annual Fee: ₹115,000.00 / 1 Lakh 15 Thousand)
+export const OTHER_FEES_HEADS = FIRST_YEAR_OTHER_FEES;
+
 export const ACADEMIC_YEARS_FEES = [
   {
     id: "year_1",
@@ -206,7 +256,7 @@ export const ACADEMIC_YEARS_FEES = [
     studentPaidTotal: 81000.00,
     freeshipTotal: 34000.00,
     grandTotal: 115000.00,
-    otherFeeHeads: OTHER_FEES_HEADS,
+    otherFeeHeads: FIRST_YEAR_OTHER_FEES,
     feeHeads: [
       {
         id: 1,
@@ -301,7 +351,7 @@ export const ACADEMIC_YEARS_FEES = [
     studentPaidTotal: 44000.00,
     freeshipTotal: 71000.00,
     grandTotal: 115000.00,
-    otherFeeHeads: OTHER_FEES_HEADS,
+    otherFeeHeads: SECOND_YEAR_OTHER_FEES,
     feeHeads: [
       {
         id: 1,
@@ -487,16 +537,123 @@ export const ACADEMIC_YEARS_FEES = [
 export const INITIAL_FEES_DATA = ACADEMIC_YEARS_FEES[2];
 
 export const INITIAL_TRANSACTION_HISTORY = [
-  // --- Official Portal Exam & Other Fee Transactions (Exact match to CyberVidya Screenshot media_1793818575882_de194e1b.png) ---
+  // --- First Year (2024-2025 I) Transactions (Exact match to CyberVidya Screenshot media_1793821546746_ec70aadb.png) ---
   {
     sNo: 1,
-    id: "txn_ofr_01",
+    id: "txn_y1_ofr_01",
+    receiptNumber: "OFR2425022000050",
+    voucherNo: "OFR2425022000050",
+    transactionId: "TXN_PG_2425022000050",
+    date: "20/02/2025",
+    time: "11:15 AM",
+    academicYear: "2024-2025 I",
+    amount: 1699.00,
+    paymentMode: "ONLINE PAYMENT",
+    paymentMethod: "ONLINE PAYMENT",
+    description: "Exam registration and Fees (₹600.00) & Late Fees Fine (₹1,099.00)",
+    status: "Success",
+    bankReference: "AXIS-PG-2425022000050",
+    invoiceNumber: "INV-2025-Y1-01",
+    payerName: "PARIKSHIT KUNDAN RAUT",
+    pdfUrl: "./receipts/OFR2425022000050.pdf",
+    fileName: "FEE_RECEIPT_OFR2425022000050.pdf",
+    hasDownload: true,
+  },
+  {
+    sNo: 2,
+    id: "txn_y1_ofr_02",
+    receiptNumber: "OFR2425122600003",
+    voucherNo: "OFR2425122600003",
+    transactionId: "Db247fec-02b5-4c69-927e-2ff5aed3c28e",
+    date: "26/12/2024",
+    time: "03:40 PM",
+    academicYear: "2024-2025 I",
+    amount: 710.00,
+    paymentMode: "ONLINE PAYMENT",
+    paymentMethod: "ONLINE PAYMENT",
+    description: "University Annual Fee",
+    status: "Success",
+    bankReference: "Db247fec-02b5-4c69-927e-2ff5aed3c28e",
+    invoiceNumber: "INV-2024-Y1-02",
+    payerName: "PARIKSHIT KUNDAN RAUT",
+    pdfUrl: "./receipts/OFR2425122600003.pdf",
+    fileName: "FEE_RECEIPT_OFR2425122600003.pdf",
+    hasDownload: true,
+  },
+  {
+    sNo: 3,
+    id: "txn_y1_ofr_03",
+    receiptNumber: "OFR2425122300014",
+    voucherNo: "OFR2425122300014",
+    transactionId: "53a0a5fc-b9ae-4500-83e4-1e30580d10db",
+    date: "23/12/2024",
+    time: "10:20 AM",
+    academicYear: "2024-2025 I",
+    amount: 1.00,
+    paymentMode: "ONLINE PAYMENT",
+    paymentMethod: "ONLINE PAYMENT",
+    description: "Late Fees Fine",
+    status: "Success",
+    bankReference: "53a0a5fc-b9ae-4500-83e4-1e30580d10db",
+    invoiceNumber: "INV-2024-Y1-03",
+    payerName: "PARIKSHIT KUNDAN RAUT",
+    pdfUrl: "./receipts/OFR2425122300014.pdf",
+    fileName: "FEE_RECEIPT_OFR2425122300014.pdf",
+    hasDownload: true,
+  },
+  {
+    sNo: 4,
+    id: "txn_y1_ofr_04",
+    receiptNumber: "OFR2425120400002",
+    voucherNo: "OFR2425120400002",
+    transactionId: "452e801d-8678-47bc-ae36-e787becf42ea",
+    date: "04/12/2024",
+    time: "01:50 PM",
+    academicYear: "2024-2025 I",
+    amount: 3600.00,
+    paymentMode: "ONLINE PAYMENT",
+    paymentMethod: "ONLINE PAYMENT",
+    description: "EXAM FEE -REGULAR",
+    status: "Success",
+    bankReference: "452e801d-8678-47bc-ae36-e787becf42ea",
+    invoiceNumber: "INV-2024-Y1-04",
+    payerName: "PARIKSHIT KUNDAN RAUT",
+    pdfUrl: "./receipts/OFR2425120400002.pdf",
+    fileName: "FEE_RECEIPT_OFR2425120400002.pdf",
+    hasDownload: true,
+  },
+  {
+    sNo: 5,
+    id: "txn_y1_ofr_05",
+    receiptNumber: "SRC2425090600025",
+    voucherNo: "SRC2425090600025",
+    transactionId: "TXN_NEFT_2425090600025",
+    date: "06/09/2024",
+    time: "12:00 PM",
+    academicYear: "2024-2025 I",
+    amount: 6500.00,
+    paymentMode: "BANK TRANSFER",
+    paymentMethod: "BANK TRANSFER",
+    description: "Admission & Registration Share",
+    status: "Success",
+    bankReference: "NEFT-SRC-2425090600025",
+    invoiceNumber: "INV-2024-Y1-05",
+    payerName: "PARIKSHIT KUNDAN RAUT",
+    pdfUrl: null,
+    fileName: null,
+    hasDownload: false,
+  },
+
+  // --- Second Year (2025-2026 II) Transactions (Exact match to CyberVidya Screenshot media_1793818575882_de194e1b.png) ---
+  {
+    sNo: 1,
+    id: "txn_y2_ofr_01",
     receiptNumber: "OFR2627042900342",
     voucherNo: "OFR2627042900342",
     transactionId: "1a8f0d10-d556-4cc8-914c-8789618218e3",
     date: "29/04/2026",
     time: "11:30 AM",
-    academicYear: "2024-2025 I",
+    academicYear: "2025-2026 II",
     amount: 3600.00,
     paymentMode: "ONLINE PAYMENT",
     paymentMethod: "ONLINE PAYMENT",
@@ -506,17 +663,18 @@ export const INITIAL_TRANSACTION_HISTORY = [
     invoiceNumber: "INV-2026-EX01",
     payerName: "PARIKSHIT KUNDAN RAUT",
     pdfUrl: "./receipts/OFR2627042900342.pdf",
-    fileName: "FEE_RECEIPT_OFR2627042900342.pdf"
+    fileName: "FEE_RECEIPT_OFR2627042900342.pdf",
+    hasDownload: true,
   },
   {
     sNo: 2,
-    id: "txn_ofr_02",
+    id: "txn_y2_ofr_02",
     receiptNumber: "OFR2526111600113",
     voucherNo: "OFR2526111600113",
     transactionId: "3a6a91aa-1b17-47c4-b7da-47cce5a73d8a",
     date: "16/11/2025",
     time: "02:15 PM",
-    academicYear: "2024-2025 I",
+    academicYear: "2025-2026 II",
     amount: 3600.00,
     paymentMode: "ONLINE PAYMENT",
     paymentMethod: "ONLINE PAYMENT",
@@ -526,17 +684,18 @@ export const INITIAL_TRANSACTION_HISTORY = [
     invoiceNumber: "INV-2025-EX02",
     payerName: "PARIKSHIT KUNDAN RAUT",
     pdfUrl: "./receipts/OFR2526111600113.pdf",
-    fileName: "FEE_RECEIPT_OFR2526111600113.pdf"
+    fileName: "FEE_RECEIPT_OFR2526111600113.pdf",
+    hasDownload: true,
   },
   {
     sNo: 3,
-    id: "txn_ofr_03",
+    id: "txn_y2_ofr_03",
     receiptNumber: "OFR2526110600051",
     voucherNo: "OFR2526110600051",
     transactionId: "A54d86a9-1dfe-453e-b354-84755824997b",
     date: "06/11/2025",
     time: "12:45 PM",
-    academicYear: "2024-2025 I",
+    academicYear: "2025-2026 II",
     amount: 1800.00,
     paymentMode: "ONLINE PAYMENT",
     paymentMethod: "ONLINE PAYMENT",
@@ -546,17 +705,18 @@ export const INITIAL_TRANSACTION_HISTORY = [
     invoiceNumber: "INV-2025-EX03",
     payerName: "PARIKSHIT KUNDAN RAUT",
     pdfUrl: "./receipts/OFR2526110600051.pdf",
-    fileName: "FEE_RECEIPT_OFR2526110600051.pdf"
+    fileName: "FEE_RECEIPT_OFR2526110600051.pdf",
+    hasDownload: true,
   },
   {
     sNo: 4,
-    id: "txn_ofr_04",
+    id: "txn_y2_ofr_04",
     receiptNumber: "OFR2526072400064",
     voucherNo: "OFR2526072400064",
     transactionId: "E4e5be13-0e62-445c-8d1a-04d5b9f76735",
     date: "24/07/2025",
     time: "03:10 PM",
-    academicYear: "2024-2025 I",
+    academicYear: "2025-2026 II",
     amount: 3600.00,
     paymentMode: "ONLINE PAYMENT",
     paymentMethod: "ONLINE PAYMENT",
@@ -566,17 +726,18 @@ export const INITIAL_TRANSACTION_HISTORY = [
     invoiceNumber: "INV-2025-EX04",
     payerName: "PARIKSHIT KUNDAN RAUT",
     pdfUrl: "./receipts/OFR2526072400064.pdf",
-    fileName: "FEE_RECEIPT_OFR2526072400064.pdf"
+    fileName: "FEE_RECEIPT_OFR2526072400064.pdf",
+    hasDownload: true,
   },
   {
     sNo: 5,
-    id: "txn_ofr_05",
+    id: "txn_y2_ofr_05",
     receiptNumber: "OFR2526070700068",
     voucherNo: "OFR2526070700068",
     transactionId: "48af13ef-afd9-4987-8647-00803516645d",
     date: "07/07/2025",
     time: "10:50 AM",
-    academicYear: "2024-2025 I",
+    academicYear: "2025-2026 II",
     amount: 614.00,
     paymentMode: "ONLINE PAYMENT",
     paymentMethod: "ONLINE PAYMENT",
@@ -586,17 +747,18 @@ export const INITIAL_TRANSACTION_HISTORY = [
     invoiceNumber: "INV-2025-EX05",
     payerName: "PARIKSHIT KUNDAN RAUT",
     pdfUrl: "./receipts/OFR2526070700068.pdf",
-    fileName: "FEE_RECEIPT_OFR2526070700068.pdf"
+    fileName: "FEE_RECEIPT_OFR2526070700068.pdf",
+    hasDownload: true,
   },
   {
     sNo: 6,
-    id: "txn_ofr_06",
+    id: "txn_y2_ofr_06",
     receiptNumber: "OFR2526051200023",
     voucherNo: "OFR2526051200023",
     transactionId: "49cbf981-3177-455e-8384-b56a4e183730",
     date: "12/05/2025",
     time: "01:20 PM",
-    academicYear: "2024-2025 I",
+    academicYear: "2025-2026 II",
     amount: 3600.00,
     paymentMode: "ONLINE PAYMENT",
     paymentMethod: "ONLINE PAYMENT",
@@ -606,10 +768,10 @@ export const INITIAL_TRANSACTION_HISTORY = [
     invoiceNumber: "INV-2025-EX06",
     payerName: "PARIKSHIT KUNDAN RAUT",
     pdfUrl: "./receipts/OFR2526051200023.pdf",
-    fileName: "FEE_RECEIPT_OFR2526051200023.pdf"
+    fileName: "FEE_RECEIPT_OFR2526051200023.pdf",
+    hasDownload: true,
   }
 ];
-
 
 export const NOTICE_BOARD = [
   {
