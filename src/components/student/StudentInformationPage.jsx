@@ -21,14 +21,14 @@ import {
 // On desktop (>= 640px): Standard 2-column layout matching CyberVidya screenshot
 const InfoRow = ({ label, value, isMono = false, isBold = false, badge = null }) => (
   <div className="flex flex-col sm:flex-row sm:items-baseline py-1 sm:py-0.5 border-b border-slate-50 last:border-0 sm:border-0">
-    <span className="w-full sm:w-48 text-slate-500 text-[11px] sm:text-[12px] shrink-0 font-normal">
+    <span className="w-full sm:w-56 text-slate-500 text-[12px] shrink-0 font-normal">
       {label} :
     </span>
     {badge ? (
       <div>{badge}</div>
     ) : (
       <span className={`text-[12px] break-all sm:break-normal ${
-        isBold ? 'font-bold text-slate-900' : 'font-medium text-slate-800'
+        isBold ? 'font-semibold text-slate-900' : 'font-normal text-slate-800'
       } ${isMono ? 'font-mono' : ''}`}>
         {value || "--"}
       </span>
@@ -37,23 +37,37 @@ const InfoRow = ({ label, value, isMono = false, isBold = false, badge = null })
 );
 
 export const StudentInformationPage = ({ student, onUpdateStudent }) => {
-  // Active sub-tab matching Screenshot 4 & 5:
+  // Active sub-tab matching CyberVidya screenshot:
   // 'personal' | 'admission' | 'address' | 'parent' | 'bank' | 'academic' | 'documents'
   const [activeTab, setActiveTab] = useState('personal');
 
-  // Modal to edit blank/personal values
+  // Modal to edit values if needed
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    rollNo: student.rollNo === '--' ? '' : (student.rollNo || '36'),
-    dob: student.dob === '--' ? '' : student.dob,
-    phone: student.phone === '--' ? '' : student.phone,
-    alternateMobile: student.alternateMobile === '--' ? '' : student.alternateMobile,
-    whatsappMobile: student.whatsappMobile === '--' ? '' : student.whatsappMobile,
-    birthPlace: student.birthPlace === '--' ? '' : student.birthPlace,
-    bloodGroup: student.bloodGroup === '--' ? '' : student.bloodGroup,
-    dateOfAdmission: student.dateOfAdmission === '--' ? '' : student.dateOfAdmission,
-    entranceExamRegNo: student.entranceExamRegNo === '--' ? '' : student.entranceExamRegNo,
-    entranceExamMeritNo: student.entranceExamMeritNo === '--' ? '' : student.entranceExamMeritNo,
+    rollNo: student.rollNo || 'UGF24EE036',
+    universityEnrollmentNo: student.universityEnrollmentNo || '20250140700489',
+    dob: student.dob || '08/03/2006',
+    phone: student.phone || '(+91) 8855915629',
+    alternateMobile: student.alternateMobile || '--',
+    whatsappMobile: student.whatsappMobile || '--',
+    birthPlace: student.birthPlace || '--',
+    birthState: student.birthState || 'Maharashtra',
+    identityMark: student.identityMark || '--',
+    domicileCountry: student.domicileCountry || 'INDIA',
+    domicileState: student.domicileState || 'Maharashtra',
+    motherTongue: student.motherTongue || 'Marathi',
+    citizenshipCategory: student.citizenshipCategory || '--',
+    bloodGroup: student.bloodGroup || '--',
+    religion: student.religion || 'Buddhist',
+    caste: student.caste || '--',
+    category: student.category || 'SC',
+    abcId: student.abcId || '309864532452',
+    antiRaggingId: student.antiRaggingId || '--',
+    dateOfAdmission: student.dateOfAdmission || '09/06/2024',
+    entranceExamRegNo: student.entranceExamRegNo || 'EN24312057',
+    entranceExamMeritNo: student.entranceExamMeritNo || '--',
+    feeCategoryName: student.feeCategoryName || 'ST-Sch',
+    admissionCategory: student.admissionCategory || 'CAP',
     addressLine1: student.address?.correspondence?.addressLine1 === '--' ? '' : (student.address?.correspondence?.addressLine1 || ''),
     pinCode: student.address?.correspondence?.pinCode === '--' ? '' : (student.address?.correspondence?.pinCode || ''),
     fatherOccupation: student.parentDetails?.fatherOccupation === '--' ? '' : (student.parentDetails?.fatherOccupation || ''),
@@ -70,16 +84,30 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
     e.preventDefault();
     if (onUpdateStudent) {
       onUpdateStudent({
-        rollNo: formData.rollNo || '36',
-        dob: formData.dob || '--',
-        phone: formData.phone || '--',
+        rollNo: formData.rollNo || 'UGF24EE036',
+        universityEnrollmentNo: formData.universityEnrollmentNo || '20250140700489',
+        dob: formData.dob || '08/03/2006',
+        phone: formData.phone || '(+91) 8855915629',
         alternateMobile: formData.alternateMobile || '--',
         whatsappMobile: formData.whatsappMobile || '--',
         birthPlace: formData.birthPlace || '--',
+        birthState: formData.birthState || 'Maharashtra',
+        identityMark: formData.identityMark || '--',
+        domicileCountry: formData.domicileCountry || 'INDIA',
+        domicileState: formData.domicileState || 'Maharashtra',
+        motherTongue: formData.motherTongue || 'Marathi',
+        citizenshipCategory: formData.citizenshipCategory || '--',
         bloodGroup: formData.bloodGroup || '--',
-        dateOfAdmission: formData.dateOfAdmission || '--',
-        entranceExamRegNo: formData.entranceExamRegNo || '--',
+        religion: formData.religion || 'Buddhist',
+        caste: formData.caste || '--',
+        category: formData.category || 'SC',
+        abcId: formData.abcId || '309864532452',
+        antiRaggingId: formData.antiRaggingId || '--',
+        dateOfAdmission: formData.dateOfAdmission || '09/06/2024',
+        entranceExamRegNo: formData.entranceExamRegNo || 'EN24312057',
         entranceExamMeritNo: formData.entranceExamMeritNo || '--',
+        feeCategoryName: formData.feeCategoryName || 'ST-Sch',
+        admissionCategory: formData.admissionCategory || 'CAP',
         address: {
           correspondence: {
             addressLine1: formData.addressLine1 || '--',
@@ -131,51 +159,39 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
   return (
     <div className="space-y-4">
       
-      {/* Page Title & Edit Button from Screenshot 4 & 5 */}
+      {/* Page Title */}
       <div className="flex items-center justify-between">
-        <h2 className="text-[17px] font-bold text-slate-900 tracking-tight">
+        <h2 className="text-[16px] sm:text-[17px] font-semibold text-slate-900 tracking-tight">
           Student Information
         </h2>
+      </div>
+
+      {/* Student Name Header Card - Clean CyberVidya style matching screenshot */}
+      <div className="bg-white rounded border border-slate-200 shadow-xs p-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          {/* Silhouette Avatar */}
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#dbe2ea] flex items-center justify-center text-slate-500 shrink-0">
+            <User className="w-9 h-9 sm:w-10 sm:h-10 text-slate-500" />
+          </div>
+          <div>
+            <h1 className="text-[17px] sm:text-[19px] font-normal text-slate-900">
+              {student.name || "MR. Parikshit Kundan Raut"}
+            </h1>
+          </div>
+        </div>
 
         <button
           onClick={() => setIsEditModalOpen(true)}
-          className="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 hover:text-blue-600 rounded text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
+          className="px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-300 text-slate-600 hover:text-blue-600 rounded text-xs font-medium flex items-center gap-1.5 shadow-2xs transition-colors"
           title="Edit student profile values"
         >
           <Edit3 className="w-3.5 h-3.5 text-blue-600" />
-          <span>Edit Details</span>
+          <span className="hidden sm:inline">Edit Details</span>
         </button>
       </div>
 
-      {/* Student Name Header Card */}
-      <div className="bg-white rounded border border-slate-200 shadow-xs p-3.5 sm:p-4 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4">
-        {/* Silhouette Avatar */}
-        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 shrink-0 ring-1 ring-slate-300">
-          <User className="w-8 h-8 sm:w-10 sm:h-10" />
-        </div>
-        <div className="flex-1">
-          <h1 className="text-[16px] sm:text-[18px] font-bold text-slate-900">
-            {student.name || "PARIKSHIT KUNDAN RAUT"}
-          </h1>
-          <p className="text-[11px] sm:text-xs text-slate-500 font-mono mt-0.5">
-            Registration No (UID): <span className="font-semibold text-slate-700">{student.registrationNo || "UGF24EE036"}</span> • Roll No: <span className="font-semibold text-slate-700">{student.rollNo || "36"}</span> • Year: <span className="font-semibold text-slate-700">{student.year || "III"}</span> • Branch: <span className="font-semibold text-slate-700">{student.branchFullName || student.branch || "Electrical Engineering"}</span>
-          </p>
-          <div className="flex items-center gap-2 mt-1.5 justify-center sm:justify-start">
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
-              Caste: {student.caste || "SC"}
-            </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-              Category: {student.category || "SCHEDULED CASTE"}
-            </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Mother: {student.parentDetails?.motherName || "SHALINI RAUT"}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Sub-Tabs Bar from Screenshot 4 & 5 - Mobile horizontally swipeable */}
-      <div className="bg-white rounded border border-slate-200 shadow-xs px-3 sm:px-4 pt-2 flex items-center gap-4 sm:gap-6 overflow-x-auto border-b scrollbar-none touch-scroll">
+      {/* Sub-Tabs Bar from Screenshot 2, 3, 4 - Mobile horizontally swipeable */}
+      <div className="bg-white rounded-t border border-b-0 border-slate-200 shadow-xs px-3 sm:px-4 pt-2.5 flex items-center gap-4 sm:gap-6 overflow-x-auto border-b scrollbar-none touch-scroll">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -184,7 +200,7 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
               onClick={() => setActiveTab(tab.id)}
               className={`pb-2.5 text-[12px] sm:text-[13px] font-medium transition-all whitespace-nowrap shrink-0 relative ${
                 isActive
-                  ? 'text-orange-500 border-b-2 border-orange-500 font-bold'
+                  ? 'text-orange-500 border-b-2 border-orange-500 font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -194,7 +210,7 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
         })}
       </div>
 
-      {/* TAB 1: Personal Information (Exact match to Screenshot 5) */}
+      {/* TAB 1: Personal Information (Exact match to CyberVidya Screenshot) */}
       {activeTab === 'personal' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           
@@ -203,36 +219,39 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
             
             {/* Panel 1: Basic Information */}
             <div className="bg-white rounded border border-slate-200 shadow-xs p-3.5 sm:p-5">
-              <div className="mb-3 border-b border-slate-200 pb-1">
-                <span className="text-[12px] font-bold text-[#00a896] uppercase tracking-wide">
-                  Basic Information ─────────
+              <div className="mb-3 border-b border-slate-100 pb-1.5">
+                <span className="text-[12px] font-bold text-[#009688]">
+                  Basic Information
                 </span>
               </div>
-              <div className="space-y-1.5 sm:space-y-2 text-[12px] text-slate-700">
-                <InfoRow label="Title" value={student.title || "MR."} />
+              <div className="space-y-1 sm:space-y-1.5 text-[12px] text-slate-700">
+                <InfoRow label="Title" value={student.title || "MR"} />
                 <InfoRow label="Display Name Format" value={student.displayNameFormat || "FIRST MIDDLE LAST"} />
-                <InfoRow label="Display Name" value={student.displayName || "PARIKSHIT KUNDAN RAUT"} isBold />
+                <InfoRow label="Display Name" value={student.displayName || "PARIKSHIT KUNDAN RAUT"} />
                 <InfoRow label="Marital Status" value={student.maritalStatus || "Unmarried"} />
                 <InfoRow label="Gender" value={student.gender || "Male"} />
-                <InfoRow label="Date of Birth" value={student.dob || "--"} />
-                <InfoRow label="Email ID" value={student.email || "ugf24ee036@jitnagpur.edu.in"} isMono />
-                <InfoRow label="Institute Email ID" value={student.instituteEmail || "parikshitkraut@gmail.com"} isMono />
-                <InfoRow label="Mobile Number" value={student.phone || "--"} isMono />
+                <InfoRow label="Date of Birth" value={student.dob || "08/03/2006"} />
+                <InfoRow label="Email ID" value={student.email || "ugf24ee036@jitnagpur.edu.in"} />
+                <InfoRow label="Institute Email ID" value={student.instituteEmail || "parikshitraut02@gmail.com"} />
+                <InfoRow label="Mobile Number" value={student.phone || "(+91) 8855915629"} />
                 <InfoRow label="Alternate Mobile Number" value={student.alternateMobile || "--"} />
               </div>
             </div>
 
             {/* Panel 2: Other Information */}
             <div className="bg-white rounded border border-slate-200 shadow-xs p-3.5 sm:p-5">
-              <div className="mb-3 border-b border-slate-200 pb-1">
-                <span className="text-[12px] font-bold text-[#00a896] uppercase tracking-wide">
-                  Other Information ─────────
+              <div className="mb-3 border-b border-slate-100 pb-1.5">
+                <span className="text-[12px] font-bold text-[#009688]">
+                  Other Information
                 </span>
               </div>
-              <div className="space-y-1.5 sm:space-y-2 text-[12px] text-slate-700">
-                <InfoRow label="Caste" value={student.caste || "SC"} isBold />
-                <InfoRow label="Category" value={student.category || "SCHEDULED CASTE"} isBold />
+              <div className="space-y-1 sm:space-y-1.5 text-[12px] text-slate-700">
                 <InfoRow label="Nationality" value={student.nationality || "Indian"} />
+                <InfoRow label="Religion" value={student.religion || "Buddhist"} />
+                <InfoRow label="Caste" value={student.caste || "--"} />
+                <InfoRow label="Category" value={student.category || "SC"} />
+                <InfoRow label="ABC ID" value={student.abcId || "309864532452"} />
+                <InfoRow label="Anti-Ragging ID" value={student.antiRaggingId || "--"} />
               </div>
             </div>
 
@@ -243,27 +262,27 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
             
             {/* Panel 3: Admin Information */}
             <div className="bg-white rounded border border-slate-200 shadow-xs p-3.5 sm:p-5">
-              <div className="mb-3 border-b border-slate-200 pb-1">
-                <span className="text-[12px] font-bold text-[#00a896] uppercase tracking-wide">
-                  Admin Information ─────────
+              <div className="mb-3 border-b border-slate-100 pb-1.5">
+                <span className="text-[12px] font-bold text-[#009688]">
+                  Admin Information
                 </span>
               </div>
-              <div className="space-y-1.5 sm:space-y-2 text-[12px] text-slate-700">
-                <InfoRow label="Registration Number" value={student.registrationNo || "UGF24EE036"} isMono isBold />
-                <InfoRow label="University/Enrollment Number" value={student.universityEnrollmentNo || "--"} isMono />
+              <div className="space-y-1 sm:space-y-1.5 text-[12px] text-slate-700">
+                <InfoRow label="Registration Number" value={student.registrationNo || "UGF24EE036"} />
+                <InfoRow label="University/Enrollment Number" value={student.universityEnrollmentNo || "20250140700489"} />
                 <InfoRow label="Application Number" value={student.applicationNo || "--"} />
-                <InfoRow label="Roll Number" value={student.rollNo || "36"} isMono isBold />
+                <InfoRow label="Roll Number" value={student.rollNo || "UGF24EE036"} />
               </div>
             </div>
 
             {/* Panel 4: Personal Information */}
             <div className="bg-white rounded border border-slate-200 shadow-xs p-3.5 sm:p-5">
-              <div className="mb-3 border-b border-slate-200 pb-1">
-                <span className="text-[12px] font-bold text-[#00a896] uppercase tracking-wide">
-                  Personal Information ─────────
+              <div className="mb-3 border-b border-slate-100 pb-1.5">
+                <span className="text-[12px] font-bold text-[#009688]">
+                  Personal Information
                 </span>
               </div>
-              <div className="space-y-1.5 sm:space-y-2 text-[12px] text-slate-700">
+              <div className="space-y-1 sm:space-y-1.5 text-[12px] text-slate-700">
                 <InfoRow label="Birth Place" value={student.birthPlace || "--"} />
                 <InfoRow label="Birth State" value={student.birthState || "Maharashtra"} />
                 <InfoRow label="Whatsapp Mobile Number" value={student.whatsappMobile || "--"} />
@@ -271,6 +290,11 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
                 <InfoRow label="Referral Source" value={student.referralSource || "--"} />
                 <InfoRow label="Physically Challenged" value={student.physicallyChallenged || "No"} />
                 <InfoRow label="Blood Group" value={student.bloodGroup || "--"} />
+                <InfoRow label="Identity Mark" value={student.identityMark || "--"} />
+                <InfoRow label="Domicile Country" value={student.domicileCountry || "INDIA"} />
+                <InfoRow label="Domicile State" value={student.domicileState || "Maharashtra"} />
+                <InfoRow label="Mother Tongue" value={student.motherTongue || "Marathi"} />
+                <InfoRow label="Citizenship Category" value={student.citizenshipCategory || "--"} />
               </div>
             </div>
 
@@ -279,51 +303,53 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
         </div>
       )}
 
-      {/* TAB 2: Admission Information (Exact match to Screenshot 4) */}
+      {/* TAB 2: Admission Information (Exact match to CyberVidya Screenshot) */}
       {activeTab === 'admission' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           
-          {/* Left Box from Screenshot 4 */}
+          {/* Left Box: Enrollment Information */}
           <div className="bg-white rounded border border-slate-200 shadow-xs p-3.5 sm:p-5">
-            <div className="space-y-1.5 sm:space-y-2 text-[12px] text-slate-700">
-              <InfoRow label="Date of Admission" value={student.dateOfAdmission || "--"} />
+            <div className="mb-3 border-b border-slate-100 pb-1.5">
+              <span className="text-[12px] font-bold text-[#009688]">
+                Enrollment Information
+              </span>
+            </div>
+            <div className="space-y-1 sm:space-y-1.5 text-[12px] text-slate-700">
+              <InfoRow label="Date of Admission" value={student.dateOfAdmission || "09/06/2024"} />
               <InfoRow label="Enrollment Session" value={student.enrollmentSession || "Odd 2024"} />
               <InfoRow label="Academic Batch" value={student.academicBatch || "2024-2028"} />
               <InfoRow label="Faculty Scope" value={student.facultyScope || "GENERAL"} />
               <InfoRow label="School" value={student.school || "GENERAL"} />
-              <InfoRow label="Degree" value={student.degree || "B TECH"} isBold />
-              <InfoRow label="Branch" value={student.branchFullName || "Electrical Engineering"} />
+              <InfoRow label="Degree" value={student.degree || "B TECH"} />
+              <InfoRow label="Branch" value={student.branchFullName || student.branch || "Electrical Engineering"} />
               <InfoRow label="Scheme" value={student.scheme || "B TECH- EE"} />
               <InfoRow label="Admission Category" value={student.admissionCategory || "CAP"} />
-              <InfoRow label="Fees Category" value={student.feeCategoryName || "SC Scholarship (60% GSRR)"} isBold />
+              <InfoRow label="Fees Category" value={student.feeCategoryName || "ST-Sch"} />
               <InfoRow label="Student Group" value={student.studentGroup || "--"} />
               <InfoRow label="Enrollment Type" value={student.enrollmentType || "First Year"} />
               <InfoRow label="Shift" value={student.shift || "SHIFT 1"} />
-              <InfoRow label="Entrance Exam Reg. No." value={student.entranceExamRegNo || "--"} isMono />
-              <InfoRow label="Entrance Exam Merit No." value={student.entranceExamMeritNo || "--"} isMono />
+              <InfoRow label="Entrance Exam Reg. No." value={student.entranceExamRegNo || "EN24312057"} />
             </div>
           </div>
 
-          {/* Right Box from Screenshot 4 */}
+          {/* Right Box: Current Academic Information */}
           <div className="bg-white rounded border border-slate-200 shadow-xs p-3.5 sm:p-5">
-            <div className="space-y-1.5 sm:space-y-2 text-[12px] text-slate-700">
+            <div className="mb-3 border-b border-slate-100 pb-1.5">
+              <span className="text-[12px] font-bold text-[#009688]">
+                Current Academic Information
+              </span>
+            </div>
+            <div className="space-y-1 sm:space-y-1.5 text-[12px] text-slate-700">
               <InfoRow label="Faculty Scope" value={student.facultyScope || "GENERAL"} />
               <InfoRow label="School" value={student.school || "GENERAL"} />
-              <InfoRow label="Degree" value={student.degree || "B TECH"} isBold />
-              <InfoRow label="Branch" value={student.branchFullName || "Electrical Engineering"} />
+              <InfoRow label="Degree" value={student.degree || "B TECH"} />
+              <InfoRow label="Branch" value={student.branchFullName || student.branch || "Electrical Engineering"} />
               <InfoRow label="Scheme" value={student.scheme || "B TECH- EE"} />
               <InfoRow label="Current Session" value={student.currentSession || "Odd 2026"} />
               <InfoRow label="Year" value={student.year || "III"} />
               <InfoRow label="Semester" value={student.semester || "V"} />
               <InfoRow label="Class Section" value={student.section || "A"} />
-              <InfoRow 
-                label="Admission Status" 
-                badge={
-                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                    {student.admissionStatus || "ACTIVE"}
-                  </span>
-                } 
-              />
+              <InfoRow label="Admission Status" value={student.admissionStatus || "ACTIVE"} />
             </div>
           </div>
 
@@ -527,35 +553,35 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
                     <label className="block text-slate-700 font-bold mb-1">Roll Number</label>
                     <input
                       type="text"
-                      placeholder="e.g. 36"
+                      placeholder="e.g. UGF24EE036"
                       value={formData.rollNo}
                       onChange={(e) => setFormData({ ...formData, rollNo: e.target.value })}
                       className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs font-mono font-bold"
                     />
-                    <span className="text-[10px] text-slate-500 mt-0.5 block">Your class roll number (e.g. 36)</span>
+                    <span className="text-[10px] text-slate-500 mt-0.5 block">Official college roll number</span>
                   </div>
                   <div>
-                    <label className="block text-slate-700 font-bold mb-1">Student UID / Registration Number</label>
+                    <label className="block text-slate-700 font-bold mb-1">University / Enrollment Number</label>
                     <input
                       type="text"
-                      disabled
-                      value="UGF24EE036 (UID)"
-                      className="w-full bg-slate-100 text-slate-600 border border-slate-200 rounded px-2.5 py-1.5 text-xs font-mono font-bold"
+                      value={formData.universityEnrollmentNo}
+                      onChange={(e) => setFormData({ ...formData, universityEnrollmentNo: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs font-mono"
                     />
-                    <span className="text-[10px] text-slate-500 mt-0.5 block">Official college UID / Login ID</span>
+                    <span className="text-[10px] text-slate-500 mt-0.5 block">University enrollment number</span>
                   </div>
                 </div>
               </div>
 
               {/* Personal Section */}
               <div className="space-y-2 pt-2 border-t border-slate-100">
-                <h4 className="font-bold text-[#00a896] uppercase text-[11px]">Personal & Contact Details</h4>
+                <h4 className="font-bold text-[#00a896] uppercase text-[11px]">Personal & Official Records</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-slate-600 font-medium mb-1">Date of Birth</label>
                     <input
                       type="text"
-                      placeholder="e.g. 15/07/2005 or DD/MM/YYYY"
+                      placeholder="08/03/2006"
                       value={formData.dob}
                       onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
                       className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs"
@@ -565,29 +591,63 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
                     <label className="block text-slate-600 font-medium mb-1">Mobile Number</label>
                     <input
                       type="text"
-                      placeholder="e.g. (+91) 98765 43210"
+                      placeholder="(+91) 8855915629"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1">Religion</label>
+                    <input
+                      type="text"
+                      value={formData.religion}
+                      onChange={(e) => setFormData({ ...formData, religion: e.target.value })}
                       className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-600 font-medium mb-1">Whatsapp Number</label>
+                    <label className="block text-slate-600 font-medium mb-1">Category</label>
                     <input
                       type="text"
-                      placeholder="e.g. (+91) 98765 43210"
-                      value={formData.whatsappMobile}
-                      onChange={(e) => setFormData({ ...formData, whatsappMobile: e.target.value })}
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                       className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-600 font-medium mb-1">Blood Group</label>
+                    <label className="block text-slate-600 font-medium mb-1">ABC ID</label>
                     <input
                       type="text"
-                      placeholder="e.g. O+, B+, A+"
-                      value={formData.bloodGroup}
-                      onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
+                      value={formData.abcId}
+                      onChange={(e) => setFormData({ ...formData, abcId: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1">Entrance Exam Reg. No.</label>
+                    <input
+                      type="text"
+                      value={formData.entranceExamRegNo}
+                      onChange={(e) => setFormData({ ...formData, entranceExamRegNo: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1">Mother Tongue</label>
+                    <input
+                      type="text"
+                      value={formData.motherTongue}
+                      onChange={(e) => setFormData({ ...formData, motherTongue: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-600 font-medium mb-1">Domicile State</label>
+                    <input
+                      type="text"
+                      value={formData.domicileState}
+                      onChange={(e) => setFormData({ ...formData, domicileState: e.target.value })}
                       className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs"
                     />
                   </div>

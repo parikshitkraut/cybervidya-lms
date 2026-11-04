@@ -67,8 +67,8 @@ export const StudentFeesPage = ({
             <div className="space-y-1.5">
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Name :</span>
-                <span className="font-semibold text-slate-800 uppercase truncate text-right sm:text-left" title={student.name}>
-                  {student.name}
+                <span className="font-semibold text-slate-800 uppercase truncate text-right sm:text-left" title={student.displayName || student.name}>
+                  {student.displayName || student.name}
                 </span>
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
@@ -125,7 +125,7 @@ export const StudentFeesPage = ({
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Roll Number :</span>
-                <span className="font-mono text-slate-800 font-bold text-right sm:text-left">{student.rollNo || "36"}</span>
+                <span className="font-mono text-slate-800 font-bold text-right sm:text-left">{student.rollNo || "UGF24EE036"}</span>
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Admission Category :</span>

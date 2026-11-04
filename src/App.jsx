@@ -52,18 +52,14 @@ export function App() {
   // Core Data States - Initialized with Parikshit Kundan Raut
   const [student, setStudent] = useState(() => {
     const saved = localStore.get('student', null);
-    if (saved && saved.name && saved.name.includes('PARIKSHIT')) {
-      // Clear out erroneous assignment of full UID to Roll Number
-      const cleanRollNo = (saved.rollNo === 'UGF24EE036' || !saved.rollNo) ? '36' : saved.rollNo;
+    if (saved && (saved.abcId === '309864532452' || saved.universityEnrollmentNo === '20250140700489')) {
       return { 
         ...INITIAL_STUDENT, 
-        ...saved, 
-        rollNo: cleanRollNo,
-        registrationNo: 'UGF24EE036',
-        uid: 'UGF24EE036',
-        prn: 'UGF24EE036'
+        ...saved 
       };
     }
+    // Update localStore with official verified records from portal screenshots
+    localStore.set('student', INITIAL_STUDENT);
     return INITIAL_STUDENT;
   });
   const [feesData, setFeesData] = useState(() => {

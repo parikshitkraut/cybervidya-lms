@@ -77,7 +77,7 @@ export const InvoiceModal = ({ isOpen, onClose, transaction, student, feeSummary
                   Billed To (Student)
                 </span>
                 <strong className="text-sm font-bold text-slate-900 block">{student.name}</strong>
-                <p className="text-slate-600">UID: <strong className="font-mono">{student.registrationNo || student.prn}</strong> | Roll No: <strong>{student.rollNo || "36"}</strong></p>
+                <p className="text-slate-600">UID: <strong className="font-mono">{student.registrationNo || student.prn}</strong> | Roll No: <strong>{student.rollNo || "UGF24EE036"}</strong></p>
                 <p className="text-slate-600">{student.branch} ({student.program})</p>
                 <p className="text-slate-500">{student.email} • {student.phone}</p>
               </div>

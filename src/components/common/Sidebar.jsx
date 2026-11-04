@@ -259,7 +259,7 @@ export const Sidebar = ({
                   {student.name || "PARIKSHIT KUNDAN RAUT"}
                 </p>
                 <p className="text-[11px] font-mono text-slate-400">
-                  UID: {student.registrationNo || "UGF24EE036"} • Roll: {student.rollNo || "36"}
+                  UID: {student.registrationNo || "UGF24EE036"} • Roll: {student.rollNo || "UGF24EE036"}
                 </p>
               </div>
             </div>
