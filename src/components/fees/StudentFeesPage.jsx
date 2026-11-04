@@ -177,7 +177,10 @@ export const StudentFeesPage = ({
             if (yearData.id === 'year_2') {
               return t.academicYear === '2025-2026 II' || t.academicYear === '2025-2026';
             }
-            return t.academicYear?.includes(yearData.academicYear) || (yearData.id === 'year_3' && !t.academicYear);
+            if (yearData.id === 'year_3') {
+              return t.academicYear === '2026-2027 III' || t.academicYear === '2026-2027';
+            }
+            return t.academicYear?.includes(yearData.academicYear);
           });
 
           return (
@@ -439,7 +442,12 @@ export const StudentFeesPage = ({
                                       5: 'OFR2526072400064',
                                       6: 'OFR2526110600051',
                                     };
-                                    const voucherMap = yearData.id === 'year_1' ? y1VoucherMap : y2VoucherMap;
+                                    const y3VoucherMap = {
+                                      1: 'OFR2627101501114',
+                                      2: 'OFR2627072400025',
+                                      3: 'OFR2627061900047',
+                                    };
+                                    const voucherMap = yearData.id === 'year_1' ? y1VoucherMap : (yearData.id === 'year_2' ? y2VoucherMap : y3VoucherMap);
                                     const voucherNo = voucherMap[head.id] || 'OFR2627042900342';
                                     const matchingTxn = yearTransactions.find(t => t.voucherNo === voucherNo) || {
                                       id: `other_${head.id}`,

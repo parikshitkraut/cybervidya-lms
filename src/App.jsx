@@ -75,7 +75,7 @@ export function App() {
       saved && 
       Array.isArray(saved) && 
       saved.length > 0 && 
-      saved.some(t => t.voucherNo === 'OFR2425022000050' && t.pdfUrl) && saved.some(t => t.voucherNo === 'OFR2627042900342')
+      saved.some(t => t.voucherNo === 'OFR2425022000050' && t.pdfUrl) && saved.some(t => t.voucherNo === 'OFR2627101501114' && t.pdfUrl)
     ) {
       return saved;
     }
