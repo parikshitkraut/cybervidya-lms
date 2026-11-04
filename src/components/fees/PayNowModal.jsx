@@ -149,7 +149,7 @@ export const PayNowModal = ({
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Total Annual College Fee:</span>
-            <span className="font-bold text-slate-900">₹ 125,848.00 (Freeship Covered)</span>
+            <span className="font-bold text-slate-900">₹ 115,000.00 (Freeship Covered)</span>
           </div>
         </div>
 
@@ -170,7 +170,7 @@ export const PayNowModal = ({
                 <span>Development Fee</span>
                 {paymentChoice === 'development' && <CheckCircle2 className="w-3.5 h-3.5 text-green-600" />}
               </div>
-              <div className="text-sm font-black text-slate-900 mt-1">₹ 14,348</div>
+              <div className="text-sm font-black text-slate-900 mt-1">₹ 14,000</div>
             </div>
 
             <div

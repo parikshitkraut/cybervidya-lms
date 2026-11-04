@@ -55,7 +55,13 @@ export function App() {
     }
     return INITIAL_STUDENT;
   });
-  const [feesData, setFeesData] = useState(() => localStore.get('feesData', INITIAL_FEES_DATA));
+  const [feesData, setFeesData] = useState(() => {
+    const saved = localStore.get('feesData', null);
+    if (saved && saved.grandTotal === 115000.00) {
+      return saved;
+    }
+    return INITIAL_FEES_DATA;
+  });
   const [paymentHistory, setPaymentHistory] = useState(() => {
     const saved = localStore.get('paymentHistory', null);
     if (
@@ -72,7 +78,7 @@ export function App() {
 
   // Modals
   const [isPayNowOpen, setIsPayNowOpen] = useState(false);
-  const [payNowDefaultAmount, setPayNowDefaultAmount] = useState(14348.00);
+  const [payNowDefaultAmount, setPayNowDefaultAmount] = useState(14000.00);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [activeReceipt, setActiveReceipt] = useState(null);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);

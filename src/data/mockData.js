@@ -153,7 +153,7 @@ export const OTHER_FEES_HEADS = [
   },
 ];
 
-// 3 Academic Years Data matching the user's fee structure (Total Annual Fee: ₹125,848.00 / ~125k)
+// 3 Academic Years Data matching the user's fee structure (Total Annual Fee: ₹115,000.00 / 1 Lakh 15 Thousand)
 export const ACADEMIC_YEARS_FEES = [
   {
     id: "year_1",
@@ -162,8 +162,8 @@ export const ACADEMIC_YEARS_FEES = [
     yearTitle: "First Year B.Tech (Odd & Even)",
     isCurrentYear: false,
     studentPaidTotal: 81000.00,
-    freeshipTotal: 44848.00,
-    grandTotal: 125848.00,
+    freeshipTotal: 34000.00,
+    grandTotal: 115000.00,
     otherFeeHeads: OTHER_FEES_HEADS,
     feeHeads: [
       {
@@ -181,9 +181,9 @@ export const ACADEMIC_YEARS_FEES = [
         id: 2,
         name: "Development Fees",
         pyob: 0.00,
-        currentReceivables: 14348.00,
-        totalReceivables: 14348.00,
-        totalCollectedAmount: 14348.00,
+        currentReceivables: 14000.00,
+        totalReceivables: 14000.00,
+        totalCollectedAmount: 14000.00,
         outstanding: 0.00,
         status: "Paid",
         statusType: "green",
@@ -192,9 +192,9 @@ export const ACADEMIC_YEARS_FEES = [
         id: 3,
         name: "Admission & University Enrollment Fee",
         pyob: 0.00,
-        currentReceivables: 13652.00,
-        totalReceivables: 13652.00,
-        totalCollectedAmount: 13652.00,
+        currentReceivables: 14000.00,
+        totalReceivables: 14000.00,
+        totalCollectedAmount: 14000.00,
         outstanding: 0.00,
         status: "Paid",
         statusType: "green",
@@ -243,11 +243,11 @@ export const ACADEMIC_YEARS_FEES = [
       },
       scholarshipB: {
         label: "Freeship Amount",
-        amount: 44848.00,
-        collected: 44848.00,
+        amount: 34000.00,
+        collected: 34000.00,
         outstanding: 0.00,
       },
-      grandTotal: 125848.00,
+      grandTotal: 115000.00,
     }
   },
   {
@@ -257,8 +257,8 @@ export const ACADEMIC_YEARS_FEES = [
     yearTitle: "Second Year B.Tech (Odd & Even)",
     isCurrentYear: false,
     studentPaidTotal: 44000.00,
-    freeshipTotal: 81848.00,
-    grandTotal: 125848.00,
+    freeshipTotal: 71000.00,
+    grandTotal: 115000.00,
     otherFeeHeads: OTHER_FEES_HEADS,
     feeHeads: [
       {
@@ -276,9 +276,9 @@ export const ACADEMIC_YEARS_FEES = [
         id: 2,
         name: "Development Fees",
         pyob: 0.00,
-        currentReceivables: 14348.00,
-        totalReceivables: 14348.00,
-        totalCollectedAmount: 14348.00,
+        currentReceivables: 14000.00,
+        totalReceivables: 14000.00,
+        totalCollectedAmount: 14000.00,
         outstanding: 0.00,
         status: "Paid",
         statusType: "green",
@@ -287,9 +287,9 @@ export const ACADEMIC_YEARS_FEES = [
         id: 3,
         name: "Examination & Autonomous Hall Ticket Fees",
         pyob: 0.00,
-        currentReceivables: 11652.00,
-        totalReceivables: 11652.00,
-        totalCollectedAmount: 11652.00,
+        currentReceivables: 12000.00,
+        totalReceivables: 12000.00,
+        totalCollectedAmount: 12000.00,
         outstanding: 0.00,
         status: "Paid",
         statusType: "green",
@@ -338,11 +338,11 @@ export const ACADEMIC_YEARS_FEES = [
       },
       scholarshipB: {
         label: "Freeship Amount",
-        amount: 81848.00,
-        collected: 81848.00,
+        amount: 71000.00,
+        collected: 71000.00,
         outstanding: 0.00,
       },
-      grandTotal: 125848.00,
+      grandTotal: 115000.00,
     }
   },
   {
@@ -352,17 +352,17 @@ export const ACADEMIC_YEARS_FEES = [
     yearTitle: "Third Year B.Tech (Current Session V)",
     isCurrentYear: true,
     studentPaidTotal: 43000.00,
-    freeshipTotal: 82848.00,
-    grandTotal: 125848.00,
+    freeshipTotal: 72000.00,
+    grandTotal: 115000.00,
     otherFeeHeads: OTHER_FEES_HEADS,
     feeHeads: [
       {
         id: 1,
         name: "Development Fees",
         pyob: 0.00,
-        currentReceivables: 14348.00,
-        totalReceivables: 14348.00,
-        totalCollectedAmount: 14348.00,
+        currentReceivables: 14000.00,
+        totalReceivables: 14000.00,
+        totalCollectedAmount: 14000.00,
         outstanding: 0.00,
         status: "Paid",
         statusType: "green",
@@ -371,9 +371,9 @@ export const ACADEMIC_YEARS_FEES = [
         id: 2,
         name: "Examination & Laboratory Academic Share",
         pyob: 0.00,
-        currentReceivables: 28652.00,
-        totalReceivables: 28652.00,
-        totalCollectedAmount: 28652.00,
+        currentReceivables: 29000.00,
+        totalReceivables: 29000.00,
+        totalCollectedAmount: 29000.00,
         outstanding: 0.00,
         status: "Paid",
         statusType: "green",
@@ -433,11 +433,11 @@ export const ACADEMIC_YEARS_FEES = [
       },
       scholarshipB: {
         label: "Freeship Amount",
-        amount: 82848.00,
-        collected: 82848.00,
+        amount: 72000.00,
+        collected: 72000.00,
         outstanding: 0.00,
       },
-      grandTotal: 125848.00,
+      grandTotal: 115000.00,
     }
   }
 ];
@@ -670,7 +670,7 @@ export const NOTICE_BOARD = [
     id: "not_4",
     authorInitials: "JIT",
     authorName: "Accounts Office, JITN",
-    title: "Freeship & EBC Scholarship Reconciliation Update (Total Fee ₹125,848)",
+    title: "Freeship & EBC Scholarship Reconciliation Update (Total Fee ₹115,000)",
     description: "Govt Freeship deduction and student share reconciliation for academic batches 2024-2028 is updated. Check your yearly ledger in Student Fees Details.",
     timeAgo: "24 days ago",
     date: "2026-10-10",
