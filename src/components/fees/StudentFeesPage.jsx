@@ -622,17 +622,19 @@ export const StudentFeesPage = ({
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100">
-                            {yearTransactions.map((txn) => (
+                            {yearTransactions
+                              .filter(txn => txn.paymentMode === 'ONLINE PAYMENT' || txn.paymentMethod === 'ONLINE PAYMENT')
+                              .map((txn) => (
                               <tr key={txn.id} className="hover:bg-slate-50">
-                                <td className="py-2.5 px-3 font-mono text-slate-700">{txn.bankReference || 'RZP_ORDER_981'}</td>
-                                <td className="py-2.5 px-3 text-slate-700">{txn.paymentMethod}</td>
+                                <td className="py-2.5 px-3 font-mono text-slate-700">{txn.bankReference || txn.transactionId || 'RZP_ORDER_981'}</td>
+                                <td className="py-2.5 px-3 text-slate-700">{txn.paymentMode || txn.paymentMethod || 'ONLINE PAYMENT'}</td>
                                 <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
                                 <td className="py-2.5 px-3 text-right font-bold text-emerald-600">
                                   ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                 </td>
                                 <td className="py-2.5 px-3 text-center">
                                   <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
-                                    {txn.status}
+                                    {txn.status || 'Success'}
                                   </span>
                                 </td>
                               </tr>
