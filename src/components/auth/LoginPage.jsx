@@ -12,6 +12,8 @@ export const LoginPage = ({ onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorTimestamp, setErrorTimestamp] = useState('');
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [forgotInput, setForgotInput] = useState('');
   const [forgotSubmitted, setForgotSubmitted] = useState(false);
@@ -19,24 +21,20 @@ export const LoginPage = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMessage('');
+    setShowErrorModal(false);
     setIsLoading(true);
 
+    // Realistic server handshake latency before throwing 500 error
     setTimeout(() => {
       setIsLoading(false);
-      const cleanUser = username.trim().toLowerCase();
-      const cleanPass = password.trim();
+      const now = new Date();
+      const timeStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-IN', { hour12: false }) + ' IST';
+      setErrorTimestamp(timeStr);
 
-      // Strict validation: ID must be ugf24ee036 and password must be small letters parikshit02
-      if (cleanUser === 'ugf24ee036' && cleanPass === 'parikshit02') {
-        onLogin({
-          role: 'student',
-          username: 'UGF24EE036',
-        });
-      } else {
-        // If incorrect, DO NOT open the dashboard!
-        setErrorMessage('Invalid User Name or Password. Access denied.');
-      }
-    }, 350);
+      // ALWAYS throw authentic server error regardless of what username or password is typed
+      setErrorMessage('The CyberVidya central authentication server is currently experiencing unexpected database latency. Unable to establish secure student session. Please contact JIT ERP Administrator.');
+      setShowErrorModal(true);
+    }, 1200);
   };
 
   return (
@@ -44,7 +42,7 @@ export const LoginPage = ({ onLogin }) => {
       
       {/* 
         High-Definition Blurred Campus Backdrop:
-        Applies a smooth 16px blur & deep contrast filter to dissolve the baked-in 
+        Applies a smooth 14px blur & deep contrast filter to dissolve the baked-in 
         static text from the campus photo while keeping the rich architectural atmosphere.
       */}
       <div 
@@ -87,11 +85,20 @@ export const LoginPage = ({ onLogin }) => {
           Sign In
         </h2>
 
-        {/* Error Alert if credentials incorrect */}
+        {/* Server Error Alert Banner */}
         {errorMessage && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg flex items-center gap-2.5 animate-in fade-in">
-            <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
-            <span className="font-semibold">{errorMessage}</span>
+          <div className="mb-4 p-3 bg-red-50 border border-red-300 text-red-800 text-xs rounded-lg flex items-start gap-2.5 animate-in fade-in shadow-xs">
+            <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+            <div className="flex-1 text-left">
+              <div className="font-bold text-red-900 text-[12px] mb-0.5 flex items-center justify-between">
+                <span>500 - Internal Server Error</span>
+                <span className="font-mono text-[9px] bg-red-100 text-red-800 px-1.5 py-0.2 rounded font-normal">HTTP 500</span>
+              </div>
+              <div className="text-[11px] text-red-700 leading-relaxed">{errorMessage}</div>
+              <div className="text-[10px] text-red-500 font-mono mt-1 pt-1 border-t border-red-200/80">
+                Host: auth-node-02.jitn.cybervidya.net • Ref: ERR_DB_TIMEOUT_500
+              </div>
+            </div>
           </div>
         )}
 
@@ -161,7 +168,7 @@ export const LoginPage = ({ onLogin }) => {
                 setShowForgotModal(true);
                 setForgotSubmitted(false);
               }}
-              className="text-xs sm:text-[11px] text-slate-600 hover:text-blue-600 font-medium transition-colors py-1"
+              className="text-xs sm:text-[11px] text-slate-600 hover:text-blue-600 font-medium transition-colors py-1 cursor-pointer"
             >
               Forgot Password?
             </button>
@@ -172,12 +179,12 @@ export const LoginPage = ({ onLogin }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-32 sm:w-28 py-2.5 sm:py-2 px-4 bg-[#18b82a] hover:bg-[#15a225] active:bg-[#128a20] text-white text-sm sm:text-[13px] font-bold rounded-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-36 py-2.5 sm:py-2 px-5 bg-[#18b82a] hover:bg-[#15a225] active:bg-[#128a20] text-white text-sm sm:text-[13px] font-bold rounded-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-80"
             >
               {isLoading ? (
                 <>
                   <div className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  <span>Entering...</span>
+                  <span>Connecting...</span>
                 </>
               ) : (
                 <span>Login</span>
@@ -193,7 +200,7 @@ export const LoginPage = ({ onLogin }) => {
       <div className="absolute bottom-4 right-4 z-20">
         <div 
           onClick={() => {
-            alert("CyberVidya Gateway Active: JITN Autonomous Authentication Server.");
+            alert("CyberVidya Gateway: JITN Autonomous Authentication Server (auth.jitn.cybervidya.net)");
           }}
           className="w-10 h-10 rounded-full bg-white text-blue-600 shadow-lg border border-slate-200 flex items-center justify-center cursor-pointer hover:bg-slate-50 hover:scale-105 transition-all"
           title="CyberVidya Autonomous Security Token"
@@ -202,13 +209,68 @@ export const LoginPage = ({ onLogin }) => {
         </div>
       </div>
 
+      {/* 500 Internal Server Error Modal Dialog (Realistic CyberVidya ERP System Error) */}
+      {showErrorModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in">
+          <div className="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-200 animate-in zoom-in-95 duration-200 text-left">
+            
+            {/* Modal Red Error Header */}
+            <div className="bg-red-600 text-white px-5 py-3.5 flex items-center gap-2.5">
+              <AlertCircle className="w-5 h-5 shrink-0" />
+              <div>
+                <h3 className="text-sm font-bold tracking-tight">500 - Internal Server Error</h3>
+                <p className="text-[10px] text-red-100 font-mono">CyberVidya ERP Gateway Exception</p>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-5 space-y-3 text-xs text-slate-700">
+              <div className="p-3 bg-slate-50 rounded border border-slate-200 space-y-1.5 font-mono text-[11px]">
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Service:</span>
+                  <span className="font-bold text-slate-800">auth-node-02.jitn.cybervidya.net</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Error Code:</span>
+                  <span className="font-bold text-red-600">ERR_AUTH_SVC_TIMEOUT_500</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Timestamp:</span>
+                  <span className="text-slate-600">{errorTimestamp || "2026-11-04 18:58:30 IST"}</span>
+                </div>
+              </div>
+
+              <p className="text-slate-600 leading-relaxed text-[12px]">
+                The server encountered an unexpected error while attempting to establish a secure database session for your account. The university ERP cluster is currently experiencing heavy load or undergoing scheduled database maintenance.
+              </p>
+
+              <div className="p-2.5 bg-amber-50 border border-amber-200 rounded text-amber-800 text-[11px] leading-relaxed">
+                <strong>Action Required:</strong> Please verify your network connection or contact the <strong>Jhulelal Institute of Technology IT Helpdesk</strong> (it-support@jitnagpur.edu.in) if the problem persists.
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowErrorModal(false)}
+                className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded shadow-xs cursor-pointer transition-colors"
+              >
+                Close & Try Again
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
       {/* Forgot Password Modal */}
       {showForgotModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="w-full max-w-sm bg-white rounded-xl shadow-2xl p-6 border border-slate-200 animate-in fade-in zoom-in-95">
+          <div className="w-full max-w-sm bg-white rounded-xl shadow-2xl p-6 border border-slate-200 animate-in fade-in zoom-in-95 text-left">
             <h3 className="text-base font-bold text-slate-900">Reset Portal Password</h3>
             <p className="text-xs text-slate-500 mt-1">
-              Enter your student PRN (e.g. <code className="font-mono text-blue-600">UGF24EE041</code>) or parent registered mobile number.
+              Enter your student PRN (e.g. <code className="font-mono text-blue-600">UGF24EE036</code>) or registered mobile number.
             </p>
 
             {!forgotSubmitted ? (
@@ -225,19 +287,19 @@ export const LoginPage = ({ onLogin }) => {
                   onChange={(e) => setForgotInput(e.target.value)}
                   placeholder="PRN or Mobile Number"
                   required
-                  className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 text-xs focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 text-xs focus:outline-none focus:border-blue-500 font-mono"
                 />
                 <div className="flex items-center justify-end gap-2 pt-2">
                   <button
                     type="button"
                     onClick={() => setShowForgotModal(false)}
-                    className="px-3 py-1.5 rounded text-xs text-slate-600 hover:bg-slate-100"
+                    className="px-3 py-1.5 rounded text-xs text-slate-600 hover:bg-slate-100 cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-1.5 rounded bg-[#18b82a] hover:bg-[#15a225] text-white text-xs font-bold"
+                    className="px-4 py-1.5 rounded bg-[#18b82a] hover:bg-[#15a225] text-white text-xs font-bold cursor-pointer"
                   >
                     Send OTP
                   </button>
@@ -245,15 +307,15 @@ export const LoginPage = ({ onLogin }) => {
               </form>
             ) : (
               <div className="mt-4 py-3 text-center space-y-2">
-                <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-                <p className="text-xs font-bold text-slate-800">Password Reset OTP Sent!</p>
-                <p className="text-[11px] text-slate-500">
-                  A verification code has been dispatched to your university-registered mobile phone.
+                <AlertCircle className="w-8 h-8 text-red-600 mx-auto" />
+                <p className="text-xs font-bold text-red-800">SMS Gateway Timeout (500)</p>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Unable to communicate with university SMS gateway service. OTP dispatch failed. Please contact the college examination branch directly.
                 </p>
                 <button
                   type="button"
                   onClick={() => setShowForgotModal(false)}
-                  className="mt-2 px-4 py-1.5 rounded bg-blue-600 text-white text-xs font-semibold"
+                  className="mt-2 px-4 py-1.5 rounded bg-slate-800 text-white text-xs font-semibold cursor-pointer"
                 >
                   Back to Sign In
                 </button>

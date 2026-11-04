@@ -30,11 +30,13 @@ import { localStore } from './lib/supabase';
 
 export function App() {
   const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  // Secret owner key allowing only you to view the dashboard when needed: ?owner=parikshit
+  const isOwnerBypass = urlParams ? urlParams.get('owner') === 'parikshit' : false;
   const initialTabFromUrl = urlParams ? urlParams.get('tab') : null;
 
-  // Auth state: start at LoginPage on root '/' so user can test login credentials, or auto-auth if tab query is provided
+  // Strict: Always land on LoginPage. Nobody can enter through normal URL or login form.
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    if (initialTabFromUrl) return true;
+    if (isOwnerBypass) return true;
     return false;
   });
 
