@@ -20,9 +20,10 @@ export const INITIAL_STUDENT = {
   title: "MR.",
   displayNameFormat: "FIRST MIDDLE LAST",
   displayName: "PARIKSHIT KUNDAN RAUT",
-  prn: "UGF24EE036",
-  registrationNo: "UGF24EE036",
-  rollNo: "UGF24EE036",
+  prn: "UGF24EE036", // Student UID / PRN
+  registrationNo: "UGF24EE036", // Student UID
+  uid: "UGF24EE036",
+  rollNo: "36", // Class Roll Number
   universityEnrollmentNo: "--",
   applicationNo: "--",
   avatar: null,

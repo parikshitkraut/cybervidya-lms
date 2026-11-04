@@ -44,6 +44,7 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
   // Modal to edit blank/personal values
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [formData, setFormData] = useState({
+    rollNo: student.rollNo === '--' ? '' : (student.rollNo || '36'),
     dob: student.dob === '--' ? '' : student.dob,
     phone: student.phone === '--' ? '' : student.phone,
     alternateMobile: student.alternateMobile === '--' ? '' : student.alternateMobile,
@@ -69,6 +70,7 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
     e.preventDefault();
     if (onUpdateStudent) {
       onUpdateStudent({
+        rollNo: formData.rollNo || '36',
         dob: formData.dob || '--',
         phone: formData.phone || '--',
         alternateMobile: formData.alternateMobile || '--',
@@ -156,7 +158,7 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
             {student.name || "PARIKSHIT KUNDAN RAUT"}
           </h1>
           <p className="text-[11px] sm:text-xs text-slate-500 font-mono mt-0.5">
-            Registration No: <span className="font-semibold text-slate-700">{student.registrationNo || "UGF24EE036"}</span> • Year: <span className="font-semibold text-slate-700">{student.year || "III"}</span> • Branch: <span className="font-semibold text-slate-700">{student.branchFullName || student.branch || "Electrical Engineering"}</span>
+            Registration No (UID): <span className="font-semibold text-slate-700">{student.registrationNo || "UGF24EE036"}</span> • Roll No: <span className="font-semibold text-slate-700">{student.rollNo || "36"}</span> • Year: <span className="font-semibold text-slate-700">{student.year || "III"}</span> • Branch: <span className="font-semibold text-slate-700">{student.branchFullName || student.branch || "Electrical Engineering"}</span>
           </p>
           <div className="flex items-center gap-2 mt-1.5 justify-center sm:justify-start">
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
@@ -250,7 +252,7 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
                 <InfoRow label="Registration Number" value={student.registrationNo || "UGF24EE036"} isMono isBold />
                 <InfoRow label="University/Enrollment Number" value={student.universityEnrollmentNo || "--"} isMono />
                 <InfoRow label="Application Number" value={student.applicationNo || "--"} />
-                <InfoRow label="Roll Number" value={student.rollNo || "UGF24EE036"} isMono isBold />
+                <InfoRow label="Roll Number" value={student.rollNo || "36"} isMono isBold />
               </div>
             </div>
 
@@ -517,8 +519,36 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
 
             <form onSubmit={handleSaveForm} className="mt-4 space-y-4 text-xs">
               
-              {/* Personal Section */}
+              {/* Roll Number & UID Section */}
               <div className="space-y-2">
+                <h4 className="font-bold text-[#00a896] uppercase text-[11px]">Academic Roll & UID Identification</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Roll Number</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 36"
+                      value={formData.rollNo}
+                      onChange={(e) => setFormData({ ...formData, rollNo: e.target.value })}
+                      className="w-full bg-slate-50 border border-slate-300 rounded px-2.5 py-1.5 focus:bg-white focus:border-blue-500 text-xs font-mono font-bold"
+                    />
+                    <span className="text-[10px] text-slate-500 mt-0.5 block">Your class roll number (e.g. 36)</span>
+                  </div>
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">Student UID / Registration Number</label>
+                    <input
+                      type="text"
+                      disabled
+                      value="UGF24EE036 (UID)"
+                      className="w-full bg-slate-100 text-slate-600 border border-slate-200 rounded px-2.5 py-1.5 text-xs font-mono font-bold"
+                    />
+                    <span className="text-[10px] text-slate-500 mt-0.5 block">Official college UID / Login ID</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Personal Section */}
+              <div className="space-y-2 pt-2 border-t border-slate-100">
                 <h4 className="font-bold text-[#00a896] uppercase text-[11px]">Personal & Contact Details</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>

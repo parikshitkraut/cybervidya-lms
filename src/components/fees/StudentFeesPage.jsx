@@ -125,7 +125,7 @@ export const StudentFeesPage = ({
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Roll Number :</span>
-                <span className="font-mono text-slate-800 font-medium text-right sm:text-left">{student.rollNo}</span>
+                <span className="font-mono text-slate-800 font-bold text-right sm:text-left">{student.rollNo || "36"}</span>
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Admission Category :</span>

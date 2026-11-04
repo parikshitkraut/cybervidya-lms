@@ -31,10 +31,10 @@ export const StudentProfile = ({ student, feeSummary }) => {
           <div className="space-y-2 text-center sm:text-left flex-1">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-cyber-50 text-cyber-700 border border-cyber-200">
-                PRN: {student.prn}
+                UID: {student.registrationNo || student.prn}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Roll No: {student.rollNo}
+                Roll No: {student.rollNo || "36"}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-vidya-50 text-vidya-700 border border-vidya-200">
                 {student.admissionCategory}

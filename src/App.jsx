@@ -51,7 +51,16 @@ export function App() {
   const [student, setStudent] = useState(() => {
     const saved = localStore.get('student', null);
     if (saved && saved.name && saved.name.includes('PARIKSHIT')) {
-      return { ...INITIAL_STUDENT, ...saved };
+      // Clear out erroneous assignment of full UID to Roll Number
+      const cleanRollNo = (saved.rollNo === 'UGF24EE036' || !saved.rollNo) ? '36' : saved.rollNo;
+      return { 
+        ...INITIAL_STUDENT, 
+        ...saved, 
+        rollNo: cleanRollNo,
+        registrationNo: 'UGF24EE036',
+        uid: 'UGF24EE036',
+        prn: 'UGF24EE036'
+      };
     }
     return INITIAL_STUDENT;
   });
@@ -106,12 +115,13 @@ export function App() {
     setIsAuthenticated(true);
     setActiveTab('home');
 
-    // Sync student PRN and roll number with the login ID (e.g. UGF24EE036)
+    // Sync student PRN and UID with the login ID (UGF24EE036) without overwriting Roll Number
     setStudent(prev => ({
       ...prev,
       prn: username.toUpperCase(),
       registrationNo: username.toUpperCase(),
-      rollNo: username.toUpperCase(),
+      uid: username.toUpperCase(),
+      // Roll Number remains separate from UID (e.g. 36)
     }));
 
     showNotification(
