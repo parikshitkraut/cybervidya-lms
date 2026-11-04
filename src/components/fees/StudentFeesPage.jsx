@@ -23,6 +23,9 @@ export const StudentFeesPage = ({
     'year_3': 'academic',
   });
 
+  // Modal for clicking Pay Now when dues are already paid
+  const [noPendingModal, setNoPendingModal] = useState(null);
+
   const toggleYear = (yearId) => {
     setExpandedYears(prev => ({
       ...prev,
@@ -176,7 +179,7 @@ export const StudentFeesPage = ({
               {isExpanded && (
                 <div>
                   
-                  {/* Sub-tabs Row (Clean tabs matching screenshot, NO green Pay button because fees are already paid) */}
+                  {/* Sub-tabs Row (Clean tabs with green Pay Now button matching Screenshot 7) */}
                   <div className="px-4 pt-2 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-white">
                     <div className="flex items-center gap-6">
                       <button
@@ -218,6 +221,17 @@ export const StudentFeesPage = ({
                         }`}
                       >
                         Online Payment History
+                      </button>
+                    </div>
+
+                    {/* Exact Green Pay Now Button from Screenshot 7 */}
+                    <div className="pb-2">
+                      <button
+                        onClick={() => setNoPendingModal(yearData.label)}
+                        className="px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-[12px] font-bold rounded shadow-xs transition-colors cursor-pointer"
+                        title="Fees already fully paid"
+                      >
+                        Pay Now
                       </button>
                     </div>
                   </div>
@@ -288,10 +302,12 @@ export const StudentFeesPage = ({
                             <td colSpan="2" className="border-r-0"></td>
                           </tr>
 
-                          {/* (B) Freeship Amount Row from Screenshot 2 & 3 */}
+                          {/* (B) Scholarship Amount Row from Screenshot 2 & 3 */}
                           <tr className="bg-white font-bold text-slate-900 border-t border-slate-100">
                             <td className="py-2.5 px-3 text-center border-r border-slate-100">(B)</td>
-                            <td className="py-2.5 px-3 border-r border-slate-100 font-semibold text-slate-800">Freeship Amount</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 font-semibold text-slate-800">
+                              {yearData.totals.scholarshipB.label || "Scholarship Amount"}
+                            </td>
                             <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
                             <td className="py-2.5 px-3 border-r border-slate-100 text-right"></td>
                             <td className="py-2.5 px-3 border-r border-slate-100 text-right">₹ {yearData.totals.scholarshipB.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
@@ -483,6 +499,36 @@ export const StudentFeesPage = ({
           );
         })}
       </div>
+
+      {/* No Pending Dues Modal when user clicks Pay Now */}
+      {noPendingModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="w-full max-w-sm bg-white rounded-lg shadow-2xl p-6 border border-slate-200 animate-in fade-in zoom-in-95">
+            <div className="flex items-center gap-2.5 mb-2 text-emerald-600">
+              <CheckCircle2 className="w-6 h-6 shrink-0" />
+              <h3 className="text-base font-bold text-slate-900">Fee Dues Fully Settled</h3>
+            </div>
+            <p className="text-xs text-slate-600 leading-relaxed mt-2">
+              All academic and examination dues for academic session <strong className="text-slate-800">{noPendingModal}</strong> have been completely settled.
+            </p>
+            <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded text-xs text-emerald-800 flex justify-between font-medium">
+              <span>Current Outstanding:</span>
+              <span className="font-bold text-emerald-700">₹ 0.00</span>
+            </div>
+            <p className="text-[11px] text-slate-500 mt-2">
+              No pending balance exists for this period. Download or view verified receipts under the <strong>Transaction History</strong> sub-tab.
+            </p>
+            <div className="mt-5 flex justify-end">
+              <button
+                onClick={() => setNoPendingModal(null)}
+                className="px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-xs font-bold rounded shadow-xs"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

@@ -24,8 +24,8 @@ export const LoginPage = ({ onLogin }) => {
       setIsLoading(false);
       const cleanUser = username.trim().toLowerCase();
 
-      // Strict validation: ID must be ugf24ee036 and password must be parikshit
-      if (cleanUser === 'ugf24ee036' && password === 'parikshit') {
+      // Strict validation: ID must be ugf24ee036 (or ugf24ee041 from screenshot) and password must be parikshit
+      if ((cleanUser === 'ugf24ee036' || cleanUser === 'ugf24ee041') && password === 'parikshit') {
         onLogin({
           role: 'student',
           username: username.trim().toUpperCase(),
