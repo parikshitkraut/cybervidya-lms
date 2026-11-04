@@ -29,7 +29,11 @@ export const AttendancePage = ({ student }) => {
 
       {/* Table */}
       <div className="bg-white rounded border border-slate-200 overflow-hidden shadow-xs">
-        <table className="w-full text-left text-xs border-collapse">
+        <div className="md:hidden px-3 py-1.5 bg-slate-100 text-[11px] text-slate-600 border-b border-slate-200">
+          👉 Swipe horizontally to view full subject-wise biometric logs
+        </div>
+        <div className="overflow-x-auto scrollbar-none touch-scroll">
+          <table className="w-full text-left text-xs border-collapse min-w-[500px]">
           <thead className="bg-[#34373d] text-white text-[11px]">
             <tr>
               <th className="py-2.5 px-3">Subject / Course</th>
@@ -55,6 +59,7 @@ export const AttendancePage = ({ student }) => {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

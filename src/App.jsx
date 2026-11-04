@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/common/Navbar';
 import { Sidebar } from './components/common/Sidebar';
 import { Footer } from './components/common/Footer';
+import { MobileBottomBar } from './components/common/MobileBottomBar';
 import { LoginPage } from './components/auth/LoginPage';
 import { NotificationToast } from './components/common/NotificationToast';
 
@@ -42,6 +43,9 @@ export function App() {
     if (initialTabFromUrl) return initialTabFromUrl;
     return localStore.get('activeTab', 'home');
   });
+
+  // Mobile drawer state for phones
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Core Data States
   const [student, setStudent] = useState(() => ({ ...INITIAL_STUDENT, ...(localStore.get('student', null) || {}) }));
@@ -177,19 +181,25 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onLogout={handleLogout}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
       {/* Main Container: Sidebar + Content */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 relative">
         
-        {/* Dark Charcoal Sidebar matching Screenshot 1 & 2 */}
+        {/* Dark Charcoal Sidebar: desktop mode + mobile slide-over drawer */}
         <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          isMobileOpen={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
+          student={student}
+          onLogout={handleLogout}
         />
 
-        {/* Inner Content Area matching Screenshots */}
-        <main className="flex-1 p-4 sm:p-6 overflow-y-auto max-w-7xl w-full">
+        {/* Inner Content Area matching Screenshots with mobile safe bottom spacing */}
+        <main className="flex-1 p-3 sm:p-4 md:p-6 pb-20 md:pb-6 overflow-y-auto max-w-7xl w-full mx-auto">
           
           {/* Tab 1: Dashboard / Home Notice Board (Screenshot 1) */}
           {activeTab === 'home' && (
@@ -249,6 +259,13 @@ export function App() {
 
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation Bar (Phone-only thumb navigation) */}
+      <MobileBottomBar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onOpenMenu={() => setIsMobileMenuOpen(true)}
+      />
 
       {/* Footer matching Screenshot 1, 2, 3 */}
       <Footer />

@@ -47,35 +47,35 @@ export const LoginPage = ({ onLogin }) => {
       {/* Subtle overlay so the white card pops authentically */}
       <div className="absolute inset-0 bg-black/5 pointer-events-none" />
 
-      {/* Main Login Card - Exactly replicating the screenshot */}
-      <div className="relative z-10 w-full max-w-[370px] bg-white rounded-md shadow-2xl p-7 border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+      {/* Main Login Card - Exactly replicating the screenshot with phone responsiveness */}
+      <div className="relative z-10 w-[92%] sm:w-full max-w-[370px] bg-white rounded-lg sm:rounded-md shadow-2xl p-5 sm:p-7 border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header with Two Logos */}
-        <div className="flex items-center justify-center gap-4 mb-6">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 mb-5 sm:mb-6">
           {/* Left: JIT Logo */}
           <div className="flex items-center justify-center">
             <img 
               src={jitLogo} 
               alt="JIT - Jhulelal Institute of Technology" 
-              className="h-16 object-contain"
+              className="h-14 sm:h-16 object-contain"
             />
           </div>
 
           {/* Thin Vertical Divider */}
-          <div className="h-12 w-[1px] bg-slate-200/90" />
+          <div className="h-10 sm:h-12 w-[1px] bg-slate-200/90" />
 
           {/* Right: CyberVidya Logo */}
           <div className="flex items-center justify-center">
             <img 
               src={cyberLogo} 
               alt="CYBER विद्या" 
-              className="h-12 object-contain"
+              className="h-10 sm:h-12 object-contain"
             />
           </div>
         </div>
 
         {/* Heading: Sign In */}
-        <h2 className="text-[22px] font-bold text-slate-900 text-left mb-5">
+        <h2 className="text-xl sm:text-[22px] font-bold text-slate-900 text-left mb-4 sm:mb-5">
           Sign In
         </h2>
 
@@ -88,12 +88,12 @@ export const LoginPage = ({ onLogin }) => {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
           
           {/* User Name Row */}
           <div>
-            <div className="flex items-center gap-2">
-              <label className="w-24 text-[13px] font-medium text-slate-800 text-left shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+              <label className="w-full sm:w-24 text-xs sm:text-[13px] font-medium text-slate-800 text-left shrink-0">
                 User Name
               </label>
               <div className="relative flex-1">
@@ -106,7 +106,7 @@ export const LoginPage = ({ onLogin }) => {
                   }}
                   required
                   placeholder="ugf24ee036"
-                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-1.5 text-[13px] font-mono text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
+                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-2 sm:py-1.5 text-base sm:text-[13px] font-mono text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
                 />
                 <User className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
@@ -115,8 +115,8 @@ export const LoginPage = ({ onLogin }) => {
 
           {/* Password Row */}
           <div>
-            <div className="flex items-center gap-2">
-              <label className="w-24 text-[13px] font-medium text-slate-800 text-left shrink-0">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+              <label className="w-full sm:w-24 text-xs sm:text-[13px] font-medium text-slate-800 text-left shrink-0">
                 Password
               </label>
               <div className="relative flex-1">
@@ -129,15 +129,15 @@ export const LoginPage = ({ onLogin }) => {
                   }}
                   required
                   placeholder="parikshit"
-                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-1.5 text-[13px] text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
+                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-2 sm:py-1.5 text-base sm:text-[13px] text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="p-1 text-slate-400 hover:text-slate-600 absolute right-2 top-1/2 -translate-y-1/2"
+                  className="p-1.5 sm:p-1 text-slate-400 hover:text-slate-600 absolute right-2 top-1/2 -translate-y-1/2"
                   title={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  {showPassword ? <EyeOff className="w-4 h-4 sm:w-3.5 sm:h-3.5" /> : <Eye className="w-4 h-4 sm:w-3.5 sm:h-3.5" />}
                 </button>
               </div>
             </div>
@@ -151,7 +151,7 @@ export const LoginPage = ({ onLogin }) => {
                 setShowForgotModal(true);
                 setForgotSubmitted(false);
               }}
-              className="text-[11px] text-slate-700 hover:text-blue-600 transition-colors"
+              className="text-xs sm:text-[11px] text-slate-700 hover:text-blue-600 transition-colors py-1"
             >
               Forgot Password?
             </button>
@@ -162,7 +162,7 @@ export const LoginPage = ({ onLogin }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-28 py-1.5 px-4 bg-[#18b82a] hover:bg-[#15a225] active:bg-[#128a20] text-white text-[13px] font-bold rounded shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"
+              className="w-32 sm:w-28 py-2.5 sm:py-1.5 px-4 bg-[#18b82a] hover:bg-[#15a225] active:bg-[#128a20] text-white text-sm sm:text-[13px] font-bold rounded shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>

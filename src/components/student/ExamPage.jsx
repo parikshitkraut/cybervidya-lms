@@ -9,8 +9,8 @@ export const ExamPage = ({ student }) => {
         Examination Cell & Hall Ticket Clearance
       </h2>
 
-      <div className="bg-white rounded border border-slate-200 p-5 shadow-xs space-y-4">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div className="bg-white rounded border border-slate-200 p-4 sm:p-5 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
           <div>
             <h3 className="font-bold text-slate-900 text-sm">
               End Semester Winter-2026 Examination Hall Ticket
@@ -19,7 +19,7 @@ export const ExamPage = ({ student }) => {
               PRN: {student.prn} • Branch: {student.branchFullName} • Sem {student.semester}
             </p>
           </div>
-          <span className="px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+          <span className="self-start sm:self-auto px-2.5 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shrink-0">
             Dues Cleared • Eligible
           </span>
         </div>

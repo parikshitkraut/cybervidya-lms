@@ -53,87 +53,87 @@ export const StudentFeesPage = ({
         {/* Teal top accent line */}
         <div className="h-[3px] bg-[#00a896] w-full" />
 
-        <div className="p-4 sm:p-5 flex flex-col md:flex-row items-start gap-6">
+        <div className="p-3.5 sm:p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
           
           {/* Avatar Silhouette */}
-          <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 shrink-0">
-            <User className="w-10 h-10" />
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 shrink-0 ring-1 ring-slate-300">
+            <User className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
 
-          {/* 3-Column Particulars Grid from Screenshot 1 & 3 */}
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-2 gap-x-6 text-[12px] text-slate-600">
+          {/* 3-Column Particulars Grid - Mobile responsive with left-right alignment on small screens */}
+          <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-1.5 sm:gap-y-2 gap-x-6 text-[12px] text-slate-600">
             
             {/* Column 1 */}
             <div className="space-y-1.5">
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Name :</span>
-                <span className="font-semibold text-slate-800 uppercase truncate" title={student.name}>
+                <span className="font-semibold text-slate-800 uppercase truncate text-right sm:text-left" title={student.name}>
                   {student.name}
                 </span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Branch :</span>
-                <span className="text-slate-800 font-medium">{student.branch}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.branch}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Academic Batch :</span>
-                <span className="text-slate-800 font-medium">{student.academicBatch}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.academicBatch}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Academic Year :</span>
-                <span className="text-slate-800 font-medium">{student.academicYear}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.academicYear}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Category :</span>
-                <span className="text-slate-800 font-medium">{student.category}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.category}</span>
               </div>
             </div>
 
             {/* Column 2 */}
             <div className="space-y-1.5">
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Registration Number :</span>
-                <span className="font-mono text-slate-800 font-medium">{student.registrationNo}</span>
+                <span className="font-mono text-slate-800 font-medium text-right sm:text-left">{student.registrationNo}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Year :</span>
-                <span className="text-slate-800 font-medium">{student.year}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.year}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Class Section :</span>
-                <span className="text-slate-800 font-medium">{student.section}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.section}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Academic Session :</span>
-                <span className="text-slate-800 font-medium">{student.academicSession}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.academicSession}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Fee Category Name :</span>
-                <span className="text-slate-800 font-medium">{student.feeCategoryName}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.feeCategoryName}</span>
               </div>
             </div>
 
             {/* Column 3 */}
             <div className="space-y-1.5">
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Degree :</span>
-                <span className="text-slate-800 font-medium">{student.degree}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.degree}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Semester :</span>
-                <span className="text-slate-800 font-medium">{student.semester}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.semester}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Roll Number :</span>
-                <span className="font-mono text-slate-800 font-medium">{student.rollNo}</span>
+                <span className="font-mono text-slate-800 font-medium text-right sm:text-left">{student.rollNo}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Admission Category :</span>
-                <span className="text-slate-800 font-medium">{student.admissionCategory}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.admissionCategory}</span>
               </div>
-              <div className="flex items-baseline">
+              <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-36 text-slate-500 shrink-0">Enrollment Type :</span>
-                <span className="text-slate-800 font-medium">{student.enrollmentType}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.enrollmentType}</span>
               </div>
             </div>
 
@@ -179,14 +179,14 @@ export const StudentFeesPage = ({
               {isExpanded && (
                 <div>
                   
-                  {/* Sub-tabs Row (Clean tabs with green Pay Now button matching Screenshot 7) */}
-                  <div className="px-4 pt-2 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-white">
-                    <div className="flex items-center gap-6">
+                  {/* Sub-tabs Row (Clean tabs with green Pay Now button matching Screenshot 7, mobile swipeable) */}
+                  <div className="px-3 sm:px-4 pt-2 border-b border-slate-200 flex items-center justify-between gap-3 bg-white overflow-x-auto scrollbar-none touch-scroll">
+                    <div className="flex items-center gap-4 sm:gap-6 shrink-0">
                       <button
                         onClick={() => setYearSubTab(yearData.id, 'academic')}
-                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                        className={`pb-2.5 text-[13px] font-medium transition-all whitespace-nowrap relative ${
                           activeSubTab === 'academic'
-                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            ? 'text-orange-500 border-b-2 border-orange-500 font-bold'
                             : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
@@ -194,9 +194,9 @@ export const StudentFeesPage = ({
                       </button>
                       <button
                         onClick={() => setYearSubTab(yearData.id, 'others')}
-                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                        className={`pb-2.5 text-[13px] font-medium transition-all whitespace-nowrap relative ${
                           activeSubTab === 'others'
-                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            ? 'text-orange-500 border-b-2 border-orange-500 font-bold'
                             : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
@@ -204,9 +204,9 @@ export const StudentFeesPage = ({
                       </button>
                       <button
                         onClick={() => setYearSubTab(yearData.id, 'transactions')}
-                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                        className={`pb-2.5 text-[13px] font-medium transition-all whitespace-nowrap relative ${
                           activeSubTab === 'transactions'
-                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            ? 'text-orange-500 border-b-2 border-orange-500 font-bold'
                             : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
@@ -214,9 +214,9 @@ export const StudentFeesPage = ({
                       </button>
                       <button
                         onClick={() => setYearSubTab(yearData.id, 'online_history')}
-                        className={`pb-2.5 text-[13px] font-medium transition-all relative ${
+                        className={`pb-2.5 text-[13px] font-medium transition-all whitespace-nowrap relative ${
                           activeSubTab === 'online_history'
-                            ? 'text-orange-500 border-b-2 border-orange-500'
+                            ? 'text-orange-500 border-b-2 border-orange-500 font-bold'
                             : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
@@ -225,10 +225,10 @@ export const StudentFeesPage = ({
                     </div>
 
                     {/* Exact Green Pay Now Button from Screenshot 7 */}
-                    <div className="pb-2">
+                    <div className="pb-2 shrink-0">
                       <button
                         onClick={() => setNoPendingModal(yearData.label)}
-                        className="px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-[12px] font-bold rounded shadow-xs transition-colors cursor-pointer"
+                        className="px-3.5 sm:px-4 py-1.5 bg-[#18b82a] hover:bg-[#15a225] text-white text-[12px] font-bold rounded shadow-xs transition-colors cursor-pointer whitespace-nowrap"
                         title="Fees already fully paid"
                       >
                         Pay Now
@@ -238,8 +238,19 @@ export const StudentFeesPage = ({
 
                   {/* Sub-tab 1: Academic Fees Table (Exact columns and styling from Screenshot 2 & 3) */}
                   {activeSubTab === 'academic' && (
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse text-[12px]">
+                    <div>
+                      {/* Mobile Swipe Hint */}
+                      <div className="md:hidden flex items-center justify-between px-3 py-1.5 bg-slate-100/90 border-b border-slate-200 text-[11px] text-slate-600 select-none">
+                        <span className="font-medium flex items-center gap-1.5">
+                          👉 Swipe table sideways for breakdown
+                        </span>
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white shrink-0">
+                          Outstanding: ₹0.00
+                        </span>
+                      </div>
+
+                      <div className="overflow-x-auto scrollbar-none touch-scroll">
+                        <table className="w-full text-left border-collapse text-[12px] min-w-[640px]">
                         
                         {/* Dark Charcoal Table Header */}
                         <thead>
@@ -331,12 +342,24 @@ export const StudentFeesPage = ({
 
                       </table>
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* Sub-tab 2: Others Table (Exact match to Screenshot media_1793730832009_917bea16.png) */}
-                  {activeSubTab === 'others' && (
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse text-[12px]">
+                {/* Sub-tab 2: Others Table (Exact match to Screenshot media_1793730832009_917bea16.png) */}
+                {activeSubTab === 'others' && (
+                  <div>
+                    {/* Mobile Swipe Hint */}
+                    <div className="md:hidden flex items-center justify-between px-3 py-1.5 bg-slate-100/90 border-b border-slate-200 text-[11px] text-slate-600 select-none">
+                      <span className="font-medium flex items-center gap-1.5">
+                        👉 Swipe table sideways for exam fee heads
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white shrink-0">
+                        Paid
+                      </span>
+                    </div>
+
+                    <div className="overflow-x-auto scrollbar-none touch-scroll">
+                      <table className="w-full text-left border-collapse text-[12px] min-w-[640px]">
                         
                         {/* Dark Charcoal Table Header */}
                         <thead>
@@ -403,13 +426,14 @@ export const StudentFeesPage = ({
 
                       </table>
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* Sub-tab 3: Transaction History */}
-                  {activeSubTab === 'transactions' && (
-                    <div className="p-4 space-y-3">
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left text-[12px]">
+                {/* Sub-tab 3: Transaction History */}
+                {activeSubTab === 'transactions' && (
+                  <div className="p-3 sm:p-4 space-y-3">
+                    <div className="overflow-x-auto scrollbar-none touch-scroll">
+                      <table className="w-full text-left text-[12px] min-w-[580px]">
                           <thead className="bg-[#34373d] text-white text-[11px]">
                             <tr>
                               <th className="py-2 px-3">Receipt No</th>
@@ -458,9 +482,9 @@ export const StudentFeesPage = ({
 
                   {/* Sub-tab 4: Online Payment History */}
                   {activeSubTab === 'online_history' && (
-                    <div className="p-4 space-y-3">
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left text-[12px]">
+                    <div className="p-3 sm:p-4 space-y-3">
+                      <div className="overflow-x-auto scrollbar-none touch-scroll">
+                        <table className="w-full text-left text-[12px] min-w-[500px]">
                           <thead className="bg-[#34373d] text-white text-[11px]">
                             <tr>
                               <th className="py-2 px-3">Gateway Ref</th>
