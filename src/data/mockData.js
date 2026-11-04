@@ -680,6 +680,27 @@ export const INITIAL_TRANSACTION_HISTORY = [
     fileName: null,
     hasDownload: false,
   },
+  {
+    sNo: 6,
+    id: "txn_y1_academic_81k",
+    receiptNumber: "AFR2425072800108",
+    voucherNo: "AFR2425072800108",
+    transactionId: "TXN_NEFT_2425072800108",
+    date: "28/07/2024",
+    time: "03:40 PM",
+    academicYear: "2024-2025 I",
+    amount: 81000.00,
+    paymentMode: "BANK TRANSFER",
+    paymentMethod: "BANK TRANSFER",
+    description: "First Year B.Tech Academic Share - Tuition, Development & Facility Fees",
+    status: "Success",
+    bankReference: "NEFT-JIT-81000-2425",
+    invoiceNumber: "INV-2024-Y1-019",
+    payerName: "PARIKSHIT KUNDAN RAUT",
+    pdfUrl: null,
+    fileName: null,
+    hasDownload: false,
+  },
 
   // --- Second Year (2025-2026 II) Transactions (Exact match to CyberVidya Screenshot media_1793818575882_de194e1b.png) ---
   {
