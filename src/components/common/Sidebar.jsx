@@ -249,10 +249,10 @@ export const Sidebar = ({
               </div>
               <div className="overflow-hidden">
                 <p className="text-xs font-bold text-white truncate">
-                  {student.name || "MISS. RIDDHI PRAMOD NAIDU"}
+                  {student.name || "PARIKSHIT KUNDAN RAUT"}
                 </p>
                 <p className="text-[11px] font-mono text-slate-400">
-                  {student.rollNo || "UGF24EE041"} • {student.degree || "B.TECH"} {student.branch || "EE"}
+                  {student.rollNo || "UGF24EE036"} • {student.degree || "B.TECH"} {student.branch || "EE"}
                 </p>
               </div>
             </div>

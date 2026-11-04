@@ -47,8 +47,14 @@ export function App() {
   // Mobile drawer state for phones
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Core Data States
-  const [student, setStudent] = useState(() => ({ ...INITIAL_STUDENT, ...(localStore.get('student', null) || {}) }));
+  // Core Data States - Initialized with Parikshit Kundan Raut
+  const [student, setStudent] = useState(() => {
+    const saved = localStore.get('student', null);
+    if (saved && saved.name && saved.name.includes('PARIKSHIT')) {
+      return { ...INITIAL_STUDENT, ...saved };
+    }
+    return INITIAL_STUDENT;
+  });
   const [feesData, setFeesData] = useState(() => localStore.get('feesData', INITIAL_FEES_DATA));
   const [paymentHistory, setPaymentHistory] = useState(() => {
     const saved = localStore.get('paymentHistory', null);
@@ -235,7 +241,10 @@ export function App() {
 
           {/* Tab 6: Student Information (Exact Match to Screenshot 4 & 5) */}
           {(activeTab === 'student-info' || activeTab === 'admission') && (
-            <StudentInformationPage student={student} />
+            <StudentInformationPage 
+              student={student} 
+              onUpdateStudent={(updated) => setStudent(prev => ({ ...prev, ...updated }))}
+            />
           )}
 
           {/* Tab 7: Feedback, Library Placeholders */}

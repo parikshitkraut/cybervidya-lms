@@ -97,7 +97,7 @@ export const Navbar = ({
             className="flex items-center gap-1.5 sm:gap-2 cursor-pointer py-1 pl-1"
           >
             <span className="text-[12px] text-slate-700 hidden md:inline">
-              Welcome <span className="text-[#c2185b] font-medium uppercase">{student.shortName || 'RIDDHI'}</span>
+              Welcome <span className="text-[#c2185b] font-medium uppercase">{student.shortName || 'PARIKSHIT'}</span>
             </span>
 
             {/* Circular Silhouette Avatar from screenshot */}
