@@ -6,8 +6,9 @@ import campusBg from '../../assets/jitn-campus-bg.png';
 import { INSTITUTION } from '../../data/mockData';
 
 export const LoginPage = ({ onLogin }) => {
-  const [username, setUsername] = useState('ugf24ee036');
-  const [password, setPassword] = useState('parikshit');
+  // Empty by default - user must enter credentials manually
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -23,32 +24,39 @@ export const LoginPage = ({ onLogin }) => {
     setTimeout(() => {
       setIsLoading(false);
       const cleanUser = username.trim().toLowerCase();
+      const cleanPass = password.trim();
 
-      // Strict validation: ID must be ugf24ee036 (or ugf24ee041 from screenshot) and password must be parikshit
-      if ((cleanUser === 'ugf24ee036' || cleanUser === 'ugf24ee041') && password === 'parikshit') {
+      // Strict validation: ID must be ugf24ee036 and password must be small letters parikshit02
+      if (cleanUser === 'ugf24ee036' && cleanPass === 'parikshit02') {
         onLogin({
           role: 'student',
-          username: username.trim().toUpperCase(),
+          username: 'UGF24EE036',
         });
       } else {
         // If incorrect, DO NOT open the dashboard!
         setErrorMessage('Invalid User Name or Password. Access denied.');
       }
-    }, 400);
+    }, 350);
   };
 
   return (
-    <div 
-      className="min-h-screen w-full relative flex items-center justify-center p-4 bg-slate-900 bg-cover bg-center select-none"
-      style={{
-        backgroundImage: `url(${campusBg})`,
-      }}
-    >
-      {/* Subtle overlay so the white card pops authentically */}
-      <div className="absolute inset-0 bg-black/5 pointer-events-none" />
+    <div className="min-h-screen w-full relative flex items-center justify-center p-4 sm:p-6 bg-slate-950 select-none overflow-hidden">
+      
+      {/* 
+        High-Definition Blurred Campus Backdrop:
+        Applies a smooth 16px blur & deep contrast filter to dissolve the baked-in 
+        static text from the campus photo while keeping the rich architectural atmosphere.
+      */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center filter blur-[14px] brightness-[0.7] scale-110 pointer-events-none"
+        style={{
+          backgroundImage: `url(${campusBg})`,
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-900/60 pointer-events-none" />
 
-      {/* Main Login Card - Exactly replicating the screenshot with phone responsiveness */}
-      <div className="relative z-10 w-[92%] sm:w-full max-w-[370px] bg-white rounded-lg sm:rounded-md shadow-2xl p-5 sm:p-7 border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+      {/* Main Login Card - Premium, sharp, centered and perfectly responsive on mobile */}
+      <div className="relative z-10 w-full max-w-[370px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-6 sm:p-7 border border-white/20 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header with Two Logos */}
         <div className="flex items-center justify-center gap-3 sm:gap-4 mb-5 sm:mb-6">
@@ -62,7 +70,7 @@ export const LoginPage = ({ onLogin }) => {
           </div>
 
           {/* Thin Vertical Divider */}
-          <div className="h-10 sm:h-12 w-[1px] bg-slate-200/90" />
+          <div className="h-10 sm:h-12 w-[1px] bg-slate-200" />
 
           {/* Right: CyberVidya Logo */}
           <div className="flex items-center justify-center">
@@ -75,20 +83,20 @@ export const LoginPage = ({ onLogin }) => {
         </div>
 
         {/* Heading: Sign In */}
-        <h2 className="text-xl sm:text-[22px] font-bold text-slate-900 text-left mb-4 sm:mb-5">
+        <h2 className="text-xl sm:text-[22px] font-bold text-slate-900 text-left mb-4 sm:mb-5 tracking-tight">
           Sign In
         </h2>
 
         {/* Error Alert if credentials incorrect */}
         {errorMessage && (
-          <div className="mb-4 p-2.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded flex items-center gap-2 animate-in fade-in">
-            <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
-            <span className="font-medium">{errorMessage}</span>
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg flex items-center gap-2.5 animate-in fade-in">
+            <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+            <span className="font-semibold">{errorMessage}</span>
           </div>
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
           
           {/* User Name Row */}
           <div>
@@ -105,8 +113,9 @@ export const LoginPage = ({ onLogin }) => {
                     if (errorMessage) setErrorMessage('');
                   }}
                   required
-                  placeholder="ugf24ee036"
-                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-2 sm:py-1.5 text-base sm:text-[13px] font-mono text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
+                  autoComplete="off"
+                  placeholder="Enter User Name"
+                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg px-3 py-2.5 sm:py-2 text-[15px] sm:text-[13px] font-mono text-slate-900 placeholder-slate-400 focus:outline-none transition-all pr-9"
                 />
                 <User className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
@@ -128,30 +137,31 @@ export const LoginPage = ({ onLogin }) => {
                     if (errorMessage) setErrorMessage('');
                   }}
                   required
-                  placeholder="parikshit"
-                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 rounded px-3 py-2 sm:py-1.5 text-base sm:text-[13px] text-slate-900 placeholder-slate-400 focus:outline-none transition-colors pr-8"
+                  autoComplete="new-password"
+                  placeholder="Enter Password"
+                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg px-3 py-2.5 sm:py-2 text-[15px] sm:text-[13px] text-slate-900 placeholder-slate-400 focus:outline-none transition-all pr-9"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="p-1.5 sm:p-1 text-slate-400 hover:text-slate-600 absolute right-2 top-1/2 -translate-y-1/2"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 absolute right-2 top-1/2 -translate-y-1/2"
                   title={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4 sm:w-3.5 sm:h-3.5" /> : <Eye className="w-4 h-4 sm:w-3.5 sm:h-3.5" />}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
           </div>
 
           {/* Forgot Password Link */}
-          <div className="text-right">
+          <div className="text-right pt-0.5">
             <button
               type="button"
               onClick={() => {
                 setShowForgotModal(true);
                 setForgotSubmitted(false);
               }}
-              className="text-xs sm:text-[11px] text-slate-700 hover:text-blue-600 transition-colors py-1"
+              className="text-xs sm:text-[11px] text-slate-600 hover:text-blue-600 font-medium transition-colors py-1"
             >
               Forgot Password?
             </button>
@@ -162,7 +172,7 @@ export const LoginPage = ({ onLogin }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-32 sm:w-28 py-2.5 sm:py-1.5 px-4 bg-[#18b82a] hover:bg-[#15a225] active:bg-[#128a20] text-white text-sm sm:text-[13px] font-bold rounded shadow-sm hover:shadow transition-all flex items-center justify-center gap-2"
+              className="w-32 sm:w-28 py-2.5 sm:py-2 px-4 bg-[#18b82a] hover:bg-[#15a225] active:bg-[#128a20] text-white text-sm sm:text-[13px] font-bold rounded-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               {isLoading ? (
                 <>
