@@ -11,6 +11,7 @@ import { StudentFeesPage } from './components/fees/StudentFeesPage';
 import { RegisteredCoursesPage } from './components/student/RegisteredCoursesPage';
 import { AttendancePage } from './components/student/AttendancePage';
 import { ExamPage } from './components/student/ExamPage';
+import { StudentInformationPage } from './components/student/StudentInformationPage';
 
 // Modals
 import { PayNowModal } from './components/fees/PayNowModal';
@@ -43,7 +44,7 @@ export function App() {
   });
 
   // Core Data States
-  const [student, setStudent] = useState(() => localStore.get('student', INITIAL_STUDENT));
+  const [student, setStudent] = useState(() => ({ ...INITIAL_STUDENT, ...(localStore.get('student', null) || {}) }));
   const [feesData, setFeesData] = useState(() => localStore.get('feesData', INITIAL_FEES_DATA));
   const [paymentHistory, setPaymentHistory] = useState(() => {
     const saved = localStore.get('paymentHistory', null);
@@ -222,8 +223,13 @@ export function App() {
             <ExamPage student={student} />
           )}
 
-          {/* Tab 6: Admission, Feedback, Library Placeholders */}
-          {(activeTab === 'admission' || activeTab === 'feedback' || activeTab === 'library') && (
+          {/* Tab 6: Student Information (Exact Match to Screenshot 4 & 5) */}
+          {(activeTab === 'student-info' || activeTab === 'admission') && (
+            <StudentInformationPage student={student} />
+          )}
+
+          {/* Tab 7: Feedback, Library Placeholders */}
+          {(activeTab === 'feedback' || activeTab === 'library') && (
             <div className="space-y-4">
               <h2 className="text-[17px] font-bold text-slate-900 capitalize">
                 {activeTab} Portal

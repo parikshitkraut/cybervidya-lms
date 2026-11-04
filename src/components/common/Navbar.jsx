@@ -99,6 +99,17 @@ export const Navbar = ({
 
               <button
                 onClick={() => {
+                  setActiveTab('student-info');
+                  setShowProfileMenu(false);
+                }}
+                className="w-full text-left px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 rounded flex items-center gap-2"
+              >
+                <User className="w-3.5 h-3.5 text-slate-400" />
+                <span>Student Information</span>
+              </button>
+
+              <button
+                onClick={() => {
                   setActiveTab('finance');
                   setShowProfileMenu(false);
                 }}
