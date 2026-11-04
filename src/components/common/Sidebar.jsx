@@ -162,12 +162,12 @@ export const Sidebar = ({
             );
           })}
 
-          {/* Flyout Submenu Panel (Exact Match to Screenshot 1, 2, 3) */}
-          {isExpanded && activeSubMenuItems && (
+          {/* Flyout Submenu Panel (Exact Match to Screenshot 6, 7, 8) */}
+          {activeSubMenuItems && (
             <div 
               onMouseEnter={() => setHoveredItem(hoveredItem)}
               onMouseLeave={() => setHoveredItem(null)}
-              className="absolute left-full top-0 w-60 bg-[#2b2d32] border-l border-[#3a3d44] shadow-2xl py-2 z-50 text-[13px] text-slate-300 select-none animate-in fade-in slide-in-from-left-1 duration-150"
+              className="absolute left-full top-0 w-64 bg-[#2b2d32] border-l border-[#3a3d44] shadow-2xl py-2 z-50 text-[13px] text-slate-300 select-none animate-in fade-in slide-in-from-left-1 duration-150"
               style={{ minHeight: '100%' }}
             >
               {activeSubMenuItems.map((sub) => (
@@ -179,7 +179,14 @@ export const Sidebar = ({
                   }}
                   className="py-2.5 px-5 hover:bg-[#34373d] hover:text-white cursor-pointer transition-colors flex items-center justify-between group"
                 >
-                  <span className="truncate">{sub.label}</span>
+                  <div className="flex items-center gap-2.5 truncate">
+                    {!sub.hasArrow ? (
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-white shrink-0"></span>
+                    ) : (
+                      <span className="w-1.5 h-1.5 opacity-0 shrink-0"></span>
+                    )}
+                    <span className="truncate">{sub.label.replace(/^•\s*/, '')}</span>
+                  </div>
                   {sub.hasArrow && (
                     <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white shrink-0" />
                   )}

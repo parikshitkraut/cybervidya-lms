@@ -58,7 +58,13 @@ export function App() {
   const [feesData, setFeesData] = useState(() => localStore.get('feesData', INITIAL_FEES_DATA));
   const [paymentHistory, setPaymentHistory] = useState(() => {
     const saved = localStore.get('paymentHistory', null);
-    if (saved && saved.length >= INITIAL_TRANSACTION_HISTORY.length) {
+    if (
+      saved && 
+      Array.isArray(saved) && 
+      saved.length > 0 && 
+      saved.some(t => t.payerName?.includes('PARIKSHIT')) &&
+      !saved.some(t => t.description?.toLowerCase().includes('backlog') || t.description?.toLowerCase().includes('resit'))
+    ) {
       return saved;
     }
     return INITIAL_TRANSACTION_HISTORY;
