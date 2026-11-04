@@ -75,11 +75,12 @@ export function App() {
       saved && 
       Array.isArray(saved) && 
       saved.length > 0 && 
-      saved.some(t => t.payerName?.includes('PARIKSHIT')) &&
-      !saved.some(t => t.description?.toLowerCase().includes('backlog') || t.description?.toLowerCase().includes('resit'))
+      saved.some(t => t.voucherNo === 'OFR2627042900342' || t.voucherNo === 'OFR2526111600113')
     ) {
       return saved;
     }
+    // Update localStore with official verified transaction records
+    localStore.set('paymentHistory', INITIAL_TRANSACTION_HISTORY);
     return INITIAL_TRANSACTION_HISTORY;
   });
 

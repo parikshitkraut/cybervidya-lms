@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
-import { User, ChevronUp, ChevronDown, Eye, FileText, Download, CreditCard, CheckCircle2 } from 'lucide-react';
-import { ACADEMIC_YEARS_FEES } from '../../data/mockData';
+import { User, ChevronUp, ChevronDown, Eye, FileText, Download, CreditCard, CheckCircle2, Search } from 'lucide-react';
+import { ACADEMIC_YEARS_FEES, OTHER_FEES_HEADS } from '../../data/mockData';
 
 export const StudentFeesPage = ({ 
   student, 
-  paymentHistory, 
+  paymentHistory = [], 
   onPayNow, 
   onViewReceipt, 
   onViewInvoice 
 }) => {
-  // Store expanded state for each academic year (all collapsed by default, exactly matching the screenshot)
+  // Store expanded state for each academic year (Year 1 expanded by default matching user screenshot)
   const [expandedYears, setExpandedYears] = useState({
-    'year_1': false,
+    'year_1': true,
     'year_2': false,
     'year_3': false,
   });
 
   // Active sub-tab per year: { [yearId]: 'academic' | 'others' | 'transactions' | 'online_history' }
   const [subTabs, setSubTabs] = useState({
-    'year_1': 'academic',
-    'year_2': 'academic',
+    'year_1': 'others',
+    'year_2': 'others',
     'year_3': 'academic',
   });
+
+  // Search filter for Transaction History
+  const [searchQuery, setSearchQuery] = useState('');
+  const [expandedTxnRows, setExpandedTxnRows] = useState({});
 
   // Modal for clicking Pay Now when dues are already paid
   const [noPendingModal, setNoPendingModal] = useState(null);
@@ -67,25 +71,27 @@ export const StudentFeesPage = ({
             <div className="space-y-1.5">
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Name :</span>
-                <span className="font-semibold text-slate-800 uppercase truncate text-right sm:text-left" title={student.displayName || student.name}>
-                  {student.displayName || student.name}
+                <span className="font-semibold text-slate-800 uppercase truncate text-right sm:text-left" title={student.displayName || "PARIKSHIT KUNDAN RAUT"}>
+                  {student.displayName ? (student.displayName.length > 20 ? student.displayName.slice(0, 18) + '...' : student.displayName) : "PARIKSHIT KUNDAN R..."}
                 </span>
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Branch :</span>
-                <span className="text-slate-800 font-medium text-right sm:text-left">{student.branch}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">
+                  {student.branch === 'Electrical Engineering' ? 'EE' : (student.branch || 'EE')}
+                </span>
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Academic Batch :</span>
-                <span className="text-slate-800 font-medium text-right sm:text-left">{student.academicBatch}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">2024 2028</span>
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Academic Year :</span>
-                <span className="text-slate-800 font-medium text-right sm:text-left">{student.academicYear}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.academicYear || "2026-2027"}</span>
               </div>
               <div className="flex items-baseline justify-between sm:justify-start">
                 <span className="w-32 text-slate-500 shrink-0">Category :</span>
-                <span className="text-slate-800 font-medium text-right sm:text-left">{student.category}</span>
+                <span className="text-slate-800 font-medium text-right sm:text-left">{student.category || "SC"}</span>
               </div>
             </div>
 
@@ -148,12 +154,13 @@ export const StudentFeesPage = ({
           const isExpanded = expandedYears[yearData.id];
           const activeSubTab = subTabs[yearData.id] || 'academic';
 
-          // Filter transactions for this academic year
-          const yearTransactions = paymentHistory.filter(t => 
-            t.academicYear?.includes(yearData.academicYear) || 
-            t.description?.includes(yearData.academicYear) ||
-            (yearData.id === 'year_3' && !t.academicYear)
-          );
+          // Filter transactions for this academic year (includes official OFR exam receipts for Year 1 & 2 matching screenshots)
+          const yearTransactions = paymentHistory.filter(t => {
+            if (yearData.id === 'year_1' || yearData.id === 'year_2') {
+              return t.voucherNo?.startsWith('OFR') || t.academicYear?.includes(yearData.academicYear);
+            }
+            return t.academicYear?.includes(yearData.academicYear) || (yearData.id === 'year_3' && !t.academicYear);
+          });
 
           return (
             <div 
@@ -345,7 +352,7 @@ export const StudentFeesPage = ({
                   </div>
                 )}
 
-                {/* Sub-tab 2: Others Table (Exact match to Screenshot media_1793730832009_917bea16.png) */}
+                {/* Sub-tab 2: Others Table (Exact match to Screenshot media_1793818562824_4057a9da.png) */}
                 {activeSubTab === 'others' && (
                   <div>
                     {/* Mobile Swipe Hint */}
@@ -366,11 +373,11 @@ export const StudentFeesPage = ({
                           <tr className="bg-[#34373d] text-white text-[11px] font-semibold tracking-wider">
                             <th className="py-2.5 px-3 border-r border-[#42464e] w-12 text-center">S. No.</th>
                             <th className="py-2.5 px-3 border-r border-[#42464e]">Fee Heads</th>
-                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">PYOB</th>
-                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Current Receivables</th>
-                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Receivables</th>
-                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Total Collected Amount</th>
-                            <th className="py-2.5 px-3 border-r border-[#42464e] text-right">Outstanding</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">PYOB</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Current Receivables</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Total Receivables</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Total Collected Amount</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Outstanding</th>
                             <th className="py-2.5 px-3 border-r border-[#42464e] text-center">Status</th>
                             <th className="py-2.5 px-2 text-center w-10"></th>
                           </tr>
@@ -378,15 +385,15 @@ export const StudentFeesPage = ({
 
                         {/* Rows matching user screenshot */}
                         <tbody className="divide-y divide-slate-100 text-slate-700">
-                          {(yearData.otherFeeHeads || []).map((head) => (
+                          {(yearData.otherFeeHeads || OTHER_FEES_HEADS).map((head) => (
                             <tr key={head.id} className="hover:bg-slate-50 transition-colors">
                               <td className="py-2 px-3 text-center border-r border-slate-100">{head.id}</td>
                               <td className="py-2 px-3 border-r border-slate-100 font-medium text-slate-800">{head.name}</td>
-                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.pyob.toFixed(2)}</td>
-                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                              <td className="py-2 px-3 border-r border-slate-100 text-right">₹ {head.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                              <td className="py-2 px-3 border-r border-slate-100 text-right font-medium">₹ {head.outstanding.toFixed(2)}</td>
+                              <td className="py-2 px-3 border-r border-slate-100">₹ {head.pyob.toFixed(2)}</td>
+                              <td className="py-2 px-3 border-r border-slate-100">₹ {head.currentReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100">₹ {head.totalReceivables.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100">₹ {head.totalCollectedAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                              <td className="py-2 px-3 border-r border-slate-100">₹ {head.outstanding.toFixed(2)}</td>
                               <td className="py-2 px-3 border-r border-slate-100 text-center">
                                 {head.statusType === 'green' ? (
                                   <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">
@@ -402,83 +409,158 @@ export const StudentFeesPage = ({
                                 <button 
                                   onClick={() => onViewReceipt({
                                     id: `other_${yearData.id}_${head.id}`,
-                                    receiptNumber: `REC-JITN-${yearData.academicYear.slice(0,4)}-${7000 + head.id}`,
+                                    receiptNumber: `OFR25260${head.id}00${head.id}`,
                                     transactionId: `TXN_EXAM_${yearData.id}_0${head.id}`,
-                                    date: `${yearData.academicYear.slice(0,4)}-09-15`,
+                                    date: "16/11/2025",
                                     time: "10:30 AM",
                                     amount: head.totalCollectedAmount,
                                     description: `${head.name} (${yearData.label})`,
-                                    paymentMethod: "Online PG (Razorpay / UPI)",
+                                    paymentMethod: "ONLINE PAYMENT",
                                     status: "Success",
                                     bankReference: `AXIS-${982100 + head.id}`,
-                                    invoiceNumber: `INV-${yearData.academicYear.slice(0,4)}-EX0${head.id}`,
-                                    payerName: student.name,
+                                    invoiceNumber: `INV-${head.id}`,
+                                    payerName: student.displayName || "PARIKSHIT KUNDAN RAUT",
                                   })}
                                   className="text-slate-600 hover:text-blue-600"
                                   title="View official receipt"
                                 >
-                                  <Eye className="w-3.5 h-3.5 mx-auto" />
+                                  <Eye className="w-3.5 h-3.5 mx-auto text-slate-700 hover:text-blue-600" />
                                 </button>
                               </td>
                             </tr>
                           ))}
                         </tbody>
 
+                        {/* Footer Total Row matching user screenshot */}
+                        <tfoot className="border-t border-slate-200 bg-white font-bold text-slate-800">
+                          <tr>
+                            <td className="py-2.5 px-3 border-r border-slate-100"></td>
+                            <td className="py-2.5 px-3 border-r border-slate-100 font-bold">Total</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 0.00</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 16,814.00</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 16,814.00</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 16,814.00</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100">₹ 0.00</td>
+                            <td className="py-2.5 px-3 border-r border-slate-100"></td>
+                            <td className="py-2.5 px-2"></td>
+                          </tr>
+                        </tfoot>
+
                       </table>
                     </div>
                   </div>
                 )}
 
-                {/* Sub-tab 3: Transaction History */}
+                {/* Sub-tab 3: Transaction History (Exact match to Screenshot media_1793818575882_de194e1b.png) */}
                 {activeSubTab === 'transactions' && (
-                  <div className="p-3 sm:p-4 space-y-3">
-                    <div className="overflow-x-auto scrollbar-none touch-scroll">
-                      <table className="w-full text-left text-[12px] min-w-[580px]">
-                          <thead className="bg-[#34373d] text-white text-[11px]">
-                            <tr>
-                              <th className="py-2 px-3">Receipt No</th>
-                              <th className="py-2 px-3">Date</th>
-                              <th className="py-2 px-3">Transaction ID</th>
-                              <th className="py-2 px-3">Description</th>
-                              <th className="py-2 px-3">Method</th>
-                              <th className="py-2 px-3 text-right">Student Paid Amount</th>
-                              <th className="py-2 px-3 text-center">Receipt</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-100">
-                            {yearTransactions.length > 0 ? (
-                              yearTransactions.map((txn) => (
-                                <tr key={txn.id} className="hover:bg-slate-50">
-                                  <td className="py-2.5 px-3 font-mono font-bold text-blue-700">{txn.receiptNumber}</td>
-                                  <td className="py-2.5 px-3 text-slate-600">{txn.date}</td>
-                                  <td className="py-2.5 px-3 font-mono text-slate-500">{txn.transactionId}</td>
-                                  <td className="py-2.5 px-3 text-slate-800">{txn.description}</td>
-                                  <td className="py-2.5 px-3 text-slate-600">{txn.paymentMethod}</td>
-                                  <td className="py-2.5 px-3 text-right font-bold text-slate-900">
-                                    ₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                                  </td>
-                                  <td className="py-2.5 px-3 text-center">
-                                    <button
-                                      onClick={() => onViewReceipt(txn)}
-                                      className="px-2.5 py-1 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200"
-                                    >
-                                      Download
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td colSpan="7" className="py-4 text-center text-slate-400">
-                                  No transactions logged for this session.
-                                </td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
+                  <div className="space-y-0">
+                    
+                    {/* Search Bar matching screenshot */}
+                    <div className="flex items-center justify-end p-2.5 bg-white border-b border-slate-100">
+                      <div className="relative w-44 sm:w-56">
+                        <input
+                          type="text"
+                          placeholder="Search"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full pl-3 pr-8 py-1 border border-slate-300 rounded text-xs focus:outline-none focus:border-blue-500 placeholder-slate-400"
+                        />
+                        <Search className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                       </div>
                     </div>
-                  )}
+
+                    <div className="overflow-x-auto scrollbar-none touch-scroll">
+                      <table className="w-full text-left text-[12px] min-w-[640px] border-collapse">
+                        
+                        {/* Dark Charcoal Table Header */}
+                        <thead className="bg-[#34373d] text-white text-[11px] font-semibold tracking-wider">
+                          <tr>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] w-8 text-center"></th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e] w-14 text-center">S.No.</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Date</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Voucher No</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Total Amount</th>
+                            <th className="py-2.5 px-3 border-r border-[#42464e]">Payment Mode</th>
+                            <th className="py-2.5 px-3 text-center w-28"></th>
+                          </tr>
+                        </thead>
+
+                        <tbody className="divide-y divide-slate-100 text-slate-700">
+                          {yearTransactions.length > 0 ? (
+                            yearTransactions
+                              .filter(t => !searchQuery || 
+                                t.voucherNo?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                t.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                t.date?.includes(searchQuery)
+                              )
+                              .map((txn, idx) => (
+                                <React.Fragment key={txn.id || idx}>
+                                  <tr className="hover:bg-slate-50 transition-colors">
+                                    <td className="py-2 px-3 text-center border-r border-slate-100 font-bold text-slate-600">
+                                      <button 
+                                        onClick={() => setExpandedTxnRows(prev => ({ ...prev, [txn.id]: !prev[txn.id] }))}
+                                        className="w-5 h-5 flex items-center justify-center hover:bg-slate-200 rounded text-slate-700 font-bold text-xs"
+                                        title={expandedTxnRows[txn.id] ? "Collapse" : "Expand"}
+                                      >
+                                        {expandedTxnRows[txn.id] ? '−' : '+'}
+                                      </button>
+                                    </td>
+                                    <td className="py-2 px-3 text-center border-r border-slate-100 text-slate-700">{txn.sNo || (idx + 1)}</td>
+                                    <td className="py-2 px-3 border-r border-slate-100 text-slate-800 whitespace-nowrap">{txn.date}</td>
+                                    <td className="py-2 px-3 border-r border-slate-100 font-mono text-slate-800 font-medium whitespace-nowrap">{txn.voucherNo || txn.receiptNumber}</td>
+                                    <td className="py-2 px-3 border-r border-slate-100 font-medium text-slate-800 whitespace-nowrap">₹ {txn.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                    <td className="py-2 px-3 border-r border-slate-100 text-slate-700 uppercase whitespace-nowrap">{txn.paymentMode || txn.paymentMethod || 'ONLINE PAYMENT'}</td>
+                                    <td className="py-2 px-3 text-center">
+                                      <div className="flex items-center justify-center gap-2.5">
+                                        <button 
+                                          onClick={() => onViewReceipt(txn)}
+                                          className="text-blue-500 hover:text-blue-700 p-1" 
+                                          title="Download Receipt"
+                                        >
+                                          <Download className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button 
+                                          onClick={() => onViewInvoice ? onViewInvoice(txn) : onViewReceipt(txn)}
+                                          className="text-slate-700 hover:text-slate-900 p-1" 
+                                          title="View Voucher"
+                                        >
+                                          <FileText className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button 
+                                          onClick={() => onViewReceipt(txn)}
+                                          className="text-slate-700 hover:text-slate-900 p-1" 
+                                          title="View Details"
+                                        >
+                                          <Eye className="w-3.5 h-3.5" />
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  {expandedTxnRows[txn.id] && (
+                                    <tr className="bg-slate-50">
+                                      <td colSpan="7" className="py-2 px-4 text-xs text-slate-600 border-b border-slate-200">
+                                        <div className="flex flex-wrap gap-4 items-center">
+                                          <div><span className="font-semibold text-slate-500">Particulars:</span> <span className="font-medium text-slate-800">{txn.description}</span></div>
+                                          <div><span className="font-semibold text-slate-500">Ref:</span> <span className="font-mono text-slate-800">{txn.bankReference || txn.transactionId}</span></div>
+                                          <div><span className="font-semibold text-slate-500">Status:</span> <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#18b82a] text-white">Paid</span></div>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  )}
+                                </React.Fragment>
+                              ))
+                          ) : (
+                            <tr>
+                              <td colSpan="7" className="py-4 text-center text-slate-400">
+                                No transactions logged for this session.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
 
                   {/* Sub-tab 4: Online Payment History */}
                   {activeSubTab === 'online_history' && (
