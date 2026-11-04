@@ -110,16 +110,17 @@ export function App() {
   }, [isAuthenticated, activeTab, student, feesData, paymentHistory]);
 
   // Login handler from exact login screenshot
-  const handleLogin = ({ username }) => {
+  const handleLogin = (creds = {}) => {
+    const rawUser = creds?.username || 'UGF24EE036';
     setIsAuthenticated(true);
     setActiveTab('home');
 
     // Sync student PRN and UID with the login ID (UGF24EE036) without overwriting Roll Number
     setStudent(prev => ({
       ...prev,
-      prn: username.toUpperCase(),
-      registrationNo: username.toUpperCase(),
-      uid: username.toUpperCase(),
+      prn: rawUser.toUpperCase(),
+      registrationNo: rawUser.toUpperCase(),
+      uid: rawUser.toUpperCase(),
       // Roll Number remains separate from UID (e.g. 36)
     }));
 

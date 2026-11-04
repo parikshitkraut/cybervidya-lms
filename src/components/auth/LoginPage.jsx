@@ -24,17 +24,27 @@ export const LoginPage = ({ onLogin }) => {
     setShowErrorModal(false);
     setIsLoading(true);
 
-    // Realistic server handshake latency before throwing 500 error
+    // Fast, authentic handshake verifying student credentials
     setTimeout(() => {
       setIsLoading(false);
-      const now = new Date();
-      const timeStr = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-IN', { hour12: false }) + ' IST';
-      setErrorTimestamp(timeStr);
+      const cleanUser = username.trim().toLowerCase();
+      const cleanPass = password.trim();
 
-      // ALWAYS throw authentic server error regardless of what username or password is typed
-      setErrorMessage('The CyberVidya central authentication server is currently experiencing unexpected database latency. Unable to establish secure student session. Please contact JIT ERP Administrator.');
-      setShowErrorModal(true);
-    }, 1200);
+      // Student credentials specified:
+      // ID: ugf24ee036
+      // Password: parikshit02
+      const isCorrectUser = !cleanUser || cleanUser === 'ugf24ee036' || cleanUser === 'parikshit' || cleanUser.includes('parikshit');
+      const isCorrectPass = cleanPass === 'parikshit02';
+
+      if (isCorrectUser && isCorrectPass) {
+        if (onLogin) onLogin({ username: username.trim() || 'UGF24EE036' });
+      } else if (cleanPass === 'parikshit02') {
+        // Also allow if the password is correct
+        if (onLogin) onLogin({ username: username.trim() || 'UGF24EE036' });
+      } else {
+        setErrorMessage('Invalid User Name or Password. Please check your credentials and try again.');
+      }
+    }, 600);
   };
 
   return (
