@@ -30,6 +30,21 @@ export const StudentFeesPage = ({
   // Modal for clicking Pay Now when dues are already paid
   const [noPendingModal, setNoPendingModal] = useState(null);
 
+  // Helper to trigger direct browser download of the official PDF fee receipts
+  const handleDownloadPdf = (txn) => {
+    const voucher = txn.voucherNo || txn.receiptNumber;
+    const pdfUrl = txn.pdfUrl || `./receipts/${voucher}.pdf`;
+    const fileName = txn.fileName || `FEE_RECEIPT_${voucher}.pdf`;
+    
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
   const toggleYear = (yearId) => {
     setExpandedYears(prev => ({
       ...prev,
@@ -157,7 +172,7 @@ export const StudentFeesPage = ({
           // Filter transactions for this academic year (includes official OFR exam receipts for Year 1 & 2 matching screenshots)
           const yearTransactions = paymentHistory.filter(t => {
             if (yearData.id === 'year_1' || yearData.id === 'year_2') {
-              return t.voucherNo?.startsWith('OFR') || t.academicYear?.includes(yearData.academicYear);
+              return t.voucherNo?.startsWith('OFR');
             }
             return t.academicYear?.includes(yearData.academicYear) || (yearData.id === 'year_3' && !t.academicYear);
           });
@@ -407,20 +422,28 @@ export const StudentFeesPage = ({
                               </td>
                               <td className="py-2 px-2 text-center">
                                 <button 
-                                  onClick={() => onViewReceipt({
-                                    id: `other_${yearData.id}_${head.id}`,
-                                    receiptNumber: `OFR25260${head.id}00${head.id}`,
-                                    transactionId: `TXN_EXAM_${yearData.id}_0${head.id}`,
-                                    date: "16/11/2025",
-                                    time: "10:30 AM",
-                                    amount: head.totalCollectedAmount,
-                                    description: `${head.name} (${yearData.label})`,
-                                    paymentMethod: "ONLINE PAYMENT",
-                                    status: "Success",
-                                    bankReference: `AXIS-${982100 + head.id}`,
-                                    invoiceNumber: `INV-${head.id}`,
-                                    payerName: student.displayName || "PARIKSHIT KUNDAN RAUT",
-                                  })}
+                                  onClick={() => {
+                                    const voucherMap = {
+                                      1: 'OFR2627042900342',
+                                      2: 'OFR2526051200023',
+                                      4: 'OFR2526070700068',
+                                      5: 'OFR2526072400064',
+                                      6: 'OFR2526110600051',
+                                    };
+                                    const voucherNo = voucherMap[head.id] || 'OFR2627042900342';
+                                    const matchingTxn = yearTransactions.find(t => t.voucherNo === voucherNo) || {
+                                      id: `other_${head.id}`,
+                                      voucherNo,
+                                      receiptNumber: voucherNo,
+                                      date: "29/04/2026",
+                                      amount: head.totalCollectedAmount,
+                                      description: head.name,
+                                      paymentMode: "ONLINE PAYMENT",
+                                      pdfUrl: `./receipts/${voucherNo}.pdf`,
+                                      fileName: `FEE_RECEIPT_${voucherNo}.pdf`
+                                    };
+                                    handleDownloadPdf(matchingTxn);
+                                  }}
                                   className="text-slate-600 hover:text-blue-600"
                                   title="View official receipt"
                                 >
@@ -513,18 +536,18 @@ export const StudentFeesPage = ({
                                     <td className="py-2 px-3 text-center">
                                       <div className="flex items-center justify-center gap-2.5">
                                         <button 
-                                          onClick={() => onViewReceipt(txn)}
-                                          className="text-blue-500 hover:text-blue-700 p-1" 
-                                          title="Download Receipt"
+                                          onClick={() => handleDownloadPdf(txn)}
+                                          className="text-[#1d52f6] hover:text-blue-800 p-0.5 cursor-pointer" 
+                                          title="Download Official Fee Receipt PDF"
                                         >
-                                          <Download className="w-3.5 h-3.5" />
+                                          <Download className="w-3.5 h-3.5 text-[#1d52f6]" />
                                         </button>
                                         <button 
-                                          onClick={() => onViewInvoice ? onViewInvoice(txn) : onViewReceipt(txn)}
-                                          className="text-slate-700 hover:text-slate-900 p-1" 
-                                          title="View Voucher"
+                                          onClick={() => handleDownloadPdf(txn)}
+                                          className="text-slate-800 hover:text-black p-0.5 cursor-pointer" 
+                                          title="Download Receipt Document"
                                         >
-                                          <FileText className="w-3.5 h-3.5" />
+                                          <FileText className="w-3.5 h-3.5 text-slate-800" />
                                         </button>
                                         <button 
                                           onClick={() => onViewReceipt(txn)}

@@ -287,7 +287,7 @@ export const StudentInformationPage = ({ student, onUpdateStudent }) => {
                 <InfoRow label="Birth State" value={student.birthState || "Maharashtra"} />
                 <InfoRow label="Whatsapp Mobile Number" value={student.whatsappMobile || "--"} />
                 <InfoRow label="Alternate Email" value={student.alternateEmail || "--"} />
-                <InfoRow label="Referral Source" value={student.referralSource || "--"} />
+                <InfoRow label="Referal Source" value={student.referralSource || "--"} />
                 <InfoRow label="Physically Challenged" value={student.physicallyChallenged || "No"} />
                 <InfoRow label="Blood Group" value={student.bloodGroup || "--"} />
                 <InfoRow label="Identity Mark" value={student.identityMark || "--"} />

@@ -34,8 +34,19 @@ export const ReceiptModal = ({ isOpen, onClose, receipt, student }) => {
                 <span>Print</span>
               </button>
               <button
-                onClick={handlePrint}
-                className="px-3 py-1 bg-[#18b82a] hover:bg-[#15a225] text-white rounded text-xs font-bold flex items-center gap-1 shadow-xs"
+                onClick={() => {
+                  if (receipt.pdfUrl) {
+                    const link = document.createElement('a');
+                    link.href = receipt.pdfUrl;
+                    link.setAttribute('download', receipt.fileName || `${receipt.voucherNo || 'FEE_RECEIPT'}.pdf`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  } else {
+                    handlePrint();
+                  }
+                }}
+                className="px-3 py-1 bg-[#18b82a] hover:bg-[#15a225] text-white rounded text-xs font-bold flex items-center gap-1 shadow-xs cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download PDF</span>

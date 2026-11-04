@@ -41,20 +41,19 @@ export const LoginPage = ({ onLogin }) => {
     <div className="min-h-screen w-full relative flex items-center justify-center p-4 sm:p-6 bg-slate-950 select-none overflow-hidden">
       
       {/* 
-        High-Definition Blurred Campus Backdrop:
-        Applies a smooth 14px blur & deep contrast filter to dissolve the baked-in 
-        static text from the campus photo while keeping the rich architectural atmosphere.
+        Authentic JIT Campus Architecture Backdrop:
+        Cleanly inpainted campus building backdrop matching the official portal.
       */}
       <div 
-        className="absolute inset-0 bg-cover bg-center filter blur-[14px] brightness-[0.7] scale-110 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center pointer-events-none"
         style={{
           backgroundImage: `url(${campusBg})`,
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-900/60 pointer-events-none" />
+      <div className="absolute inset-0 bg-black/15 pointer-events-none" />
 
       {/* Main Login Card - Premium, sharp, centered and perfectly responsive on mobile */}
-      <div className="relative z-10 w-full max-w-[370px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-6 sm:p-7 border border-white/20 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative z-10 w-full max-w-[360px] bg-white rounded-xl shadow-[0_15px_40px_rgba(0,0,0,0.35)] p-5 sm:p-7 border border-slate-200/80 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header with Two Logos */}
         <div className="flex items-center justify-center gap-3 sm:gap-4 mb-5 sm:mb-6">
@@ -104,16 +103,20 @@ export const LoginPage = ({ onLogin }) => {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+          {/* Hidden fields to deflect aggressive Chrome mobile autofill */}
+          <input type="text" name="prevent_autofill_user" className="hidden" tabIndex="-1" autoComplete="off" />
+          <input type="password" name="prevent_autofill_pwd" className="hidden" tabIndex="-1" autoComplete="off" />
           
           {/* User Name Row */}
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-              <label className="w-full sm:w-24 text-xs sm:text-[13px] font-medium text-slate-800 text-left shrink-0">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs sm:text-[13px] font-medium text-slate-800 text-left">
                 User Name
               </label>
-              <div className="relative flex-1">
+              <div className="relative">
                 <input
                   type="text"
+                  name="cv_auth_uid"
                   value={username}
                   onChange={(e) => {
                     setUsername(e.target.value);
@@ -121,8 +124,9 @@ export const LoginPage = ({ onLogin }) => {
                   }}
                   required
                   autoComplete="off"
+                  data-lpignore="true"
                   placeholder="Enter User Name"
-                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg px-3 py-2.5 sm:py-2 text-[15px] sm:text-[13px] font-mono text-slate-900 placeholder-slate-400 focus:outline-none transition-all pr-9"
+                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg px-3 py-2.5 text-[15px] sm:text-[13px] font-mono text-slate-900 placeholder-slate-400 focus:outline-none transition-all pr-9"
                 />
                 <User className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
@@ -131,13 +135,14 @@ export const LoginPage = ({ onLogin }) => {
 
           {/* Password Row */}
           <div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-              <label className="w-full sm:w-24 text-xs sm:text-[13px] font-medium text-slate-800 text-left shrink-0">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs sm:text-[13px] font-medium text-slate-800 text-left">
                 Password
               </label>
-              <div className="relative flex-1">
+              <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  name="cv_auth_key"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -145,8 +150,9 @@ export const LoginPage = ({ onLogin }) => {
                   }}
                   required
                   autoComplete="new-password"
+                  data-lpignore="true"
                   placeholder="Enter Password"
-                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg px-3 py-2.5 sm:py-2 text-[15px] sm:text-[13px] text-slate-900 placeholder-slate-400 focus:outline-none transition-all pr-9"
+                  className="w-full bg-[#eef4ff] hover:bg-[#e6efff] focus:bg-white border border-[#c7d8fe] focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg px-3 py-2.5 text-[15px] sm:text-[13px] text-slate-900 placeholder-slate-400 focus:outline-none transition-all pr-9"
                 />
                 <button
                   type="button"
